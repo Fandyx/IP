@@ -1,0 +1,25 @@
+.infobox-container{
+	font-size: 100% !important;
+	
+}
+.capitalize{
+	text-transform:capitalize;
+}
+.btn_tables{
+min-height: 50px;
+background: #438eb9;
+text-align: left;
+padding: 15px 10px;
+color: white;
+cursor:pointer;
+font-size: 15px;
+}
+#admin_panel .dataTables_wrapper{
+	display:none;
+}
+.navbar{
+	background:#662D91 !important;
+}
+.logo_img{
+	height:30px;
+}
