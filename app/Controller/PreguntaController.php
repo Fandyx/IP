@@ -15,42 +15,237 @@ class PreguntaController extends AppController {
  * @var array
  */
 	public $components = array('Paginator', 'Session');
-	var $uses = array('Area','Pregunta','Tag','Respuesta','PreguntaTag','PreguntaVoto');
+	var $uses = array('Area','Pregunta','Tag','Respuesta','PreguntaTag','PreguntaVoto','RespuestaVoto');
 	
 /**
  * index method
  *
  * @return void
- */
-	public function index() {
+ */     public function hechas(){
+        if(AppController::authReturnLogin()){
+            
+        }
+        }
+	public function index() { 
+            if(AppController::authReturnLogin()){
 		$this->Area->recursive = 0;
 		$this->Pregunta->recursive = 0;
-		$this->set('areas', $this->Area->find('all',array('limit'=>16)));
-          $user=$this->Session->read("User");
-		$this->set('preguntas', $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, COUNT(respuesta) as crespuesta FROM Instaprofe.ip_pregunta left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id where ip_area.id in (SELECT area from ip_usuario_area where usuario=".$user['id'].") group by ip_pregunta.id order by fecha_pregunta desc ;"));
-	    $this->set('rec_preguntas', $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, COUNT(respuesta) as crespuesta FROM Instaprofe.ip_pregunta left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id group by ip_pregunta.id order by fecha_pregunta desc ;"));
-        $this->set('top_preguntas', $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, COUNT(respuesta) as crespuesta, COUNT(pregunta_id) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id inner join ip_pregunta_votos on pregunta_id=ip_pregunta.id order by numpreg desc ;"));   
-        $this->set('p_tags', $this->PreguntaTag->find('all', array('joins' => array(
-     array(
-         'table' => 'tags',
-         'alias' => 'Tags',
-         'type' => 'inner',
-         'conditions'=> array('Tags.id=PreguntaTag.tag')
-     )),'fields' => array('id','pregunta','Tags.tag'))));
-		$this->render('index');
+               
+		$this->set('areas', $this->Area->find('all',array('conditions'=>array('id<33'),'order'=>'area')));
+                $user=$this->Session->read("User");
+                $user_table="ip_usuario_area";
+                $user_type="usuario";
+                if($user["tipo"]==="3"){
+                     $user_type="profesor";
+                    $user_table="ip_profesor_area";
+                }
+         $this->set('mis_preguntas', $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id where ip_pregunta.id_usuario_preg=".$user['id']." group by ip_pregunta.id order by fecha_pregunta desc,numpreg desc,crespuesta desc ;"));        
+        $this->set('preguntas', $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id where ip_area.id in (SELECT area from ".$user_table." where ".$user_type."=".$user['id'].") group by ip_pregunta.id order by fecha_pregunta desc,numpreg desc,crespuesta desc ;"));
+        $this->set('rec_preguntas', $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id group by ip_pregunta.id order by fecha_pregunta desc,numpreg desc,crespuesta desc ;"));
+        $this->set('top_preguntas', $this->Pregunta->query("SELECT DISTINCT(ip_respuesta.id),titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido,  (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id inner join ip_pregunta_votos on pregunta_id=ip_pregunta.id group by ip_pregunta.id order by numpreg desc,crespuesta desc;"));   
+        $this->set('p_tags',$this->PreguntaTag->find('all', array('joins' => array(
+                array(
+                    'table' => 'tags',
+                    'alias' => 'Tags',
+                    'type' => 'inner',
+                    'conditions'=> array('Tags.id=PreguntaTag.tag')
+                )),'fields' => array('id','pregunta','Tags.tag'))));
+            $this->render('index');}
 	}
-
-    public function Post(){
-        $id=$_GET["pid"];
+        public function buscarPregunta(){
+               if(AppController::authReturnLogin()){
+                  $area=$this->request->data("area");
+                  $tags=$this->request->data("tags");
+                   $cond=" AND (";
+                $sw=true;
+               if($tags!=""){
+                foreach ($tags as $tag){
+                    $cond.=" ip_tags.tag='".$tag."' OR";
+                
+                $sw=false;    
+               }
+               
+                }
+                $cond=  substr($cond, 0,-3);
+                $cond.=")";
+                $join_tags="";
+                if($sw){$cond="";}
+                if($tags!=""){
+                     $join_tags="inner join ip_pregunta_tags on ip_pregunta_tags.pregunta=ip_pregunta.id inner join ip_tags on ip_pregunta_tags.tag=ip_tags.id";
+                }
+                $p_tags=$this->PreguntaTag->find('all', array('joins' => array(
+                array(
+                    'table' => 'tags',
+                    'alias' => 'Tags',
+                    'type' => 'inner',
+                    'conditions'=> array('Tags.id=PreguntaTag.tag')
+                )),'fields' => array('id','pregunta','Tags.tag')));
+                $preg=$this->Pregunta->query("SELECT ip_pregunta.id,titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, "
+                        . "(SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL(SUM(ip_pregunta_votos.voto),0) as numpreg  FROM Instaprofe.ip_pregunta left outer join ip_respuesta"
+                        . " on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id "
+                        .$join_tags
+                        . " left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id"
+                        . " inner join ip_area on ip_pregunta.area=ip_area.id where ip_area.id= ".$area                   
+                        . $cond." group by ip_pregunta.id "
+                        . "order by numpreg desc, crespuesta desc, fecha_pregunta desc ;"); 
+             
       
+             
+              return new CakeResponse(array('body'=>json_encode(array('preg'=>$preg,'p_tags'=>$p_tags)),'status'=>200));}
+          
+            
+       return new CakeResponse(array('body'=> json_encode(array('message'=>'FAIL')),'status'=>500));  
+        }
+    private function vote($user,$preg,$fecha,$voto){
+        $exists=$this->PreguntaVoto->find('first',array('conditions'=>array('pregunta_id'=>$preg,'usuario_id'=>$user)));
+       
+        if(sizeof($exists)==0){
+          $this->PreguntaVoto->create();
+        $this->PreguntaVoto->saveField("pregunta_id", $preg);
+        $this->PreguntaVoto->saveField("usuario_id", $user["id"]);
+        $this->PreguntaVoto->saveField("pregunta_id", $preg);
+        $this->PreguntaVoto->saveField("fecha", $fecha);
+        $this->PreguntaVoto->saveField("voto", $voto);
+       
+        }
+        else{
+             if($voto==$exists["PreguntaVoto"]["voto"]){$voto=0;}
+             $this->PreguntaVoto->id=$exists["PreguntaVoto"]["id"];
+             $this->PreguntaVoto->saveField("fecha", $fecha);
+              $this->PreguntaVoto->saveField("voto", $voto);
+        }
+         $pv= $this->PreguntaVoto->find("all",array('conditions'=>array('PreguntaVoto.pregunta_id'=>$preg),'fields' => array('sum(PreguntaVoto.voto) AS voto,'.$voto.' as type')));
+        return $pv[0][0];
+    }    
+    public function votarPos(){
+       if(AppController::authReturnLogin()){
+         $user=$this->Session->read('User');
+         $preg=$this->request->data("pid");
+        $fecha=date('Y-m-d G:i:s', time() - 3600 * 5);;
+        $res=$this->vote($user,$preg,$fecha,1);
+      
+        return new CakeResponse(array('body'=>json_encode(array('votes'=>$res)),'status'=>200));}
+          
+            
+       return new CakeResponse(array('body'=> json_encode(array('message'=>'FAIL')),'status'=>500));    
+                
+    }
+    public function votarNeg(){
+        if(AppController::authReturnLogin()){
+         $user=$this->Session->read('User');
+         $preg=$this->request->data("pid");
+        $fecha=date('Y-m-d G:i:s', time() - 3600 * 5);
+        $res=$this->vote($user,$preg,$fecha,-1);
+        
+        return new CakeResponse(array('body'=> json_encode(array('votes'=>$res)),'status'=>200));}
+          
+            
+       return new CakeResponse(array('body'=> json_encode(array('message'=>'FAIL')),'status'=>500));    
+                
+    }
+    
+        private function voteRes($user,$res,$fecha,$voto){
+        $exists=$this->RespuestaVoto->find('first',array('conditions'=>array('respuesta'=>$res,'usuario_id'=>$user)));
+       
+        if(sizeof($exists)==0){
+          $this->RespuestaVoto->create();
+        $this->RespuestaVoto->saveField("respuesta", $res);
+        $this->RespuestaVoto->saveField("usuario_id", $user["id"]);
+        $this->RespuestaVoto->saveField("respuesta", $res);
+        $this->RespuestaVoto->saveField("fecha", $fecha);
+        $this->RespuestaVoto->saveField("voto", $voto);
+       
+        }
+        else{
+             if($voto==$exists["RespuestaVoto"]["voto"]){$voto=0;}
+             $this->RespuestaVoto->id=$exists["RespuestaVoto"]["id"];
+             $this->RespuestaVoto->saveField("fecha", $fecha);
+              $this->RespuestaVoto->saveField("voto", $voto);
+        }
+         $pv= $this->RespuestaVoto->find("all",array('conditions'=>array('RespuestaVoto.respuesta'=>$res),'fields' => array('sum(RespuestaVoto.voto) AS voto,'.$voto.' as type')));
+        return $pv[0][0];
+    }    
+    public function votarPosRes(){
+      if(AppController::authReturnLogin()){
+         $user=$this->Session->read('User');
+         $res=$this->request->data("rid");
+        $fecha=date('Y-m-d G:i:s', time() - 3600 * 5);;
+        $res=$this->voteRes($user,$res,$fecha,1);
+      
+        return new CakeResponse(array('body'=>json_encode(array('votes'=>$res)),'status'=>200));}
+          
+            
+       return new CakeResponse(array('body'=> json_encode(array('message'=>'FAIL')),'status'=>500));    
+                
+    }
+    public function votarNegRes(){
+        if(AppController::authReturnLogin()){
+         $user=$this->Session->read('User');
+         $res=$this->request->data("rid");
+        $fecha=date('Y-m-d G:i:s', time() - 3600 * 5);;
+        $res=$this->voteRes($user,$res,$fecha,-1);
+        
+        return new CakeResponse(array('body'=> json_encode(array('votes'=>$res)),'status'=>200));}
+          
+            
+       return new CakeResponse(array('body'=> json_encode(array('message'=>'FAIL')),'status'=>500));    
+                
+    }
+    
+    public function Post(){
+         if(AppController::authReturnLogin()){
+        $id=$_GET["pid"];
+        $user=$this->Session->read('User');
         $this->set('pregunta', $this->Pregunta->find("first",array('conditions'=>array('Pregunta.id'=>$id))));
      $this->set('p_tags', $this->PreguntaTag->find("all",array('conditions'=>array('pregunta'=>$id))));
-     $this->set('voto_preg', $this->PreguntaVoto->find("count",array('conditions'=>array('PreguntaVoto.pregunta_id'=>$id))));
-        $this->set('respuestas', $this->Respuesta->find("all",array('conditions'=>array('Respuesta.pregunta'=>$id),'groupby'=>'Respuesta.id')));
-       $this->render();
+    $pv= $this->PreguntaVoto->find("all",array('conditions'=>array('PreguntaVoto.pregunta_id'=>$id),'fields' => array('sum(PreguntaVoto.voto) AS voto')));
+    $exists=$this->PreguntaVoto->find('first',array('conditions'=>array('pregunta_id'=>$id,'usuario_id'=>$user["id"])));
+   
+   
+   if(sizeof($exists)>0){
+    $this->set('vote',$exists["PreguntaVoto"]["voto"]);
+   }else{
+        $this->set('vote',0);
+   }
+      $this->set('voto_preg',$pv[0][0]["voto"]);
+        $this->set('respuestas', $this->Respuesta->query("SELECT *,IFNULL((SELECT voto from ip_respuesta_votos where ip_respuesta_votos.respuesta=Respuesta.id and usuario_id=".$user["id"]."),0) as voted,IFNULL((SELECT SUM(RespuestaVoto.voto) FROM ip_respuesta_votos as RespuestaVoto where RespuestaVoto.respuesta=Respuesta.id),0) as nvotes from ip_respuesta as Respuesta left outer join ip_respuesta_votos as RespuestaVoto on RespuestaVoto.respuesta=Respuesta.id inner join ip_usuario as Usuario on Respuesta.id_usuario_res=Usuario.id where Respuesta.pregunta=".$id." GROUP BY Respuesta.id ORDER BY mejor_respuesta desc,nvotes desc"));
+         $this->render();}
+    }
+    public function bestAnswer(){
+            if(AppController::isRequestOK($this->request)){
+                $res_id=$this->request->data("rid");
+                $this->Respuesta->id=$res_id;
+                $user=$this->Session->read('User');
+                $preg=  $this->Respuesta->field("pregunta");
+                $this->Pregunta->id=$preg;
+                $user_id=$this->Pregunta->field("id_usuario_preg");
+                
+                if($user_id==$user["id"]){
+                $preg_id=$this->Respuesta->field("pregunta");
+               
+                $this->Respuesta->updateAll(array('mejor_respuesta'=>null),array('respuesta.pregunta'=>$preg_id,'mejor_respuesta'=>1));
+                $this->Respuesta->saveField('mejor_respuesta',true);
+                return new CakeResponse(array('body'=> json_encode(array('title'=>'¡Gracias!','text'=>'Has seleccionado la mejor respuesta a tu pregunta')),'status'=>200));}
+            }
+            
+       return new CakeResponse(array('body'=> json_encode(array('message'=>'FAIL')),'status'=>500));    
+                
+    }
+        public function delBestAnswer(){
+            if(AppController::isRequestOK($this->request)){
+                $res_id=$this->request->data("rid");
+                $this->Respuesta->id=$res_id;
+                $preg_id=$this->Respuesta->field("pregunta");
+                $this->Respuesta->updateAll(array('mejor_respuesta'=>null),array('respuesta.pregunta'=>$preg_id,'mejor_respuesta'=>1));
+               
+                return new CakeResponse(array('body'=> json_encode(array('title'=>'Realizado','text'=>'Esta ya no sera mas la mejor respuesta')),'status'=>200));}
+          
+            
+       return new CakeResponse(array('body'=> json_encode(array('message'=>'FAIL')),'status'=>500));    
+                
     }
     public function saveRespuesta(){
-            if ($this->request->is('post')) {
+            if (AppController::isRequestOK($this->request)) {
                 $user=$this->Session->read('User');
                 $resp=$this->request->data("resp");
                 $pid=$this->request->data("pid");
@@ -58,7 +253,7 @@ class PreguntaController extends AppController {
                 $this->Respuesta->set("pregunta",$pid);
                 $this->Respuesta->set("respuesta",$resp);
                 $this->Respuesta->set("id_usuario_res",$user["id"]);
-                $fecha=date('Y-m-d H:i:s');
+                $fecha=date('Y-m-d G:i:s', time() - 3600 * 5);
                 $this->Respuesta->set("fecha_respuesta",$fecha);
                 $this->Respuesta->save();
                 if($this->Respuesta->id>0){
@@ -67,20 +262,21 @@ class PreguntaController extends AppController {
                                                     <p>'.$resp.'</p>
                                                 </div>
                                                     <small>
-                                                Posteado por 
+                                                Publicado por
+                                               
                                                 <span class="btn-link no-padding btn-sm popover-info" data-rel="popover" data-placement="right" title="" data-content="
                                                 <img class=\'modal_img\' src=\'data:image/png;base64,'.$user["p_avatar"].'\'/>
                                                 <span id=\'profile-modal\'>
                                                   <br/>'.$user["ciudad"].' <i class=\'ace-icon fa fa-map-marker purple\'></i><br/>
-                                                '.$user["descripcion"].' 
-                                               </span>" data-original-title="<i class=\'ace-icon fa fa-user purple\'></i> '.$user["nombre"]." ".$user["apellido"].'" aria-describedby="popover34171">'.$user["nombre"]." ".$user["apellido"].'</span>                                           
-                                                 <br/>
+                                               <p class=\'user_description\'> '.$user["descripcion"].' </p>
+                                               </span>" data-original-title="<i class=\'ace-icon fa fa-user purple\'></i> '.$user["nombre"]." ".$user["apellido"].'" aria-describedby="popover34171"> <a href="../Usuarios/profile?uid='.$user["id"].'">'.$user["nombre"]." ".$user["apellido"].' </a> </span>                                           
+                                               <br/>
                                                     Fecha: '.$fecha.'
                                                     </small>
                                         </blockquote>
                                         </div>
                                      </div>';
-                      return new CakeResponse(array('body'=> json_encode(array('block'=>$block,'avatar'=>$user["p_avatar"])),'status'=>200));}
+                      return new CakeResponse(array('body'=> json_encode(array('block'=>$block,'avatar'=>$user["p_avatar"],'id'=>$this->Respuesta->id)),'status'=>200));}
           
             }
        return new CakeResponse(array('body'=> json_encode(array('message'=>'FAIL')),'status'=>500));    
@@ -109,14 +305,15 @@ class PreguntaController extends AppController {
  * @return void
  */
 	public function add() {
-		if ($this->request->is('post')) {
+             if(AppController::isRequestOK($this->request)){
+		
 			$this->Pregunta->create();
 		
 			$tags=$this->request->data("tags");
 			$taga=explode(", ",$tags);
 		     $user=$this->Session->read("User");
 			$this->Pregunta->set('id_usuario_preg',$user["id"]);
-			$date=date('Y-m-d H:i:s', time() + 3600 * 5);
+			$date=date('Y-m-d G:i:s');
 			
 			if ($this->Pregunta->save($this->request->data)) {
 			
@@ -131,14 +328,17 @@ class PreguntaController extends AppController {
 				$this->PreguntaTag->set('pregunta',$this->Pregunta->id);
 				$this->PreguntaTag->set('tag',$this->Tag->id);
 				$this->PreguntaTag->save();
-			}
-				
+                                }
+				$n_preg=$this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id where ip_pregunta.id=".$this->Pregunta->id);
 			
-				return $this->redirect(array('action' => 'index'));
-			} else {
+				return new CakeResponse(array('body'=> json_encode(array('npreg'=>$n_preg,'id'=>$this->Pregunta->id)),'status'=>200));
+                                
+                        }
+                        else {
 				
 			}
 		}
+             
 	}
 
 /**

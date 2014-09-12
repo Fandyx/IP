@@ -19,16 +19,11 @@
                                                         <li class="active">
                                                             <a data-toggle="tab" href="#edit-basic">
                                                                 <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
-                                                                Informacion Personal
+                                                                Información Personal
                                                             </a>
                                                         </li>
 
-                                                        <li>
-                                                            <a data-toggle="tab" href="#edit-settings">
-                                                                <i class="purple ace-icon fa fa-cog bigger-125"></i>
-                                                                Configuración
-                                                            </a>
-                                                        </li>
+                                            
 
                                                         <li>
                                                             <a data-toggle="tab" href="#edit-password">
@@ -47,11 +42,13 @@
                                                                 <div class="col-xs-12 col-sm-4">
                                                                     
                                                                      <?php
-                                                                        if(!empty($user["p_avatar"])){
-                                                                      echo '<img class="profile_img" src="data:image/jpeg;base64,'.$user["p_avatar"].'" id="avatar" editable>';
+                                                                                
+                                                                                if($user["p_avatar"]!=null){
+                                                                      echo '<img class="profile_img avatar" src="data:image/jpeg;base64,'.$user["p_avatar"].'" id="profile_img" name="data[\'p_avatar\']" editable>';
                                                                             }else{
                                                                                 echo $this->Form->input('p_avatar', array('type' => 'file','label' => false));
-                                                                            } ?>
+                                                                            }
+                                                                            ?>
                                 
                                                                 
                                                                 </div>
@@ -70,7 +67,7 @@
                                                                     <div class="space-4"></div>
 
                                                                     <div class="form-group">
-                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Nombre y Apellido</label>
+                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">¿Como te llamas?*</label>
 
                                                                         <div class="col-sm-8">
                                                                             <?php 
@@ -91,7 +88,7 @@
                                                                     </div>
                                                                     <div class="space-4"></div>
                                                                     <div class="form-group">
-                                                                        <label class="col-sm-4 control-label no-padding-right"  for="form-field-ciudad">Ciudad</label>
+                                                                        <label class="col-sm-4 control-label no-padding-right"  for="form-field-ciudad">¿Donde vives?*</label>
 
                                                                         <div class="col-sm-8">
                                                                             <input class="col-xs-12 col-sm-10 ciudad" type="text" name="ciudad" id="ciudad" required placeholder="Ciudad" value="<?php echo $user["ciudad"]?>" />
@@ -99,26 +96,29 @@
                                                                     </div>
                                                                     <div class="space-4"></div>
                                                                     <div class="form-group">
-                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-select">Tipo</label>
+                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-select">¿Cual es tu rol?*</label>
 
                                                                         <div class="col-sm-8">
                                                                             <select class="col-xs-12 col-sm-10" id="form-type-select" name="tipo">
-                                                                                <option value="1" <?php if($user["tipo"]==1)echo "selected";?>>Profesor</option>
+                                                                                <option value="3" <?php if($user["tipo"]==3)echo "selected";?>>Profesor</option>
                                                                                 <option value="2" <?php if($user["tipo"]==2)echo "selected";?>>Estudiante</option>
-                                                                                <option value="3" <?php if($user["tipo"]==3)echo "selected";?>>Padre de Familia</option>
+                                                                                <option value="1" <?php if($user["tipo"]==1)echo "selected";?>>Padre de Familia</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Institución</label>
+                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">¿Donde Estudias?*</label>
 
                                                                         <div class="col-sm-8">
                                                                             <?php 
                                                                                 $nombre="";$apellido="";
                                                                                 $c_checked="";$u_checked="";$o_checked="";
-                                                                                $c_input="";$u_input="";$o_input="";
+                                                                                $c_input="<input type='text' placeholder='Especifique Colegio...' class='ins_name col-xs-12 col-sm-10 valid colegio' name='nom-cole' id='nom-cole' />";
+                                                                                $u_input="<input type='text' placeholder='Especifique Universidad...' class='ins_name col-xs-12 col-sm-10 valid universidad' name='nom-univ'  id='nom-univ'/>";
+                                                                                $o_input="<input type='text' name='nom-otro'  id='nom-otro' placeholder='Especifique Otro...' class='ins_name col-xs-12 col-sm-10 valid' />";
                                                                                 $c_name="";$u_name="";$o_name="";
                                                                                 $c_visible="";$u_visible="";$o_visible="";
+                                                                               
                                                                                 foreach($u_instituto as $instituto){
                                                                                 
                                                                                 
@@ -127,7 +127,7 @@
                                                                                     $c_name=$instituto["ip_instituto"]["instituto"];
                                                                                     $c_visible="style='display:block;'";
                                                                                 }
-                                                                                $c_input="<input type='text' placeholder='Especifique Colegio...' class='ins_name col-xs-12 col-sm-10 valid' id='nom-cole' value='".$c_name."' ".$c_visible."/>";
+                                                                                $c_input="<input type='text' placeholder='Especifique Colegio...' class='ins_name col-xs-12 col-sm-10 valid colegio' id='nom-cole' name='nom-cole' value='".$c_name."' ".$c_visible."/>";
                                                                                 
                                                                                 $name="";
                                                                                 if($instituto["ip_instituto"]["tipo"]==2){
@@ -135,14 +135,14 @@
                                                                                 $u_name=$instituto["ip_instituto"]["instituto"];
                                                                                 $u_visible="style='display:block;'";
                                                                                 }
-                                                                                $u_input="<input type='text' placeholder='Especifique Universidad...' class='ins_name col-xs-12 col-sm-10 valid' id='nom-univ' value='".$u_name."' ".$u_visible."/>";
+                                                                                $u_input="<input type='text' placeholder='Especifique Universidad...' class='ins_name col-xs-12 col-sm-10 valid universidad' id='nom-univ' name='nov-univ' value='".$u_name."' ".$u_visible."/>";
                                                                                 
                                                                                 $name="";
                                                                                 if($instituto["ip_instituto"]["tipo"]==3){$o_checked=" checked";
                                                                                 $o_name=$instituto["ip_instituto"]["instituto"];
                                                                                 $o_visible="style='display:block;'";
                                                                                 }
-                                                                                $o_input="<input type='text' id='nom-otro' placeholder='Especifique Otro...' class='ins_name col-xs-12 col-sm-10 valid' value='".$o_name."' ".$o_visible."/>";
+                                                                                $o_input="<input type='text' id='nom-otro' placeholder='Especifique Otro...' class='ins_name col-xs-12 col-sm-10 valid' name='nov-otro' value='".$o_name."' ".$o_visible."/>";
                                                                                     }
                                                                                 echo '<label class="pad-10">
                                                                                 <input name="instituto" type="checkbox" id="check-cole"  class="ace valid ins_chk" aria-required="true" aria-invalid="true"'.$c_checked.'>
@@ -170,24 +170,38 @@
 
                                                             <hr />
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-date">Fecha de Nacimiento</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-date">¿En que fecha naciste?*</label>
 
                                                                 <div class="col-sm-9">
                                                                     <div class="input-medium">
                                                                         <div class="input-group">
-                                                                            <input class="input-medium date-picker" id="fecha_nacimiento" name="fecha_nacimiento" type="text" data-date-format="dd-mm-yyyy" value="<?php $time=strtotime(substr($user["fecha_nacimiento"],0,-9));echo date('d-m-Y',$time);?>" placeholder="dd-mm-yyyy" />
+                                                                            <input class="input-medium date-picker estud_fecha" id="fecha_nacimiento" name="fecha_nacimiento" type="text" data-date-format="dd-mm-yyyy" value="<?php $time=strtotime(substr($user["fecha_nacimiento"],0,-9));echo date('d-m-Y',$time);?>" placeholder="dd-mm-yyyy" />
+                                                                            
+                                                                               
                                                                             <span class="input-group-addon">
                                                                                 <i class="ace-icon fa fa-calendar"></i>
                                                                             </span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                 
                                                             </div>
+                                                            <div class="space-4"></div>
+                                                            <div class="form-group" id="email_padre_container">
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-email">Email Padre*</label>
 
+                                                                <div class="col-sm-9">
+                                                                    <span class="input-icon input-icon-right">
+                                                                        <input type="email" id="email_padre" name="email_padre" placeholder="Email Padre de Familia" />
+                                                                       
+                                                                        <i class="ace-icon fa fa-envelope"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
                                                             <div class="space-4"></div>
 
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right">Genero</label>
+                                                                <label class="col-sm-3 control-label no-padding-right">¿Cual es tu genero?*</label>
 
                                                                 <div class="col-sm-9">
                                                                     <label class="inline">
@@ -206,7 +220,7 @@
                                                             <div class="space-4"></div>
 
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-comment">Agrega una descripción</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-comment">Cuentanos sobre ti  </label>
 
                                                                 <div class="col-sm-6">
                                                                     <textarea id="descripcion" name="descripcion" class="form-control limited" maxlength="150"><?=$user["descripcion"]?></textarea>
@@ -258,7 +272,7 @@
                                                                 </div>
                                                             </div>
                                                                     <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-phone">Telefono 2 (Opcional)</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-phone">Teléfono 2 (Opcional)</label>
 
                                                                 <div class="col-sm-9">
                                                                     <span class="input-icon input-icon-right">
@@ -269,7 +283,7 @@
                                                             </div>
                                                             
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-phone">Telefono 3 (Opcional)</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-phone">Teléfono 3 (Opcional)</label>
 
                                                                 <div class="col-sm-9">
                                                                     <span class="input-icon input-icon-right">
@@ -281,7 +295,7 @@
 
                                                             <div class="space"></div>
                                                             <h4 class="header blue bolder smaller">Intereses</h4>
-                                                                <h6 class="grey">Selecciona las areas del conocimiento que te interesa aprender.</h6>
+                                                                <h6 class="grey">Selecciona las áreas del conocimiento que te interesa aprender.</h6>
                                                             <div class="form-group">
                                                         
                                                             <div class="col-xs-12 col-lg-12 form-inline">
@@ -340,61 +354,26 @@
                                         
                                                         </div>
 
-                                                        <div id="edit-settings" class="tab-pane">
-                                                            <div class="space-10"></div>
-
-                                                            <div>
-                                                                <label class="inline">
-                                                                    <input type="checkbox" name="form-field-checkbox" class="ace" />
-                                                                    <span class="lbl"> Make my profile public</span>
-                                                                </label>
-                                                            </div>
-
-                                                            <div class="space-8"></div>
-
-                                                            <div>
-                                                                <label class="inline">
-                                                                    <input type="checkbox" name="form-field-checkbox" class="ace" />
-                                                                    <span class="lbl"> Email me new updates</span>
-                                                                </label>
-                                                            </div>
-
-                                                            <div class="space-8"></div>
-
-                                                            <div>
-                                                                <label class="inline">
-                                                                    <input type="checkbox" name="form-field-checkbox" class="ace" />
-                                                                    <span class="lbl"> Keep a history of my conversations</span>
-                                                                </label>
-
-                                                                <label class="inline">
-                                                                    <span class="space-2 block"></span>
-
-                                                                    for
-                                                                    <input type="text" class="input-mini" maxlength="3" />
-                                                                    days
-                                                                </label>
-                                                            </div>
-                                                        </div>
+                                                     
 
                                                         <div id="edit-password" class="tab-pane">
                                                             <div class="space-10"></div>
 
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-pass1">New Password</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-pass1">Nueva Contraseña</label>
 
                                                                 <div class="col-sm-9">
-                                                                    <input type="password" id="form-field-pass1" />
+                                                                    <input type="password"  class="n_password" autocomplete="off" />
                                                                 </div>
                                                             </div>
 
                                                             <div class="space-4"></div>
 
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-pass2">Confirm Password</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-pass2">Confirmar Contraseña</label>
 
                                                                 <div class="col-sm-9">
-                                                                    <input type="password" id="form-field-pass2" />
+                                                                    <input type="password" name="pass" id="password2" />
                                                                 </div>
                                                             </div>
                                                         </div>

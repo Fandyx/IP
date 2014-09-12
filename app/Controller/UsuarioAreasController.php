@@ -13,8 +13,8 @@ class UsuarioAreasController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
-
+	public $components = array('Paginator','Session');
+	var $uses = array('Area','Pregunta','Tag','Respuesta','Instituto','Usuario','UsuarioArea','UsuarioTag');
 /**
  * index method
  *
@@ -31,7 +31,12 @@ class UsuarioAreasController extends AppController {
  * @throws NotFoundException
  * @param string $id
  * @return void
- */
+ */     public function getUsuarioAreas(){
+      $user=$_SESSION['User'];
+      $id=$user["id"];
+             $options = array('conditions' => array('UsuarioArea.usuario' => $id));
+           return $this->UsuarioArea->query("SELECT ip_area.id as area_id, ip_area.area as area FROM Instaprofe.ip_usuario inner join ip_usuario_area on ip_usuario_area.usuario=ip_usuario.id inner join ip_area on ip_usuario_area.area=ip_area.id where ip_usuario.id=".$id." AND ip_area.id<=31");
+        }
 	public function view($id = null) {
 		if (!$this->UsuarioArea->exists($id)) {
 			throw new NotFoundException(__('Invalid usuario area'));

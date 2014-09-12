@@ -37,15 +37,31 @@ public function checkAuth(){
     try{
     if((isset($user["id"]))){
         if($user["id"]<=0){
+          
 		return false;
         }else{
             return true;    
         }
-	}else{return false;}
+	}else{ 
+            return false;}
 
 }catch(exception $e){
     return false;
 }
 }
 
+public function authReturnLogin(){
+    if(!$this->checkAuth()){
+        $this->redirect("../Usuarios");
+    }
+    return true;
+}
+public function isRequestOK($request){
+    if ($request->is('post')&&$this->checkAuth()) {
+              return true; 
+    }else{
+        $this->redirect("../Usuarios");
+        return false;
+    }
+}
 }

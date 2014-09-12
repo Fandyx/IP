@@ -54,23 +54,25 @@
 													<div class="space-4"></div>
 												</fieldset>
 											</form>
-
+<!--
 											<div class="social-or-login center">
 												<span class="bigger-110">O Ingresa Usando</span>
 											</div>
 
-											<div class="space-6"></div>
+											<div class="space-6"></div>-->
 
-											<div class="social-login center">
+<!--											<div class="social-login center">
 												<a class="btn btn-primary">
 													<i class="ace-icon fa fa-facebook"></i>
+                                                                                                        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+                                                                                                        </fb:login-button>
 												</a>
 
 												<a class="btn btn-info">
 													<i class="ace-icon fa fa-twitter"></i>
 												</a>
 
-											</div>
+											</div>-->
 										</div><!-- /.widget-main -->
 
 										<div class="toolbar clearfix">
@@ -137,47 +139,52 @@
 										<div class="widget-main">
 											<h4 class="header green lighter bigger">
 												<i class="ace-icon fa fa-users blue"></i>
-												New User Registration
+												Registro
 											</h4>
 
 											<div class="space-6"></div>
-											<p> Enter your details to begin: </p>
+											<p> Ingresa tus datos para continuar: </p>
 
-											<form>
+											<form id="register_form" method="POST" action="Usuarios/register">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="email" class="form-control" placeholder="Email" />
+															<input type="email"  id="email" name="email" class="form-control" placeholder="Email*" />
 															<i class="ace-icon fa fa-envelope"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" placeholder="Username" />
+                                                                                                                    <select id="rol" name="rol"  data-placeholder="Escoge tu Rol" class="chosen-select" >
+                                                                                                                        <option value="">-Escoge Tu Rol*-</option>
+                                                                                                                        <option value="3">Profesor</option>
+                                                                                                                        <option value="2">Estudiante</option>
+                                                                                                                        <option value="1">Padre De Familia</option>
+                                                                                                                        </select>
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="Password" />
+															<input type="password" id="password" name="password" class="form-control" placeholder="Contraseña*" />
 															<i class="ace-icon fa fa-lock"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="Repeat password" />
+															<input type="password" name="password2" id="password2" class="form-control" placeholder="Repetir Contraseña*" />
 															<i class="ace-icon fa fa-retweet"></i>
 														</span>
 													</label>
 
 													<label class="block">
-														<input type="checkbox" class="ace" />
+														<input id="agree" name="agree" type="checkbox" aria-required="true"  class="ace valid" />
 														<span class="lbl">
-															I accept the
-															<a href="#">User Agreement</a>
+															Acepto los
+															<a href="#">Terminos y Condiciones</a>
 														</span>
 													</label>
 
@@ -189,8 +196,8 @@
 															<span class="bigger-110">Reset</span>
 														</button>
 
-														<button type="button" class="width-65 pull-right btn btn-sm btn-success">
-															<span class="bigger-110">Register</span>
+														<button type="submit" value="submit" class="width-65 pull-right btn btn-sm btn-success">
+															<span class="bigger-110">Registrarme</span>
 
 															<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 														</button>
@@ -202,7 +209,7 @@
 										<div class="toolbar center">
 											<a href="#" data-target="#login-box" class="back-to-login-link">
 												<i class="ace-icon fa fa-arrow-left"></i>
-												Back to login
+												Regresar al login
 											</a>
 										</div>
 									</div><!-- /.widget-body -->

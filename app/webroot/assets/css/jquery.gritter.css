@@ -96,6 +96,12 @@
     background-image: url(../images/gritter-light.png);
     color: #222;
 }
+.gritter-center{
+    position: fixed !important;
+left: 33%;
+right: 33%;
+top: 33%;
+}
 .gritter-light .gritter-title {
     text-shadow: none;
 }

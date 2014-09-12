@@ -14,7 +14,7 @@ class AreasController extends AppController {
  * @var array
  */
 	public $components = array('Paginator');
-        var $uses = array('Area','Pregunta','Tag','Respuesta','Instituto','Usuario','UsuarioArea','UsuarioTag');
+        var $uses = array('Area','Pregunta','Tag','Respuesta','Instituto','Usuario','UsuarioArea','ProfesorArea','UsuarioTag');
 /**
  * index method
  *
@@ -85,7 +85,25 @@ class AreasController extends AppController {
  * @throws NotFoundException
  * @param string $id
  * @return void
- */
+ */     public function dataAreas(){
+        $id=$this->request->data("area_id");
+        $user=$this->Session->read('User');
+        if($id>0){
+         
+        $temas=$this->Tag->find('count',array('conditions'=>array('area'=>$id)));
+        $preguntas=$this->Pregunta->find('count',array('conditions'=>array('Pregunta.area'=>$id)));
+        $profesores="";
+        if($user["tipo"]==3){
+         $profesores=$this->UsuarioArea->find('count',array('conditions'=>array('UsuarioArea.area'=>$id)))." Estudiantes";   
+        }else{
+        $profesores=$this->ProfesorArea->find('count',array('conditions'=>array('ProfesorArea.area'=>$id)))." Profesores";
+        }
+        
+        return new CakeResponse(array('body'=> json_encode(array('temas'=>$temas,'preguntas'=>$preguntas,'profesores'=>$profesores)),'status'=>200));
+        }else{
+            return new CakeResponse(array('body'=> json_encode(array('message'=>'FAIL')),'status'=>500));    
+        }
+        }
 	public function edit($id = null) {
 		if (!$this->Area->exists($id)) {
 			throw new NotFoundException(__('Invalid area'));

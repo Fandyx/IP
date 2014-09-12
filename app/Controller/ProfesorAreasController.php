@@ -118,6 +118,13 @@ class ProfesorAreasController extends AppController {
  * @param string $id
  * @return void
  */
+        public function getProfesorAreas(){
+      $user=$_SESSION['User'];
+      $id=$user["id"];
+             $options = array('conditions' => array('ProfesorArea.profesor' => $id));
+           return $this->ProfesorArea->query("SELECT ip_area.id as area_id, ip_area.area as area FROM Instaprofe.ip_usuario inner join ip_profesor_area on ip_profesor_area.profesor=ip_usuario.id inner join ip_area on ip_profesor_area.area=ip_area.id where ip_usuario.id=".$id." AND ip_area.id<=31");
+        }
+
 	public function delete($id = null) {
 		$this->ProfesorArea->id = $id;
 		if (!$this->ProfesorArea->exists()) {

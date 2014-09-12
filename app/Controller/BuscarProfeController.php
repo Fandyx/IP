@@ -6,7 +6,7 @@ App::uses('AppController', 'Controller');
  * @property Area $Area
  * @property PaginatorComponent $Paginator
  */
-class BuscarProfeController extends AppController {
+class CalendarController extends AppController {
 
 /**
  * Components

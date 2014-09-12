@@ -16,7 +16,7 @@ class Usuario extends AppModel {
  * @var mixed False or table name
  */
 	public $useTable = 'usuario';
-
+       
 /**
  * Validation rules
  *
@@ -27,12 +27,6 @@ class Usuario extends AppModel {
             'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'Se requiere un nombre de usuario'
-            )
-        ),
-        'pass' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'Se requiere una contraseña'
             )
         )
     );
@@ -98,16 +92,15 @@ class Usuario extends AppModel {
 	);
 
 public function beforeSave($options = array()) {
+     App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
     if (isset($this->data[$this->alias]['pass'])) {
-        $passwordHasher = new BlowfishPasswordHasher();
-        $this->data[$this->alias]['pass'] = $passwordHasher->hash(
+        $passwordHasher =  new SimplePasswordHasher(array('hashType' => 'sha256'));
+        $this->data[$this->alias]['pass'] =  $passwordHasher->hash(
             $this->data[$this->alias]['pass']
         );
     }
     return true;
 }
-
-
 
 
 

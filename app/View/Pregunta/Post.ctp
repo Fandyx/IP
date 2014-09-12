@@ -3,16 +3,31 @@
                                     <div class="ace-spinner touch-spinner">
                                         <div class="input-group">
                                            <div>
-                                               <button class="btn-link">
-                                            <i class="green ace-icon ace-icon fa fa-plus fa-2x"></i>
+                                               <button class="btn-link" id='upvote_btn' onclick='upvote_p(<?=$pregunta["Pregunta"]["id"]?>)'>
+                                           <?php $color=""; 
+                                            if($vote=="1"){
+                                            echo '<i class="green ace-icon ace-icon fa fa-thumbs-up fa-2x" ></i>';}
+                                            else{
+                                            echo '<i class="green ace-icon ace-icon fa fa-thumbs-o-up fa-2x" ></i>';}
+                                            ?>
                                              </button>
                                             </div>
-                                            
-                                            <div class="votes_number"><?=$voto_preg?></div>
+                                           <?php if($voto_preg>0){
+                                            $color="green";}
+                                            else if($voto_preg<0){
+                                            $color="red";}?>
+                                            <div class="votes_number <?=$color?>" id="pregunta_votes"><?=$voto_preg==""?0:$voto_preg?></div>
                                             
                                              <div>                 
                                               
-                                                      <button class="btn-link"><i class=" ace-icon ace-icon fa fa-minus red fa-2x"></i></button>            
+                                                      <button class="btn-link" id='downvote_btn' onclick='downvote_p(<?=$pregunta["Pregunta"]["id"]?>)'>
+                                                        
+                                            <?php if($vote=="-1"){
+                                            echo '  <i class=" ace-icon ace-icon fa fa-thumbs-down red fa-2x"></i>';}
+                                            else{
+                                            echo '  <i class=" ace-icon ace-icon fa fa-thumbs-o-down red fa-2x"></i>';}
+                                            ?>
+                                                      </button>            
                                                        
                                             </div></div></div>
                                     </div>
@@ -51,17 +66,17 @@
                                                 </div>
                                                     <small>
                                                             
-                                                Posteado por 
+                                                Publicado por 
                                                 <span class="btn-link no-padding btn-sm popover-info" data-rel="popover" data-placement="right" title="" data-content= "
                                                 <img class='modal_img' src='data:image/png;base64,<?=$pregunta["Usuario"]["p_avatar"]?>'/>
                                                 <span id='profile-modal'>
                                                 <?php
-                                                 if($pregunta["Usuario"]["tipo"]==3){echo "Profesor <i class='ace-icon fa fa-book purple'>";}
+                                                 if($pregunta["Usuario"]["tipo"]==3){echo "Profesor <i class='ace-icon fa fa-book purple'></i>";}
                                                  if($pregunta["Usuario"]["tipo"]==2){echo "Estudiante <i class='ace-icon fa fa-graduation-cap purple'></i>";}
-                                                 if($pregunta["Usuario"]["tipo"]==3){echo "Padre de Familia <i class='ace-icon fa fa-home purple'>";}?>
+                                                 if($pregunta["Usuario"]["tipo"]==1){echo "Padre de Familia <i class='ace-icon fa fa-home purple'>";}?>
                                                   <br/><?=$pregunta["Usuario"]["ciudad"]?> <i class='ace-icon fa fa-map-marker purple'></i><br/>
-                                                <?=$pregunta["Usuario"]["descripcion"]?> 
-                                               </span>" data-original-title="<i class='ace-icon fa fa-user purple'></i> <?=$pregunta["Usuario"]["nombre"]." ".$pregunta["Usuario"]["apellido"]?>" aria-describedby="popover34171"><?=$pregunta["Usuario"]["nombre"]." ".$pregunta["Usuario"]["apellido"]?></span>                                               
+                                                <p class='user_description'><?=$pregunta["Usuario"]["descripcion"]?> </p>
+                                               </span>" data-original-title="<i class='ace-icon fa fa-user purple'></i> <?=$pregunta["Usuario"]["nombre"]." ".$pregunta["Usuario"]["apellido"]?>" aria-describedby="popover34171"><a href="../Usuarios/profile?uid=<?=$pregunta["Usuario"]["id"]?>"><?=$pregunta["Usuario"]["nombre"]." ".$pregunta["Usuario"]["apellido"]?></a></span>                                               
                                                  <br/>
                                                     Fecha: <?=$pregunta["Pregunta"]["fecha_pregunta"]?>
                                                     </small>
@@ -76,53 +91,91 @@
                               
                                  <div class="widget-box transparent ui-sortable-handle">
                                   <div class="widget-header">
-                                        <h4 class="widget-title lighter"><?=sizeof($respuestas)?> Respuestas</h4>
+                                      <h4 class="widget-title lighter"><span id="respuestas_n"><?=sizeof($respuestas)?></span> Respuestas</h4>
                                   </div>
                                   <div class="widget-body">
                                                       <div id="responses">
                                       <?php 
                                                 foreach($respuestas as $respuesta){
-                                                   
+                                                    
+                                                   $m_res=!($respuesta["Respuesta"]["mejor_respuesta"]==null);
+                                                   $res_class="";
+                                                   if($m_res){
+                                                       $res_class="bestanswer";
+                                                   }
                                                 ?>
-                                    <div class="row">
+                                                          
+                                    <div class="row" id="respuesta-<?=$respuesta["Respuesta"]["id"]?>">
                                         <div class="col-xs-1 center">
                                             <div class="ace-spinner touch-spinner">
                                         <div class="input-group">
                                            <div>
-                                               <button class="btn-link">
-                                            <i class="green ace-icon ace-icon fa fa-plus fa-2x"></i>
+                                               <button class="btn-link" id ="upvote-<?=$respuesta["Respuesta"]["id"]?>" onclick='upvote_r(<?=$respuesta["Respuesta"]["id"]?>)'>
+                                              <?php $color="";$voted=$respuesta[0]["voted"];
+                                            if($voted=="1"){
+                                            echo '<i class="green ace-icon ace-icon fa fa-thumbs-up fa-2x" ></i>';}
+                                            else{
+                                            echo '<i class="green ace-icon ace-icon fa fa-thumbs-o-up fa-2x" ></i>';}
+                                            ?>
                                              </button>
                                             </div>
-                                            
-                                            <div class="votes_number"><?=sizeof($respuesta["RespuestaVoto"])?></div>
+                                            <?php 
+                                            $voto_res=$respuesta[0]["nvotes"];
+                                            if($voto_res>0){
+                                            $color="green";}
+                                            else if($voto_res<0){
+                                            $color="red";}?>
+                                            <div class="votes_number <?=$color?>" id="votes-<?=$respuesta["Respuesta"]["id"]?>"><?=$voto_res?></div>
                                             
                                              <div>                 
                                               
-                                                      <button class="btn-link"><i class=" ace-icon ace-icon fa fa-minus red fa-2x"></i></button>            
+                                                      <button class="btn-link" id="downvote-<?=$respuesta["Respuesta"]["id"]?>" onclick='downvote_r(<?=$respuesta["Respuesta"]["id"]?>)'>
+                                                          <?php if($voted=="-1"){
+                                            echo '  <i class=" ace-icon ace-icon fa fa-thumbs-down red fa-2x"></i>';}
+                                            else{
+                                            echo '  <i class=" ace-icon ace-icon fa fa-thumbs-o-down red fa-2x"></i>';}
+                                            ?></button>            
                                                        
-                                            </div></div></div>
+                                            </div>
+                                            <?php 
+                                            if($m_res){
+                                                echo '<span class="badge badge-transparent bestanswer_chk" title="El usuario que pregunto, marcó esta como la mejor respuesta.">
+									<i class="ace-icon fa fa-check green fa-2x"></i>
+								</span>';
+                                            }
+                                            ?>
+                                        </div></div>
                                         </div>
-                                      <div class="col-xs-11">
+                                      <div class="col-xs-11  <?=$res_class?>">
                                      <blockquote class="pull-left">
                                                     <div class="widget-main padding-6 no-padding-left no-padding-right">
                                                     <p><?=$respuesta["Respuesta"]["respuesta"]?></p>
                                                 </div>
                                                     <small>
                                                             
-                                                Posteado por 
+                                                Publicado por 
                                                 <span class="btn-link no-padding btn-sm popover-info" data-rel="popover" data-placement="right" title="" data-content= "
                                                 <img class='modal_img' src='data:image/png;base64,<?=$respuesta["Usuario"]["p_avatar"]?>'/>
                                                 <span id='profile-modal'>
                                                 <?php
+                                               
                                                  if($respuesta["Usuario"]["tipo"]==3){echo "Profesor <i class='ace-icon fa fa-book purple'></i>";}
                                                  if($respuesta["Usuario"]["tipo"]==2){echo "Estudiante <i class='ace-icon fa fa-graduation-cap purple'></i>";}
                                                  if($respuesta["Usuario"]["tipo"]==1){echo "Padre de Familia <i class='ace-icon fa fa-home purple'></i>";}?>
                                                   <br/><?=$respuesta["Usuario"]["ciudad"]?> <i class='ace-icon fa fa-map-marker purple'></i><br/>
-                                                <?=$respuesta["Usuario"]["descripcion"]?> 
-                                               </span>" data-original-title="<i class='ace-icon fa fa-user purple'></i> <?=$respuesta["Usuario"]["nombre"]." ".$respuesta["Usuario"]["apellido"]?>" aria-describedby="popover34171"><?=$respuesta["Usuario"]["nombre"]." ".$respuesta["Usuario"]["apellido"]?></span>                                               
+                                                 <p class='user_description'><?=$respuesta["Usuario"]["descripcion"]?> </p>
+                                                  </span>" data-original-title="<i class='ace-icon fa fa-user purple'></i> <?=$respuesta["Usuario"]["nombre"]." ".$respuesta["Usuario"]["apellido"]?>" aria-describedby="popover34171"><a href="../Usuarios/profile?uid=<?=$respuesta["Usuario"]["id"]?>"><?=$respuesta["Usuario"]["nombre"]." ".$respuesta["Usuario"]["apellido"]?></a></span>                                               
                                                  <br/>
                                                     Fecha: <?=$respuesta["Respuesta"]["fecha_respuesta"]?>
                                                     </small>
+                                         <?php 
+                                         $user=$this->Session->read("User");
+                                         if($pregunta["Usuario"]["id"]==$user["id"]&&!$m_res){
+                                             echo '<button class="btn-primary btn-sm" id="bestAnswer-'.$respuesta["Respuesta"]["id"].'" onclick="bestAnswer('.$respuesta["Respuesta"]["id"].')" style="margin-top:10px;">Marcar como Mejor Respuesta</button>';
+                                         }else if($pregunta["Usuario"]["id"]==$user["id"]){
+                                              echo '<button class="btn-danger btn-sm" id="unBestAnswer-'.$respuesta["Respuesta"]["id"].'" onclick="unBestAnswer('.$respuesta["Respuesta"]["id"].')" style="margin-top:10px;">Desmarcar como Mejor Respuesta</button>';
+                                         }
+                                                 ?>
                                         </blockquote>
                                         </div>
                                      </div>       
