@@ -28,7 +28,7 @@
                                                         <li>
                                                             <a data-toggle="tab" href="#edit-password">
                                                                 <i class="blue ace-icon fa fa-key bigger-125"></i>
-                                                                Contraseña
+                                                                Cambiar Contraseña
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -175,7 +175,19 @@
                                                                 <div class="col-sm-9">
                                                                     <div class="input-medium">
                                                                         <div class="input-group">
-                                                                            <input class="input-medium date-picker estud_fecha" id="fecha_nacimiento" name="fecha_nacimiento" type="text" data-date-format="dd-mm-yyyy" value="<?php $time=strtotime(substr($user["fecha_nacimiento"],0,-9));echo date('d-m-Y',$time);?>" placeholder="dd-mm-yyyy" />
+                                                                            <?php 
+                                                                        $time=substr($user["fecha_nacimiento"],0,-9);
+                                                                        
+                                                                        $val=$time;
+                                                                      if($time=="0000-00-00"){
+                                                                          $val="";
+                                                                      }else{
+                                                                          $time=strtotime(substr($user["fecha_nacimiento"],0,-9));
+                                                                          $val=$time;
+                                                                          $val=date('d-m-Y',$val);
+                                                                      }
+                                                                         ?>
+                                                                            <input class="input-medium date-picker estud_fecha" id="fecha_nacimiento" name="fecha_nacimiento" type="text" data-date-format="dd-mm-yyyy" value="<?=$val?>" placeholder="dd-mm-yyyy" />
                                                                             
                                                                                
                                                                             <span class="input-group-addon">

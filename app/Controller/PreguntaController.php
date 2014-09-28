@@ -15,33 +15,20 @@ class PreguntaController extends AppController {
  * @var array
  */
 	public $components = array('Paginator', 'Session');
-	var $uses = array('Area','Pregunta','Tag','Respuesta','PreguntaTag','PreguntaVoto','RespuestaVoto');
+	var $uses = array('Area','Pregunta','Tag','Respuesta','Usuario','PreguntaTag','PreguntaVoto','RespuestaVoto');
 	
 /**
  * index method
  *
  * @return void
- */     public function hechas(){
-        if(AppController::authReturnLogin()){
-            
-        }
-        }
-	public function index() { 
-            if(AppController::authReturnLogin()){
-		$this->Area->recursive = 0;
-		$this->Pregunta->recursive = 0;
-               
-		$this->set('areas', $this->Area->find('all',array('conditions'=>array('id<33'),'order'=>'area')));
-                $user=$this->Session->read("User");
-                $user_table="ip_usuario_area";
-                $user_type="usuario";
-                if($user["tipo"]==="3"){
-                     $user_type="profesor";
-                    $user_table="ip_profesor_area";
-                }
-         $this->set('mis_preguntas', $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id where ip_pregunta.id_usuario_preg=".$user['id']." group by ip_pregunta.id order by fecha_pregunta desc,numpreg desc,crespuesta desc ;"));        
-        $this->set('preguntas', $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id where ip_area.id in (SELECT area from ".$user_table." where ".$user_type."=".$user['id'].") group by ip_pregunta.id order by fecha_pregunta desc,numpreg desc,crespuesta desc ;"));
-        $this->set('rec_preguntas', $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id group by ip_pregunta.id order by fecha_pregunta desc,numpreg desc,crespuesta desc ;"));
+ *     
+ */     public function setForIndex($uid,$user_table,$user_type){
+        $this->Area->recursive = 0;
+        $this->Pregunta->recursive = 0;
+        $this->set('areas', $this->Area->find('all',array('conditions'=>array('id<33'),'order'=>'area')));       
+         $this->set('mis_preguntas', $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id where ip_pregunta.id_usuario_preg=".$uid." group by ip_pregunta.id order by fecha_pregunta desc,numpreg desc,crespuesta desc ;"));        
+        $this->set('preguntas', $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id where ip_area.id in (SELECT area from ".$user_table." where ".$user_type."=".$uid.") group by ip_pregunta.id order by fecha_pregunta desc,numpreg desc,crespuesta desc ;"));
+        $this->set('rec_preguntas', $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id WHERE fecha_pregunta between date_sub(now(),INTERVAL 4 WEEK) and now() group by ip_pregunta.id order by fecha_pregunta desc,numpreg desc,crespuesta desc ;"));
         $this->set('top_preguntas', $this->Pregunta->query("SELECT DISTINCT(ip_respuesta.id),titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido,  (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id inner join ip_pregunta_votos on pregunta_id=ip_pregunta.id group by ip_pregunta.id order by numpreg desc,crespuesta desc;"));   
         $this->set('p_tags',$this->PreguntaTag->find('all', array('joins' => array(
                 array(
@@ -50,12 +37,94 @@ class PreguntaController extends AppController {
                     'type' => 'inner',
                     'conditions'=> array('Tags.id=PreguntaTag.tag')
                 )),'fields' => array('id','pregunta','Tags.tag'))));
+        }
+        public function hechas(){
+        if(AppController::authReturnLogin()){
+             $id=$this->request->query["uid"];
+             $this->Pregunta->recursive=0;
+             $this->Area->recursive=false;
+               $this->set('areas', $this->Area->find('all',array('conditions'=>array('id<33'),'order'=>'area')));   
+            $hechas=$this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id where ip_pregunta.id_usuario_preg=".$id." group by ip_pregunta.id order by fecha_pregunta desc,numpreg desc,crespuesta desc ;");
+           $this->set('p_tags',$this->PreguntaTag->find('all', array('joins' => array(
+                array(
+                    'table' => 'tags',
+                    'alias' => 'Tags',
+                    'type' => 'inner',
+                    'conditions'=> array('Tags.id=PreguntaTag.tag')
+                )),'fields' => array('id','pregunta','Tags.tag'))));
+            $this->set('preg_req',$hechas);
+             if(sizeof($hechas)>0){
+            $this->set('tab_name',"Preguntas hechas por ".$hechas[0]["ip_usuario"]["nombre"]." ".$hechas[0]["ip_usuario"]["apellido"]);
+            }else{
+                 $this->set('tab_name',"0 Resultados");
+            }$this->render("index");
+        }
+        }
+         public function resueltas(){
+        if(AppController::authReturnLogin()){
+            $id=$this->request->query["uid"];
+              $this->Area->recursive=false;
+               $this->set('areas', $this->Area->find('all',array('conditions'=>array('id<33'),'order'=>'area')));   
+           
+            $resueltas=$this->Respuesta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id where ip_respuesta.id_usuario_res=".$id." group by ip_pregunta.id order by fecha_pregunta desc,numpreg desc,crespuesta desc ;");
+              $this->set('p_tags',$this->PreguntaTag->find('all', array('joins' => array(
+                array(
+                    'table' => 'tags',
+                    'alias' => 'Tags',
+                    'type' => 'inner',
+                    'conditions'=> array('Tags.id=PreguntaTag.tag')
+                )),'fields' => array('id','pregunta','Tags.tag'))));
+                $this->set('preg_req',$resueltas);
+               if(sizeof($resueltas)>0){ $this->set('tab_name',"Preguntas resueltas por ".$resueltas[0]["ip_usuario"]["nombre"]." ".$resueltas[0]["ip_usuario"]["apellido"]);
+          
+            }else{
+                 $this->set('tab_name',"0 Resultados");
+            }
+            $this->render("index");
+          
+        }
+        }
+         public function mejores(){
+        if(AppController::authReturnLogin()){
+           $id=$this->request->query["uid"];
+             $this->Area->recursive=false;
+               $this->set('areas', $this->Area->find('all',array('conditions'=>array('id<33'),'order'=>'area')));   
+           
+            $resueltas=$this->Respuesta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id where ip_respuesta.id_usuario_res=".$id." AND mejor_respuesta=1 group by ip_pregunta.id order by fecha_pregunta desc,numpreg desc,crespuesta desc ;");
+            $this->set('p_tags',$this->PreguntaTag->find('all', array('joins' => array(
+                array(
+                    'table' => 'tags',
+                    'alias' => 'Tags',
+                    'type' => 'inner',
+                    'conditions'=> array('Tags.id=PreguntaTag.tag')
+                )),'fields' => array('id','pregunta','Tags.tag'))));
+            $this->set('preg_req',$resueltas);
+            if(sizeof($resueltas)>0){
+             $this->set('tab_name',"Mejores respuestas de ".$resueltas[0]["ip_usuario"]["nombre"]." ".$resueltas[0]["ip_usuario"]["apellido"]);
+            }else{
+                 $this->set('tab_name',"0 Resultados");
+            }
+             $this->render("index");
+        }
+        }
+	public function index() { 
+            if(AppController::authReturnLogin()){
+            $user=$this->Session->read("User");
+                $user_table="ip_usuario_area";
+                $user_type="usuario";
+                if($user["tipo"]==="3"){
+                     $user_type="profesor";
+                    $user_table="ip_profesor_area";
+                }
+              
+             $this->setForIndex($user["id"],$user_table,$user_type);
             $this->render('index');}
 	}
         public function buscarPregunta(){
                if(AppController::authReturnLogin()){
                   $area=$this->request->data("area");
                   $tags=$this->request->data("tags");
+                   $keys=$this->request->data("keywords");
                    $cond=" AND (";
                 $sw=true;
                if($tags!=""){
@@ -80,12 +149,35 @@ class PreguntaController extends AppController {
                     'type' => 'inner',
                     'conditions'=> array('Tags.id=PreguntaTag.tag')
                 )),'fields' => array('id','pregunta','Tags.tag')));
-                $preg=$this->Pregunta->query("SELECT ip_pregunta.id,titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, "
-                        . "(SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL(SUM(ip_pregunta_votos.voto),0) as numpreg  FROM Instaprofe.ip_pregunta left outer join ip_respuesta"
+               
+                $uid="";
+                 if(isset($this->request->data["uid"])){
+                     
+                     $id=$this->request->data("uid");
+                     $uid=" AND ip_usuario.id=".$id;
+                 }
+               
+                 $q_area="";
+                 $t_area="";
+                 if($area!=""){
+                     $t_area="ip_area.area,";
+                    $q_area=" inner join ip_area on ip_pregunta.area=ip_area.id where ip_area.id= ".$area; 
+                 }
+                   $q_keys="";
+                 if($keys!=""){
+
+                    $q_keys=" AND (ip_pregunta.titulo like '%".$keys."%' OR ip_pregunta.pregunta like '%".$keys."%' OR ip_area.area like '%".$keys."%' OR ip_tags.tag like '%".$keys."%')"; 
+                     $join_tags="inner join ip_pregunta_tags on ip_pregunta_tags.pregunta=ip_pregunta.id inner join ip_tags on ip_pregunta_tags.tag=ip_tags.id";
+                      $t_area="ip_area.area,";
+                      if($area==""){
+                      $q_area=" inner join ip_area on ip_pregunta.area=ip_area.id";} 
+                 }
+                $preg=$this->Pregunta->query("SELECT ip_pregunta.id,titulo,ip_pregunta.id,".$t_area."ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, "
+                        . "(SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg  FROM Instaprofe.ip_pregunta left outer join ip_respuesta"
                         . " on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id "
                         .$join_tags
                         . " left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id"
-                        . " inner join ip_area on ip_pregunta.area=ip_area.id where ip_area.id= ".$area                   
+                        . $q_area.$uid.$q_keys                   
                         . $cond." group by ip_pregunta.id "
                         . "order by numpreg desc, crespuesta desc, fecha_pregunta desc ;"); 
              
@@ -121,7 +213,7 @@ class PreguntaController extends AppController {
        if(AppController::authReturnLogin()){
          $user=$this->Session->read('User');
          $preg=$this->request->data("pid");
-        $fecha=date('Y-m-d G:i:s', time() - 3600 * 5);;
+        $fecha=date('Y-m-d G:i:s', time() - 3600 * 5);
         $res=$this->vote($user,$preg,$fecha,1);
       
         return new CakeResponse(array('body'=>json_encode(array('votes'=>$res)),'status'=>200));}
@@ -182,8 +274,8 @@ class PreguntaController extends AppController {
         if(AppController::authReturnLogin()){
          $user=$this->Session->read('User');
          $res=$this->request->data("rid");
-        $fecha=date('Y-m-d G:i:s', time() - 3600 * 5);;
-        $res=$this->voteRes($user,$res,$fecha,-1);
+        $fecha=date('Y-m-d G:i:s', time() - 3600 * 5);
+            $res=$this->voteRes($user,$res,$fecha,-1);
         
         return new CakeResponse(array('body'=> json_encode(array('votes'=>$res)),'status'=>200));}
           
@@ -225,6 +317,9 @@ class PreguntaController extends AppController {
                
                 $this->Respuesta->updateAll(array('mejor_respuesta'=>null),array('respuesta.pregunta'=>$preg_id,'mejor_respuesta'=>1));
                 $this->Respuesta->saveField('mejor_respuesta',true);
+                      App::import('Controller', 'Email');
+                $EmailController = new EmailController();
+                $EmailController->bestAnswer($res_id);
                 return new CakeResponse(array('body'=> json_encode(array('title'=>'¡Gracias!','text'=>'Has seleccionado la mejor respuesta a tu pregunta')),'status'=>200));}
             }
             
@@ -238,7 +333,7 @@ class PreguntaController extends AppController {
                 $preg_id=$this->Respuesta->field("pregunta");
                 $this->Respuesta->updateAll(array('mejor_respuesta'=>null),array('respuesta.pregunta'=>$preg_id,'mejor_respuesta'=>1));
                
-                return new CakeResponse(array('body'=> json_encode(array('title'=>'Realizado','text'=>'Esta ya no sera mas la mejor respuesta')),'status'=>200));}
+                return new CakeResponse(array('body'=> json_encode(array('title'=>'Realizado','text'=>'Esta ya no será más la mejor respuesta')),'status'=>200));}
           
             
        return new CakeResponse(array('body'=> json_encode(array('message'=>'FAIL')),'status'=>500));    
@@ -257,6 +352,10 @@ class PreguntaController extends AppController {
                 $this->Respuesta->set("fecha_respuesta",$fecha);
                 $this->Respuesta->save();
                 if($this->Respuesta->id>0){
+                 App::import('Controller', 'Email');
+                $EmailController = new EmailController();
+                
+                $EmailController->quesAnswer($pid);
                    $block='<blockquote class="pull-left">
                                                     <div class="widget-main padding-6 no-padding-left no-padding-right">
                                                     <p>'.$resp.'</p>

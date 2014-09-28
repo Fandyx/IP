@@ -14,9 +14,9 @@ class EmailController extends AppController {
  * @var array
  */
 	public $uses =  array('Area','Pregunta','Tag','Respuesta','Instituto','Usuario','ProfesorArea','UsuarioTag');
-
-/**
- * index method
+     
+/** 
+* index method
  *
  * @return void
  */    public function index() {
@@ -31,6 +31,84 @@ class EmailController extends AppController {
                 $randomString .= $characters[rand(0, strlen($characters) - 1)];
             }
             return $randomString;
+        }
+        public function quesAnswer($pid){
+             $this->autoRender=false;
+             
+           
+            $this->Pregunta->recursive=0;
+            $redes=" <br/><br/>Saludos,<br/>Instaprofe<br/><br/>Síguenos en <a href='www.facebook.com/instaprofeoficial'>Facebook</a> - <a href='www.twitter.com/instaprofe'>Twitter</a> - <a href='www.instagram.com/instaprofeoficial'>Instagram</a>";
+            $preg=$this->Pregunta->find('first',array('conditions'=>array('Pregunta.id'=>$pid)));
+            $user=$this->Usuario->find('first',array('conditions'=>array('id'=>$preg["Pregunta"]["id_usuario_preg"])));
+            $email=$user["Usuario"]["email"];
+            $msj="Hola ".$user["Usuario"]["nombre"]." ".$user["Usuario"]["apellido"].",<br/><br/> Tu pregunta <i>\"".$preg["Pregunta"]["titulo"]."\"</i> ha sido respondida. <br/><br/>Para ver las respuestas, ingresa a <a href='http://localhost/Inicio/cake/Pregunta/Post?pid=".$preg["Pregunta"]["id"].'>Aqui</a>'.$redes;
+            $this->sendEmail($email, 'Instaprofe - ¡Pregunta Respondida!', $msj);
+            
+        }
+        public function bestAnswer($rid){
+        $this->autoRender=false;
+        $res=$this->Respuesta->find('first',array('conditions'=>array('Respuesta.id'=>$rid)));
+        $user=$this->Usuario->find('first',array('conditions'=>array('id'=>$res["Respuesta"]["id_usuario_res"])));
+            $this->Pregunta->recursive=0;
+          $redes=" <br/><br/>Saludos,<br/>Instaprofe<br/><br/>Síguenos en <a href='www.facebook.com/instaprofeoficial'>Facebook</a> - <a href='www.twitter.com/instaprofe'>Twitter</a> - <a href='www.instagram.com/instaprofeoficial'>Instagram</a>";
+            $preg=$this->Pregunta->find('first',array('conditions'=>array('Pregunta.id'=>$res["Respuesta"]["pregunta"])));
+           
+    
+           
+            $email=$user["Usuario"]["email"];
+            $msj="¡Felicitaciones ".$user["Usuario"]["nombre"]." ".$user["Usuario"]["apellido"]."!<br/><br/> Tu respuesta a la pregunta <i>\"".$preg["Pregunta"]["titulo"]."\"</i> ha sido seleccionada como la mejor.<br/><br/>Para verla, ingresa <a href='http://localhost/Inicio/cake/Pregunta/Post?pid=".$preg["Pregunta"]["id"].'>Aqui</a>'.$redes;
+            $this->sendEmail($email, 'Instaprofe - ¡Tu respuesta fue la mejor!', $msj);
+            
+        }
+        public function soporte(){
+            $user=$this->Session->read('User');
+            $asunto=$this->request->data('asunto');
+            $msj=$this->request->data('msj');
+            $user=$this->Usuario->find('first',array('conditions'=>array('id'=>$res["Respuesta"]["id_usuario_res"])));
+            $email=$user["Usuario"]["email"];
+            $msj="El usuario ".$user["Usuario"]["nombre"]." ".$user["Usuario"]["apellido"]." ";
+            
+        }
+        public function forget(){
+            $this->autoRender=false;
+            $email=$this->request->data("email");
+            $user=$this->Usuario->find('first',array('conditions'=>array('email'=>$email)));
+            if(sizeof($user)>0){
+            $newpass=$this->generateRandomString();
+            $this->Usuario->id=$user["Usuario"]["id"];
+            $this->Usuario->saveField('pass',$newpass);
+            $msj="Hola ".$user["Usuario"]["nombre"]." ".$user["Usuario"]["apellido"].", has indicado que olvidaste tu contraseña.<br/>
+                    Te hemos generado una nueva.<br/><br/>
+                    <strong>Nueva Contraseña: ".$newpass."</strong><br/> 
+                    <br/><br/>        
+                    Ingresa a http://www.instaprofe.com";
+            $this->sendEmail($email, 'Instaprofe - Contraseña Reasignada', $msj);
+             $this->Session->setFlash('<div class="clearfix">
+            <div class="pull-left alert alert-danger no-margin">
+      <i class="ace-icon fa fa-check bigger-120 blue"></i>
+                   &nbsp;Tu contraseña ha sido reasignada. Revisa tu correo.&nbsp;   
+            </div></div><div class="hr dotted"></div>
+    ');
+             $this->redirect("../Usuarios");
+            }else{
+                        $this->Session->setFlash('<div class="clearfix">
+            <div class="pull-left alert alert-danger no-margin">
+      <i class="ace-icon fa fa-frown-o bigger-120 blue"></i>
+                   &nbsp;No existe una cuenta asociada a este email&nbsp;   
+            </div></div><div class="hr dotted"></div>
+    ');
+           
+       $this->redirect("../Usuarios");
+            }
+        }
+        public function sendEmail($email,$title,$msj){
+             App::uses('CakeEmail', 'Network/Email');
+                     
+                    $Email = new CakeEmail('default');
+                    $Email->to($email);
+                    $Email->emailFormat('html');
+                    $Email->subject($title);
+                    $Email->send($msj);     
         }
 	public function emailRegisterEstudiante($email) {
 		$this->autoRender = false;
@@ -121,13 +199,7 @@ class EmailController extends AppController {
           
                 </td>';
                 
-           App::uses('CakeEmail', 'Network/Email');
-                     
-                    $Email = new CakeEmail('default');
-                    $Email->to($email);
-                    $Email->emailFormat('html');
-                    $Email->subject('Bienvenido a Instaprofe.com');
-                    $Email->send($html);     
+                    $this->sendEmail($email, 'Bienvenido a InstaProfe', $html);
 	}
 
 }

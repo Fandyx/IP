@@ -186,7 +186,7 @@
                                   <i class="ace-icon fa fa-spinner fa-spin purple" id="load_resp"></i>
                                   <div class="col-xs-11" id="comment_box"> 
                                   <textarea class="col-xs-11 respuesta_txt" id="respuesta" placeholder="Escribe tu respuesta"></textarea>
-                                  <button id="resp_send" class="btn btn-info respuesta_txt">Enviar</button></div>
+                                  <button id="resp_send" class="btn btn-primary respuesta_txt">Enviar Respuesta</button></div>
                                   </div>
 
                                 <script>var active="#leftp_preg"</script>

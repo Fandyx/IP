@@ -5,7 +5,7 @@
 								<img src="assets/images/INSTAPROFE_1.png" alt="logo" id="login_logo"/>
 								<h4 class="white" id="id-company-text">¡Tu red de acompañamiento educativo!</h4>
 							</div>
-
+                                                        <?php echo $this->Session->flash()?>
 							<div class="space-6"></div>
 
 							<div class="position-relative">
@@ -79,7 +79,7 @@
 											<div>
 												<a href="#" data-target="#forgot-box" class="forgot-password-link">
 													<i class="ace-icon fa fa-arrow-left"></i>
-													Olvide mi contraseña
+													Olvidé mi contraseña
 												</a>
 											</div>
 
@@ -96,7 +96,7 @@
 								<div id="forgot-box" class="forgot-box widget-box no-border">
 									<div class="widget-body">
 										<div class="widget-main">
-											<h4 class="header red lighter bigger">
+											<h4 class="header blue lighter bigger">
 												<i class="ace-icon fa fa-key"></i>
 												Recuperar contraseña
 											</h4>
@@ -107,25 +107,26 @@
 											</p>
 
 											<?php echo $this->Form->end();?>
+                                                                                        <form id="forgot-pass" action="Email/forget" method="POST">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="email" class="form-control" placeholder="Email" />
+															<input type="email" name="email" class="form-control" placeholder="Email" />
 															<i class="ace-icon fa fa-envelope"></i>
 														</span>
 													</label>
 
 													<div class="clearfix">
-														<button type="button" class="width-35 pull-right btn btn-sm btn-danger">
-															<i class="ace-icon fa fa-lightbulb-o"></i>
-															<span class="bigger-110">Enviar!</span>
+														<button type="submit" class="width-35 pull-right btn btn-sm btn-primary">
+															<i class="ace-icon fa fa-mail-forward"></i>
+															<span class="bigger-110">Enviar</span>
 														</button>
 													</div>
 												</fieldset>
 											</form>
 										</div><!-- /.widget-main -->
 
-										<div class="toolbar center">
+										<div class="toolbar orange2 center">
 											<a href="#" data-target="#login-box" class="back-to-login-link">
 												Regresar al login
 												<i class="ace-icon fa fa-arrow-right"></i>
@@ -184,7 +185,7 @@
 														<input id="agree" name="agree" type="checkbox" aria-required="true"  class="ace valid" />
 														<span class="lbl">
 															Acepto los
-															<a href="#">Terminos y Condiciones</a>
+															<a href="#">Términos y Condiciones</a>
 														</span>
 													</label>
 

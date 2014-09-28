@@ -1,6 +1,6 @@
                                                    
                                     <div class="row">
-                                            <div class="col-xs-6 col-sm-8">
+                                            <div id="col_search" class="col-xs-6 col-sm-8">
                                                     <div class="input-group">
                                                            <div class="col-md-7">
      
@@ -23,21 +23,20 @@
                                                         var u_ciudad='<?=$user["ciudad"]?>';
                                                         </script>
                                                         <div class="col-md-5">
-                                                            <select class="chosen-select ciudad" id="filter_ciudad" data-placeholder="En la ciudad de..." value="<?php echo $user["ciudad"]?>" style="display: none;">
-                                                        <option> </option>
-                                                        
-
-                                                        </select>
-                                                           
-                                                        
+                                                              <span class="input-icon" id='ciudad_container'>
+                                                            <input class="ciudad" id="filter_ciudad" placeholder="En la ciudad de..." value="<?php echo $user["ciudad"]?>" />
+                                                           <i class='ace-icon fa fa-map-marker gray'></i>
+                                                              </span>
                                                         </div>
                                                         
                                                         <br/><div class="space-10"></div>
                                                         <div class="advanced" id="advanced">
                                                         <div class="col-md-7">
+                                                         
                                                             <select multiple="" class="chosen-select tag-input-style" id="tema_filter" data-placeholder="Que quieran saber de...(Temas)" >
 																
                                                             </select>
+                                                           
                                                         </div>
                                                          <div class="col-md-5" id="inst_container">
                                                              <span class="input-icon">
@@ -68,7 +67,7 @@
                                                        <i class="ace-icon fa fa-spinner fa-spin purple" id="load_prof"></i>
                                                    
 										<!-- #section:custom/widget-box.options.transparent -->
-										<div class="widget-box transparent ui-sortable-handle" id="wid-results">
+										<div class="widget-box widget-color-green ui-sortable-handle" id="wid-results">
 											<div class="widget-header">
                                                                                          
 												<h4 class="widget-title lighter">Resultados de Búsqueda</h4>
@@ -119,7 +118,7 @@
  
 
 <!-- /section:custom/widget-box.header.options -->
-<div class="col-xs-4">
+<div class="col-xs-4" id="misareas">
     <div class="widget-box widget-color-blue2">
             <div class="widget-header">
                     <h4 class="widget-title lighter smaller">Mis Áreas</h4>

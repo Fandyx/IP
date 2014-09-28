@@ -124,7 +124,8 @@ class EstudianteController extends AppController {
                     $this->Respuesta->find('count',array('conditions'=>array('id_usuario_res'=>$uid,'mejor_respuesta'=>true))));
                   $this->set('contactos',
                     $this->Contacto->find('count',array('conditions'=>array('id_contactado'=>$uid))));
-		
+		$this->set('n_contactos',
+                    $this->Contacto->find('count',array('conditions'=>array('id_contactador'=>$uid)))); 
 		$this->set('u_instituto',  
 		$this->Instituto->query("SELECT * FROM Instaprofe.ip_usuario inner join ip_usuario_instituto on ip_usuario_instituto.usuario=ip_usuario.id inner join ip_instituto on ip_instituto.id=ip_usuario_instituto.instituto where ip_usuario.id=".$user['id']));
 		$this->set('u_area',  

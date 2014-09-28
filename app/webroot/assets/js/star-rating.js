@@ -359,7 +359,7 @@
         size: 'md',
         showClear: true,
         showCaption: true,
-        defaultCaption: '{rating} Stars',
+        defaultCaption: '{rating} Estrellas',
         starCaptions: {
             0.5: '1/2 Estrella',
             1: '1 Estrella',
@@ -389,7 +389,7 @@
         clearButtonBaseClass: 'clear-rating',
         clearButtonActiveClass: 'clear-rating-active',
         clearCaption: 'No Calificado',
-        clearCaptionClass: 'label label-default',
+        clearCaptionClass: 'label label-info',
         clearValue: 0,
         captionElement: null,
         clearElement: null,

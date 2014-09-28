@@ -1,43 +1,66 @@
-  			var grid_data = 
-			[ 
-				{id:"1",name:"Desktop Computer",note:"note",stock:"Yes",ship:"FedEx", sdate:"2007-12-03"},
-				{id:"2",name:"Laptop",note:"Long text ",stock:"Yes",ship:"InTime",sdate:"2007-12-03"},
-				{id:"3",name:"LCD Monitor",note:"note3",stock:"Yes",ship:"TNT",sdate:"2007-12-03"},
-				{id:"4",name:"Speakers",note:"note",stock:"No",ship:"ARAMEX",sdate:"2007-12-03"},
-				{id:"5",name:"Laser Printer",note:"note2",stock:"Yes",ship:"FedEx",sdate:"2007-12-03"},
-				{id:"6",name:"Play Station",note:"note3",stock:"No", ship:"FedEx",sdate:"2007-12-03"},
-				{id:"7",name:"Mobile Telephone",note:"note",stock:"Yes",ship:"ARAMEX",sdate:"2007-12-03"},
-				{id:"8",name:"Server",note:"note2",stock:"Yes",ship:"TNT",sdate:"2007-12-03"},
-				{id:"9",name:"Matrix Printer",note:"note3",stock:"No", ship:"FedEx",sdate:"2007-12-03"},
-				{id:"10",name:"Desktop Computer",note:"note",stock:"Yes",ship:"FedEx", sdate:"2007-12-03"},
-				{id:"11",name:"Laptop",note:"Long text ",stock:"Yes",ship:"InTime",sdate:"2007-12-03"},
-				{id:"12",name:"LCD Monitor",note:"note3",stock:"Yes",ship:"TNT",sdate:"2007-12-03"},
-				{id:"13",name:"Speakers",note:"note",stock:"No",ship:"ARAMEX",sdate:"2007-12-03"},
-				{id:"14",name:"Laser Printer",note:"note2",stock:"Yes",ship:"FedEx",sdate:"2007-12-03"},
-				{id:"15",name:"Play Station",note:"note3",stock:"No", ship:"FedEx",sdate:"2007-12-03"},
-				{id:"16",name:"Mobile Telephone",note:"note",stock:"Yes",ship:"ARAMEX",sdate:"2007-12-03"},
-				{id:"17",name:"Server",note:"note2",stock:"Yes",ship:"TNT",sdate:"2007-12-03"},
-				{id:"18",name:"Matrix Printer",note:"note3",stock:"No", ship:"FedEx",sdate:"2007-12-03"},
-				{id:"19",name:"Matrix Printer",note:"note3",stock:"No", ship:"FedEx",sdate:"2007-12-03"},
-				{id:"20",name:"Desktop Computer",note:"note",stock:"Yes",ship:"FedEx", sdate:"2007-12-03"},
-				{id:"21",name:"Laptop",note:"Long text ",stock:"Yes",ship:"InTime",sdate:"2007-12-03"},
-				{id:"22",name:"LCD Monitor",note:"note3",stock:"Yes",ship:"TNT",sdate:"2007-12-03"},
-				{id:"23",name:"Speakers",note:"note",stock:"No",ship:"ARAMEX",sdate:"2007-12-03"}
-			];
-			
-			var subgrid_data = 
-			[
-			 {id:"1", name:"sub grid item 1", qty: 11},
-			 {id:"2", name:"sub grid item 2", qty: 3},
-			 {id:"3", name:"sub grid item 3", qty: 12},
-			 {id:"4", name:"sub grid item 4", qty: 5},
-			 {id:"5", name:"sub grid item 5", qty: 2},
-			 {id:"6", name:"sub grid item 6", qty: 9},
-			 {id:"7", name:"sub grid item 7", qty: 3},
-			 {id:"8", name:"sub grid item 8", qty: 8}
-			];
+jQuery(function($) {
+    var Base64Binary = {
+	_keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+	
+	/* will return a  Uint8Array type */
+	decodeArrayBuffer: function(input) {
+		var bytes = (input.length/4) * 3;
+		var ab = new ArrayBuffer(bytes);
+		this.decode(input, ab);
 		
-  jQuery(function($) {
+		return ab;
+	},
+	
+	decode: function(input, arrayBuffer) {
+		//get last chars to see if are valid
+		var lkey1 = this._keyStr.indexOf(input.charAt(input.length-1));		 
+		var lkey2 = this._keyStr.indexOf(input.charAt(input.length-2));		 
+	
+		var bytes = (input.length/4) * 3;
+		if (lkey1 == 64) bytes--; //padding chars, so skip
+		if (lkey2 == 64) bytes--; //padding chars, so skip
+		
+		var uarray;
+		var chr1, chr2, chr3;
+		var enc1, enc2, enc3, enc4;
+		var i = 0;
+		var j = 0;
+		
+		if (arrayBuffer)
+			uarray = new Uint8Array(arrayBuffer);
+		else
+			uarray = new Uint8Array(bytes);
+		
+		input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+		
+		for (i=0; i<bytes; i+=3) {	
+			//get the 3 octects in 4 ascii chars
+			enc1 = this._keyStr.indexOf(input.charAt(j++));
+			enc2 = this._keyStr.indexOf(input.charAt(j++));
+			enc3 = this._keyStr.indexOf(input.charAt(j++));
+			enc4 = this._keyStr.indexOf(input.charAt(j++));
+	
+			chr1 = (enc1 << 2) | (enc2 >> 4);
+			chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+			chr3 = ((enc3 & 3) << 6) | enc4;
+	
+			uarray[i] = chr1;			
+			if (enc3 != 64) uarray[i+1] = chr2;
+			if (enc4 != 64) uarray[i+2] = chr3;
+		}
+	
+		return uarray;	
+	}
+}
+    $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+    _title: function(title) {
+        if (!this.options.title ) {
+            title.html("&#160;");
+        } else {
+            title.html(this.options.title);
+        }
+    }
+}));
     $('[data-rel=popover]').popover({html:true});
              $('[data-rel=popover]').hover(function(){
 
@@ -59,6 +82,50 @@
                     type: 'text',
                     name: 'username'
         });
+        $( "#siguiendo" ).click( function(e) {
+					e.preventDefault();
+			
+					var dialog = $( "#siguiendo-dialog" ).removeClass('hide').dialog({
+						modal: true,
+						title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-check'></i> Siguiendo</h4></div>",
+						
+						buttons: [ 
+							
+							{
+								text: "OK",
+								"class" : "btn btn-primary btn-xs",
+								click: function() {
+									$( this ).dialog( "close" ); 
+								} 
+							}
+						]
+					});
+                                    });
+                $( "#seguidores" ).click( function(e) {
+					e.preventDefault();
+			
+					var dialog = $( "#seguidores-modal" ).removeClass('hide').dialog({
+						modal: true,
+						title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-check'></i> jQuery UI Dialog</h4></div>",
+						title_html: true,
+						buttons: [ 
+							{
+								text: "Cancel",
+								"class" : "btn btn-xs",
+								click: function() {
+									$( this ).dialog( "close" ); 
+								} 
+							},
+							{
+								text: "OK",
+								"class" : "btn btn-primary btn-xs",
+								click: function() {
+									$( this ).dialog( "close" ); 
+								} 
+							}
+						]
+					});
+                                    });
 $( ".bestanswer_chk" ).tooltip({
 					show: null,
 					position: {
@@ -92,6 +159,8 @@ $(this).draggable({
 });
 
 });
+
+
 
 
 
@@ -138,10 +207,10 @@ events: [
 }
 ]
 ,
-editable: true,
-droppable: false, // this allows things to be dropped onto the calendar !!!
+editable:true,
+droppable:true, // this allows things to be dropped onto the calendar !!!
 selectable: true,
-eventStartEditable:false,
+
 selectHelper: true,
 select: function(start, end, allDay) {
  var modal = 
@@ -801,10 +870,10 @@ jQuery(".ciudad").autocomplete("option", "delay", 100);
 
             $.mask.definitions['~']='[+-]';
             $('#phone').mask('9999999999');
-
+            $("#precio").mask("$99999?9");
             jQuery.validator.addMethod("phone", function (value, element) {
                     return this.optional(element) || /^\d{10}( x\d{1,6})?$/.test(value);
-            }, "Ingresa un numero de telefono valido.");
+            }, "Ingresa un numero de telefono válido.");
     $.validator.addMethod(
 "normalDate",
 function(value, element) {
@@ -866,17 +935,17 @@ return value.match(/^\d\d?\-\d\d?\-\d\d\d\d$/);
 
                     messages: {
                             email: {
-                                    required: "Ingresa un email valido.",
-                                    email: "Ingresa un email valido."
+                                    required: "Ingresa un email válido.",
+                                    email: "Ingresa un email válido."
                             },
 
                             ciudad: "Por favor escoge una ciudad",
                             direccion: "Ingresa una dirección valida",
                             subscription: "Por favor escoge al menos una opción",
                             instituto:"Este campo es obligatorio",
-                            documento:"Ingresa un documento de identidad valido",
+                            documento:"Ingresa un documento de identidad válido",
                             sexo: "Selecciona un genero",
-                            phone:"Ingresa un telefono valido",
+                            phone:"Ingresa un telefono válido",
                             username: "El nombre de usuario no puede contener menos de 6 caracteres."
                     },
 
@@ -1048,4 +1117,5 @@ jQuery(this).removeClass("ui-corner-top").addClass("ui-corner-all");
 }
 });
 }
+
 

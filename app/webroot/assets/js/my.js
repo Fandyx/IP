@@ -3,9 +3,63 @@ toggleTable("users");
 toggleTable("profe");
 toggleTable("est");
 toggleTable("pad");
+ var prev=$(".teach_rating").val();
+  $( "#contactanos" ).click( function(e) {
+					e.preventDefault();
+			console.log(1);
+            var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
+            modal: true,
+            title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-envelope'></i> Contáctanos</h4></div>",
+            title_html: true,
+            width:800,
+            height:400,
+            buttons: [ 
+                    {
+                            text: "Cancelar",
+                            "class" : "btn btn-xs",
+                            click: function() {
+                                    $( this ).dialog( "close" ); 
+                            } 
+                    },
+                    {
+                            text: "Enviar",
+                            "class" : "btn btn-primary btn-xs",
+                            click: function() {
+                                var asunto=$("#contactar_asunto").val();
+                                var msj=$("#contactar_msj").val();
+                                  $.ajax({url:"../Email/soporte",data:{asunto:asunto,msj:msj},success:function(){
+                                          
+                                  }});
+                            } 
+                    }
+            ]
+    });
+
+    /**
+    dialog.data( "uiDialog" )._title = function(title) {
+            title.html( this.options.title );
+    };
+    **/
+});
+    $(".teach_stars").rating({showClear:false,step:1,disabled:true,showCaption:false});
+    $(".teach_rating").rating({showClear:false,step:1,disabled:false,showCaption:false});
+    $(".teach_rating").on("rating.change", function(event, value, caption) {
+    rate_user(user_id,value,prev);
+});
     autoCompleteUniversidad();
     autoCompleteColegio();
     autoCompleteInstituto();
+$("#add_col").click(function(){
+    $("#extra_col").append("<span><input type='text' placeholder='Especifique Colegio...' class='colegio ins_name col-sm-10 valid' id='nom-cole' name='nom-cole[]' style='display:block'/><button onclick='$(this).parent().remove()' class='btn btn-danger btn-sm ins_name' style='display:block' type='button' class='del_col'><i class='white ace-icon ace-icon glyphicon glyphicon-minus'></i></button></span>");
+    autoCompleteColegio();
+});
+$("#add_univ").click(function(){
+    $("#extra_univ").append("<span><input type='text' placeholder='Especifique Universidad' class='universidad ins_name col-sm-10 valid' id='nom-univ' name='nom-univ[]' style='display:block'/><button onclick='$(this).parent().remove()' class='btn btn-danger btn-sm ins_name' style='display:block' type='button' class='del_col'><i class='white ace-icon ace-icon glyphicon glyphicon-minus'></i></button></span>");
+    autoCompleteUniversidad();
+});
+$("#add_otro").click(function(){
+    $("#extra_otro").append("<span><input type='text' placeholder='Especifique Otro...' class='ins_name col-sm-10 valid' id='nom-otro' name='nom-otro[]' style='display:block'/><button onclick='$(this).parent().remove()' class='btn btn-danger btn-sm ins_name' style='display:block' type='button' class='del_col'><i class='white ace-icon ace-icon glyphicon glyphicon-minus'></i></button></span>");
+});
 $("#add_edu").click(function(){
     $("#prof_edu").append(' <div class="profile-info-row educacion_prof">\
                                                                         <select class="col-sm-2" name="tipo_edu[]">\
@@ -33,7 +87,7 @@ $("#add_exp").click(function(){
                                 <option value="E">Empleado</option>\
                                  <option value="I">Independiente</option>\
                             </select>\
-                            <input type="text" placeholder="Nombre de la institucion" name="inst_exp[]" class="instituto col-sm-4">\
+                            <input type="text" placeholder="¿Donde trabajaste?" name="inst_exp[]" class="instituto col-sm-4">\
                             <input type="text" placeholder="Rol" class="col-sm-3" name="rol_exp[]">\
                             <input type="text" placeholder="Años" name="year_exp[]" class="input-mini spinner-input form-control instituto col-sm-1" maxlength="3">\
                             <button class="btn btn-danger btn-sm" onclick="$(this).parent().remove()" id="add_exp">\
@@ -42,6 +96,7 @@ $("#add_exp").click(function(){
                             </div>');
     autoCompleteInstituto();
 });
+
 $(".estud_fecha").change(function(){
     if(getAge($(this).val())<18){
         $.gritter.add({
@@ -71,6 +126,17 @@ $.each(ciudades,function(key, value)
 });
 select.trigger('chosen:updated');
 }
+$(".contactado").change(function(){
+     var id=$(this).attr("id").split("-")[1];
+     var checked=$("#contactado-"+id).is(":checked");
+     $.ajax({
+        url:"../Contactos/contacto",
+        data:{id:id,checked:checked},
+        method:"POST",
+        success:function(data){
+              }   
+          });
+});
 $("#area_search").change(function(){
     var ciudad=$("#filter_ciudad").val();
     var ins=$("#filter_isnt").val();
@@ -140,13 +206,13 @@ $("#wid-results-close").click(function(){
                                             <div class="ace-spinner touch-spinner">\
                                         <div class="input-group">\
                                            <div>\
-                                               <button class="btn-link" onclick="upvote_r('+id+')">\
+                                               <button class="btn-link" id="upvote-'+id+'" onclick="upvote_r('+id+')">\
                                             <i class="green ace-icon ace-icon fa fa-thumbs-o-up fa-2x"></i>\
                                              </button>\
                                             </div>\
-                                            <div class="votes_number">0</div>\
+                                            <div id="votes-'+id+'" class="votes_number">0</div>\
                                              <div>\
-                                          <button class="btn-link" onclick="downvote_r('+id+')"><i class=" ace-icon ace-icon fa fa-thumbs-o-down red fa-2x">\
+                                          <button class="btn-link" id="downvote-'+id+'" onclick="downvote_r('+id+')"><i class=" ace-icon ace-icon fa fa-thumbs-o-down red fa-2x">\
                                           </i></button></div></div></div></div><div class="col-xs-11">'+block);
                                             var r=parseInt($("#respuestas_n").html());
                                             $("#respuestas_n").html(r+1);
@@ -245,10 +311,13 @@ $(".area_chk").change(function(){
 $(".ins_chk").change(function(){
 	var id=$(this).attr("id").split("-")[1];
 	var checked=$(this).is(":checked");
-	if(checked){
-		$("#nom-"+id).show();
+	var sel="#nom-"+id;
+        if(checked){
+                $(sel).show();
+                 $("#add_"+id).show();
 	}else{
-		$("#nom-"+id).hide();
+		$(sel).hide();
+                 $("#add_"+id).hide();
 	}
 	
 });
@@ -407,10 +476,20 @@ $("#prof_search").click(function(){
 				var usr=$(this)[0].Usuario;
                                 var inst=$(this)[0].Instituto;
                                 var res=$(this)[0][0];
+                                
+                                var mres=0,sum=0;
                                 res.mres==null?mres=0:mres=res.mres;
-                                var instname="Independiente";
+                                res.total_sum==null?sum=0:sum=res.total_sum;
+                                var instname="";
                                 if(inst.instituto){
                                    instname=inst.instituto.toString();
+                                }else{
+                                    if(usr.tipo==3){
+                                        instname="Independiente";
+                                    }
+                                    else{
+                                        instname="No Especifica";
+                                    }
                                 }
 					var src='data:image/jpeg;base64,'+usr.p_avatar;
 				console.log(usr.id+" "+usr.nombre+" "+usr.p_avatar);
@@ -418,10 +497,12 @@ $("#prof_search").click(function(){
 				src="../assets/avatars/profile-pic.jpg";
 				}
                             var tipo='  <i class="ace-icon fa fa-briefcase grey"></i> Profesor<br/>';
-                            var stars=' <input id="input-id" type="number" class="stars" min=0 max=5 data-size="xs">';
+                            var stars=' <input id="input-id" type="number" class="stars" min=0 max=5 data-size="xs" value="'+sum+'">';
+                            var contacts= '<div class="">Veces contactado: <span>'+res.contact+'</span></div>';
                             if(usr.tipo!=3){
                               tipo='<i class="ace-icon fa fa-graduation-cap grey"></i> Estudiante<br/>';
                               stars='<div class="">Preguntas hechas: <span>'+res.pregs+'</span></div>';
+                              contacts='';
                             }
 			$("#search_list").append('\
 			<li class="dd-item" data-id="1">\
@@ -446,6 +527,7 @@ $("#prof_search").click(function(){
                                 '+stars+'\
                                 <div class="">Preguntas respondidas: <span>'+res.count+'</span></div>\
                                 <div class="">Mejores respuestas: <span>'+mres+'</span></div>\
+                                '+contacts+'\
 				</div>\
 				<div id="button_inside" class="col-sm-3">\
 				<a class="btn btn-primary btn-block" href="../Usuarios/profile?uid='+usr.id+'">Ver perfil...</a>\
@@ -454,46 +536,11 @@ $("#prof_search").click(function(){
 			</div>\
 		</li>');
                           
-                $(".stars").rating({showClear:false,step:1,disabled:true});
+                $(".stars").rating({showClear:false,step:1,disabled:true,showCaption:false});
 		$("#wid-results").show("slide");		
 		$("#search_list").show("fade");
 		$('#contactar-'+usr.id).on(ace.click_event, function(){contactar(usr)});
-		$.ajax({
-		url:"../ProfesorAreas/areaProfe",
-		method:"POST",
-		data:{prof_id:usr.id,area:ar},
-		success:function(response){
-			
-				var data=$.parseJSON(response);
-                                var size=data.size;
-                                data=data.data;
-		
-			$("#sr_"+usr.id).html('<h4>\
-						Temas:\
-					</h4>');
-			$(data).each(function(){
-				console.log($(this));
-				var obj2=$(this)[0].ip_area;
-				var data2=$.parseJSON(response).data2;
 
-			$("#sr_"+usr.id).append("<p id='thems_"+usr.id+"'>"+obj2.area+": </p>");
-							var temas="";
-				var elems = $(data2), count = elems.length;
-				elems.each(function(){
-					
-					var user=$(this)[0].UsuarioTag.usuario;
-					var area=$(this)[0].Tags.area;
-				
-					if(parseInt(user)==parseInt(usr.id)){
-					temas+=$(this)[0].Tags.tag;
-					}
-					 if (!--count) $('#thems_'+usr.id).append(temas);
-					 
-					});
-				
-		});
-		}
-		});
 		});
                 $("#load_prof").hide();
 		},
@@ -505,6 +552,8 @@ $("#prof_search").click(function(){
                                                 title:"Error"
 					  }
 					);
+                                   $("#wid-results .widget-title").html("Resultados de Búsqueda (0 Resultados)");
+                                   $("#search_list").html('No hay resultados para mostrar.');$("#search_list").show("fade");
 				
 			
 		}
@@ -538,6 +587,8 @@ function showThemes(id,tema){
 		temas=temas.temas;	
 		$("#temas").html($(this).capitalize(temas,','));
 		$("#row_temas").css("display","table-row");
+                $(".themeSelected").removeClass("themeSelected");
+                $("#tema-"+id).addClass("themeSelected");
         }
     	});
         
@@ -607,18 +658,18 @@ function contactar(id){
                         data=$.parseJSON(data);
                           $("#info_container").html(data.html);
                         gritter(data.title,data.text,data.class,data.avatar);
-                        follow(id);
+                        follow(id,true);
                         $("#contact-"+id).html(' <i class="ace-icon fa fa-hand-o-down bigger-120 blue"></i>\
                                                     Contactado');
                         $("#contact-"+id).removeClass("contact_user");
                         $("#contact-"+id).addClass("contacted_user");
+                        ("#contact-"+id).addClass("contacted_user");
+                        $( ".contact_user").unbind( "click" );
                     }
                 });}
     }));}
-function follow(id){
-    console.log(confirm("¿Estas seguro?","¿Deseas seguir a este usuario?",function(result){
-        if(result){
-        $.ajax({
+function ajax_follow(id){
+         $.ajax({
                     url:"../Usuarios/seguir",
                     data:{id:id},
                     method:'POST',
@@ -638,8 +689,18 @@ function follow(id){
                     });
 
                     }
-                });}
-    }));}
+                });
+}
+function follow(id,sw){
+    if(!sw){
+    console.log(confirm("¿Estas seguro?","¿Deseas seguir a este usuario?",function(result){
+        if(result){
+            ajax_follow(id);
+        }
+         }));
+    }else{
+        ajax_follow(id);
+    }}
 function unfollow(id){
     console.log(confirm("¿Estas seguro?","¿Deseas dejar de seguir a este usuario?",function(result){
         if(result){
@@ -678,7 +739,7 @@ $.gritter.add({
                 text: message,
                 image: src,
                 sticky: false,
-                time: 2000,
+                time: 5000,
                 before_open: function(){
 
                 },
@@ -784,7 +845,7 @@ function bestAnswer(id){
             var selector= $("#bestAnswer-"+id).attr("id")|| $("#unBestAnswer-"+id).attr("id")
              $("#"+selector).html("Desmarcar como Mejor respuesta");
              $("#"+selector).parent().parent().addClass("bestanswer");
-              $("#respuesta-"+id+" .center").append('<span class="badge badge-transparent bestanswer_chk" title="El usuario que pregunto, marcó esta como la mejor respuesta.">\
+              $("#respuesta-"+id+" .input-group").append('<span class="badge badge-transparent bestanswer_chk" title="El usuario que pregunto, marcó esta como la mejor respuesta.">\
 									<i class="ace-icon fa fa-check green fa-2x"></i>\
 								</span>');
              $("#"+selector).attr("onclick","unBestAnswer("+id+")");
@@ -852,9 +913,14 @@ function changeType(){
         $(".chosen-select").trigger("chosen:updated");
     }
 }
-$.fn.startLoading=function(){
+$.fn.startLoading=function(position,size,top,left){
+     if(position===undefined||position===""){position="absolute";}
+    if(size===undefined||size===""){size="60px";}
+    if(top===undefined||top===""){top="10%";}
+    if(left===undefined||left===""){left="30%";}
+            
     var name=$(this).selector;
-var a='<div style="position: absolute;z-index: 90000;font-size: 60px;top: 10%;left: 30%;" class="ajax-loading-overlay"><i class="ajax-loading-icon fa fa-spin fa-spinner fa-2x purple"></i> </div>';    
+var a='<div style="position: '+position+';z-index: 90000;font-size: '+size+';top: '+top+';left: '+left+';" class="ajax-loading-overlay"><i class="ajax-loading-icon fa fa-spin fa-spinner fa-2x purple"></i> </div>';    
 $(this).html(a);
 }
 $.fn.stopLoading=function(){
@@ -881,12 +947,12 @@ $.fn.scrollTo = function( target, options, callback ){
 function question_search(){
     var area=$("#area_search").val();
     var tags=$("#tema_filter").val();
-     
+    var keywords=$("#ques_keyword").val();
                 $("#question_search_container").startLoading();
     $.ajax({
         url:"buscarPregunta",
         method:"POST",
-        data:{area:area,tags:tags},
+        data:{area:area,tags:tags,uid:getUrlParameter("uid"),keywords:keywords},
         success:function(data){
             data=$.parseJSON(data);
             if(data.preg.length>0){
@@ -933,7 +999,9 @@ function question_search(){
             $("#question_search_container").append(cont);
             });
              $("#question_search_container").stopLoading();
-            $(".active").removeClass("active");
+            $("#myTab2 .active").removeClass("active");
+             $(".tab-content.padding-4 .active").removeClass("active");
+           
             $("#search_tab").show();
             $("#search_tab").addClass("active");
             
@@ -974,4 +1042,55 @@ function renderCalendar(){
                 function(data){
             
     }});
+}
+function getURLParameter(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+}
+function rate_user(id,value,prev){
+ 
+    confirm("¿Estas seguro?","¿Deseas calificar a este usuario con "+value+" estrellas?",function(result){
+       
+        if(result){
+    $("#calificar").startLoading("relative","15px",0,0);
+    $.ajax({url:"../Usuarios/calificar",data:{uid:id,val:value},method:"POST",success:function(data){
+    $("#calificar").stopLoading();
+    data=$.parseJSON(data);
+    var sum=data.sum;
+   $("#calificar").html('<span>\
+                         <p><strong>Califica tu experiencia con este profesor</strong></p>\
+                         </span>\
+                        <input id="teach_rating-'+id+'" type="number" value="'+value+'" class="teach_rating" min=0 max=5 data-size="xg">\
+                         ');
+    $(".teach_rating").rating({showClear:false,step:1,disabled:false,showCaption:false});
+    $(".teach_rating").on("rating.change", function(event, value, caption) {
+    rate_user(user_id,value,prev);
+});
+    var stars=' <input id="input-id" type="number" class="teach_stars" min=0 max=5 data-size="xg" value="'+sum+'">';
+       
+            $("#star_container").html(stars);
+            $(".teach_stars").rating({showClear:false,step:1,disabled:true,showCaption:false});
+            gritter(data.title,data.msg,"gritter-success",data.avatar);
+    }});}else{
+
+$(".teach_rating").rating('update', parseInt(prev));
+
+   
+    }
+});
+}
+function fb_share(name,link,pic,caption,desc,msj){
+//    var encodedPng = pic.substring(pic.indexOf(',') + 1, pic.length);
+    //name=$(this).capitalize(name," ");
+//     pic=Base64Binary.decode(encodedPng);  
+//     console.log(pic);
+FB.ui(
+{
+method: 'feed',
+name: name,
+link: link,
+picture: pic,
+caption: caption,
+description: desc,
+message: msj
+});
 }

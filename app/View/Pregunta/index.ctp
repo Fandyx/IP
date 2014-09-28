@@ -18,9 +18,10 @@
 												Tu pregunta ha sido enviada.
 											</p>
 </div>
-<div class="widget-box collapsed widget-color-blue" id="search_box">
+   <?php if(!isset($preg_req)){?>
+<div class="widget-box widget-color-blue2" id="search_box">
 	<div class="widget-header" >
-            	<div class="widget-toolbar no-border">
+            	<div class="widget-toolbar no-border" id="search_box_header" >
 											
 
         <a href="#" class="collapse_btn" data-action="collapse">
@@ -40,7 +41,7 @@
 <div class="form-group" >
 	<form id="question-form">
 	<div class="col-sm-12">
-		<input type="text" id="ques_title" placeholder="Titulo de la pregunta" class="col-xs-10 col-sm-5">
+		<input type="text" id="ques_title" placeholder="Título de la pregunta" class="col-xs-10 col-sm-5">
 		
 	</div>
 	<div class="col-sm-12">
@@ -71,7 +72,7 @@
 	</div>
                                                                                                     										<!-- #section:plugins/input.tag-input -->
 	<div id="ques_tags">
-   <input type="text" name="tags" id="form-field-tags" placeholder="Etiquetas..." style="display: none;">
+        <input type="text" name="tags" id="form-field-tags" placeholder="Etiquetas...(Temas)" style="display: none;">
 												
 			
 												
@@ -81,15 +82,16 @@
 	</div>
 	
 		<div class="col-sm-12">
-		<button type="button" id="send_question" class="btn btn-primary btn-large">Hacer Pregunta</button>
+		<button type="button" id="send_question" class="btn btn-primary btn-large"><i class="ace-icon fa fa-check"></i>Enviar</button>
 		</div>
 	
 </div>
 </div>
 </div>
-<div class="widget-box widget-color-blue" id="question_box">
-                    <div class="widget-header" >
-                            <div class="widget-toolbar no-border">
+   <?php }?>
+<div class="widget-box widget-color-green " id="question_box">
+                    <div class="widget-header">
+                              <div class="widget-toolbar no-border"  id="question_box_header">
 
 
                     <a href="#" class="collapse_btn" data-action="collapse">
@@ -107,8 +109,10 @@
             <div class="col-sm-12 widget-container-col ui-sortable">
                     <div class="widget-box transparent ui-sortable-handle">
                             <div class="widget-header">
-
-                                    <div class="col-sm-3 right width-20" >
+                                    <div class="col-sm-2 right" >
+                                        <input type="text" class="width-100" id="ques_keyword" placeholder="Palabra(s) clave..."/>
+                                    </div>
+                                    <div class="col-sm-2 right" >
                                     <select class="chosen-select" id="area_search" data-placeholder="Área" style="display: none;">
                                     <option> </option>
                                     <?php
@@ -120,32 +124,40 @@
                                     </select>
 
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <select multiple="" class="chosen-select chosen-question tag-input-style" id="tema_filter" data-placeholder="Temas" >
 
                                         </select>
                                     </div> 
-                                     <button class="btn-primary right" onclick="question_search()" id="change_type_button">Buscar</button>    
+                                     <button class="btn-primary right" onclick="question_search()" id="change_type_button">Buscar Todas</button>    
                                     <div class="widget-toolbar no-border">
                                             <ul class="nav nav-tabs" id="myTab2">
-
+                                              <?php
+                                              $li_class="active";
+                                              if(isset($preg_req)){
+                                                         echo '<li class="active">
+                                                                <a data-toggle="tab" id="request_tab" href="#request">'.$tab_name.'</a>
+                                                            </li>';
+                                                         $li_class="";
+                                                }else{    ?>
                                                 <li id="search_tab">
                                                                 <a data-toggle="tab"  href="#search_tabpane">Búsqueda</a>
                                                 </li>
-                                                <li class="active">
-                                                                <a data-toggle="tab" id="recent_questions" href="#profile2">Recientes</a>
+                                                <li class="<?=$li_class?>">
+                                                            <a data-toggle="tab" href="#misareas">Mis Áreas</a>
                                                 </li>
+                                              
                                                 <li>
                                                                 <a data-toggle="tab"  href="#myquestions">Mis preguntas</a>
                                                 </li>    
-                                                <li >
-                                                            <a data-toggle="tab" href="#home2">Mis Áreas</a>
-                                                    </li>
+                                                  <li>
+                                                                <a data-toggle="tab" id="recent_questions" href="#profile2">Recientes</a>
+                                                </li>
 
 
-                                                    <li>
+                                                <li>
                                                             <a data-toggle="tab" href="#info2">Top</a>
-                                                    </li>
+                                                </li><?php }?>
                                             </ul>
                                     </div>
                             </div>
@@ -163,13 +175,15 @@
                                         </div></div>
                                         </div>
                                     </div>
-
-                                <div id="profile2" class="tab-pane active">
-                                    <div class="scrollable ace-scroll" style="position: relative; padding-top: 12px;"><div class="scroll-track" style="display: block;"><div class="scroll-bar" style="left: 0px;"></div></div><div class="scroll-content" ><div >
-                                        <ul class="question_container">
+                                <?php   if(isset($preg_req)){?>
+                                <div id="request" class="tab-pane active">
+                                  <div class="scrollable ace-scroll" style="position: relative; padding-top: 12px;">
+                                        <div class="scroll-track" style="display: block;">
+                                            <div class="scroll-bar" style="left: 0px;"></div></div><div class="scroll-content" ><div >
+                                                    <ul class="question_container">
                                             <?php
                                             //echo print_r($preguntas);
-                                            foreach($rec_preguntas as $preg){
+                                            foreach($preg_req as $preg){
                                             echo '<li class="question_li"><a href="Post?pid='.$preg['ip_pregunta']['id'].'">';
                                                 $cres=$preg['0']['crespuesta'];
                                                 $votes=$preg['0']['numpreg'];
@@ -203,11 +217,56 @@
                                             ?>
 
 
-                                        </ul>
-                                        </div></div>
-                                        </div>
-                                    </div>
-                                    <div id="myquestions" class="tab-pane">
+                                    </ul></div></div></div>
+                                </div>           
+                                                          <?php } else{?>
+                                <div id="misareas" class="tab-pane active">
+                                    <!-- #section:custom/scrollbar.horizontal -->
+                                    <div class="scrollable ace-scroll" style="position: relative; padding-top: 12px;"><div class="scroll-track" style="display: block;"><div class="scroll-bar" style="left: 0px;"></div></div><div class="scroll-content" ><div >
+                                    <ul class="question_container">
+                                            <?php
+                                            //echo print_r($preguntas);
+                                            foreach($preguntas as $preg){
+                                              echo '<li class="question_li"><a href="Post?pid='.$preg['ip_pregunta']['id'].'">';
+                                                $cres=$preg['0']['crespuesta'];
+                                                $votes=$preg['0']['numpreg'];
+                                                if($votes===null){$votes=0;}
+                                                echo '<div class="votes"><div class="respuestas_n center">
+                                                        <p>Respuestas<br/>
+                                                         <span style="font-weight:bold;font-size:15px">'.$cres.'</span></p>
+                                                    </div>';
+                                                 $class='';
+                                                if($votes>0){$class='class="green"';}else if($votes<0){$class='class="red"';}
+                                                echo '<div class="puntuacion_n center">
+                                                        <p >Puntuación<br/>
+                                                        <span style="font-weight:bold;font-size:15px" '.$class.'>'.$votes.'</span></p>
+                                                    </div></div><div class="question_rest">'; 
+                                                $title=$preg['ip_pregunta']['titulo'];
+                                                echo '<h4 class="blue">'.$title.'</h4><p class="hashtags">';
+
+                                                foreach($p_tags as $tag){
+                                                    if($tag['PreguntaTag']['pregunta']==$preg['ip_pregunta']['id']){
+                                                        $t=$tag['Tags']['tag'];
+                                                        echo '<span class="label label-sm label-purple">'.$t.'</span> ';
+                                                    }
+                                                }
+                                                echo '</p>
+                                                    <p class="area">';
+                                                    $autor=$preg['ip_usuario']['nombre']." ".$preg['ip_usuario']['apellido'];
+                                                    $fecha=$preg['ip_pregunta']['fecha_pregunta'];
+                                                    echo $preg['ip_area']['area'].'</p><p class="autor">'.$autor.'</p><p class="fecha">'.$fecha.'</p>
+                                              </div></a></li>';
+                                                                                                            }
+                                                                                                            ?>
+
+
+                                                                                                    </ul>
+                                                                                                    </div></div>
+                                                                                                    </div>
+
+                                                                                                    <!-- /section:custom/scrollbar.horizontal -->
+                                                                                            </div>
+                                                                                            <div id="myquestions" class="tab-pane">
                                     <div class="scrollable ace-scroll" style="position: relative; padding-top: 12px;"><div class="scroll-track" style="display: block;"><div class="scroll-bar" style="left: 0px;"></div></div><div class="scroll-content" ><div >
                                         <ul class="question_container">
                                             <?php
@@ -250,14 +309,13 @@
                                         </div></div>
                                         </div>
                                     </div>
-                                            <div id="home2" class="tab-pane">
-                                                                                                    <!-- #section:custom/scrollbar.horizontal -->
-                                                                                                    <div class="scrollable ace-scroll" style="position: relative; padding-top: 12px;"><div class="scroll-track" style="display: block;"><div class="scroll-bar" style="left: 0px;"></div></div><div class="scroll-content" ><div >
-                                                                                                    <ul class="question_container">
-                                                                                                            <?php
-                                                                                                            //echo print_r($preguntas);
-                                                                                                            foreach($preguntas as $preg){
-                                                                                                              echo '<li class="question_li"><a href="Post?pid='.$preg['ip_pregunta']['id'].'">';
+                                <div id="profile2" class="tab-pane">
+                                    <div class="scrollable ace-scroll" style="position: relative; padding-top: 12px;"><div class="scroll-track" style="display: block;"><div class="scroll-bar" style="left: 0px;"></div></div><div class="scroll-content" ><div >
+                                        <ul class="question_container">
+                                            <?php
+                                            //echo print_r($preguntas);
+                                            foreach($rec_preguntas as $preg){
+                                            echo '<li class="question_li"><a href="Post?pid='.$preg['ip_pregunta']['id'].'">';
                                                 $cres=$preg['0']['crespuesta'];
                                                 $votes=$preg['0']['numpreg'];
                                                 if($votes===null){$votes=0;}
@@ -286,16 +344,16 @@
                                                     $fecha=$preg['ip_pregunta']['fecha_pregunta'];
                                                     echo $preg['ip_area']['area'].'</p><p class="autor">'.$autor.'</p><p class="fecha">'.$fecha.'</p>
                                               </div></a></li>';
-                                                                                                            }
-                                                                                                            ?>
+                                            }
+                                            ?>
 
 
-                                                                                                    </ul>
-                                                                                                    </div></div>
-                                                                                                    </div>
+                                        </ul>
+                                        </div></div>
+                                        </div>
+                                    </div>
 
-                                                                                                    <!-- /section:custom/scrollbar.horizontal -->
-                                                                                            </div>							<div id="info2" class="tab-pane">
+						<div id="info2" class="tab-pane">
                                                                                                     <div class="scrollable ace-scroll" style="position: relative; padding-top: 12px;"><div class="scroll-track" style="display: block;"><div class="scroll-bar" style="left: 0px;"></div></div><div class="scroll-content" ><div >
                                         <ul class="question_container">
                                             <?php
@@ -337,6 +395,7 @@
                                         </ul>
                                         </div></div>
                                         </div>
+                                                          <?php }?>
                                         </div>
                                 </div>
                         </div>

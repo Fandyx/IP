@@ -1,3 +1,4 @@
+ <script src="../assets/js/grids.js"></script>
 		<?php
 		$user=$this->Session->read('User');
 		?>
@@ -8,7 +9,7 @@ var user_type=<?=$user["tipo"]?>;
 		<div class="page-content-area">
 						<div class="page-header">
 							<h1>
-								Perfil
+								Mi Perfil
 								
 							</h1>
 						</div><!-- /.page-header -->
@@ -43,17 +44,14 @@ var user_type=<?=$user["tipo"]?>;
 												</span>
 
 												<!-- /section:pages/profile.picture -->
-												<div class="space-4"></div>
-
-												<div class="label label-info label-xlg arrowed-in arrowed-in-right">
+												
 													<div class="inline position-relative">
 														<a href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
-														<span class="white"><?=$user["nombre"]." ".$user["apellido"]?></span>
+														<span class="white" id="star_container"><input id="teach_rating-<?=$user["id"]?>" type="number" class="teach_stars" min=0 max=5 data-size="xg" value="<?=$stars?>"></span>
 														</a>
-
-														
-													</div>
-												</div>
+                                                                                                            </div>
+                                                                                                
+												
 											</div>
 
 											<div class="space-6"></div>
@@ -66,7 +64,8 @@ var user_type=<?=$user["tipo"]?>;
                                                         <i class="ace-icon fa fa-gear bigger-120 purple"></i>
                                                         Editar
                                                     </a>
-												
+                                                                                                                                             
+											
 												</div>
 
 												<div class="space-6"></div>
@@ -128,41 +127,43 @@ var user_type=<?=$user["tipo"]?>;
 													Siguiendo
 												</div>
 											</div>
-
-											<!-- /section:custom/extra.grid -->
+                                                                                         <!-- /section:custom/extra.grid -->
 											<div class="hr hr16 dotted"></div>
-										</div>
-
+										<div class="fb-like like-profile" style="position:relative !important;margin-top:10px;margin-left:30px;" data-width="350" data-href="http://www.instaprofe.com/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+										
+                                                                                </div>
+                                                                                	
 										<div class="col-xs-12 col-sm-9" id="profile-opt">
 											<div class="center">
 					
 
-                                                                                            <a href="../Pregunta/hechas/<?=$user["id"]?>"><span class="btn btn-sm btn-purple no-hover">
+                                                                                            <a href="../Pregunta/hechas?uid=<?=$user["id"]?>"><span class="btn btn-sm btn-purple no-hover">
 													<span class="line-height-1 bigger-170"> <?=$p_hechas?> </span>
 
 													<br />
-													<span class="line-height-1 smaller-90"> Preguntas Hechas </span>
+													<span class="line-height-1 smaller-90"> Preguntas Realizadas </span>
                                                                                                     </span></a>
-                                                                                             <a href="../Pregunta/resueltas/<?=$user["id"]?>">        
+                                                                                             <a href="../Pregunta/resueltas?uid=<?=$user["id"]?>">        
 												<span class="btn btn-sm btn-primary">
 													<span class="line-height-1 bigger-170"> <?=$p_resueltas?> </span>
 
 													<br />
-													<span class="line-height-1 smaller-90">Preguntas Resueltas </span>
+													<span class="line-height-1 smaller-90">Respuestas </span>
                                                                                                 </span></a>
-                                                                                             <a href="../Pregunta/mejores/<?=$user["id"]?>">      
+                                                                                             <a href="../Pregunta/mejores?uid=<?=$user["id"]?>">      
 												<span class="btn btn-sm btn-yellow no-hover">
                                                                                                     <span class="line-height-1 bigger-170"> <?=$m_respuestas?>  </span>
 
                                                                                                     <br />
                                                                                                     <span class="line-height-1 smaller-90"> Mejores Respuestas </span>
                                                                                             </span></a><?php if($user["tipo"]==3){?>
-                                                                                          <span class="btn btn-sm btn-success no-hover">
+                                                                                            <a href="../Contactos/contactado">      
+                                                                                               <span class="btn btn-sm btn-success no-hover">
                                                                                                     <span class="line-height-1 bigger-170"> <?=$n_contactos?>  </span>
 
                                                                                                     <br />
                                                                                                     <span class="line-height-1 smaller-90"> Veces Contactado </span>
-                                                                                              </span>
+                                                                                               </span></a>
                                                                                                 <?php } ?>
 											</div>
 
@@ -171,7 +172,7 @@ var user_type=<?=$user["tipo"]?>;
 											<!-- #section:pages/profile.info -->
                                     <div class="profile-user-info profile-user-info-striped">
                                             <div class="profile-info-row">
-                                                    <div class="profile-info-name"> Mi nombre es: </div>
+                                                    <div class="profile-info-name"> Mi nombre es </div>
 
                                                     <div class="profile-info-value">
                                                             <span id="user_name"><?=$user["nombre"]." ".$user["apellido"]?></span>
@@ -179,7 +180,7 @@ var user_type=<?=$user["tipo"]?>;
                                             </div>
 
                                             <div class="profile-info-row">
-                                                    <div class="profile-info-name">Me encuentro en: </div>
+                                                    <div class="profile-info-name">Soy de </div>
 
                                                     <div class="profile-info-value">
                                                             <i class="fa fa-map-marker light-orange bigger-110"></i>
@@ -188,7 +189,7 @@ var user_type=<?=$user["tipo"]?>;
                                             </div>
 
                                             <div class="profile-info-row">
-                                                    <div class="profile-info-name"> Tengo </div>
+                                                    <div class="profile-info-name"> Edad </div>
 
                                                     <div class="profile-info-value">
                                                         <?php
@@ -205,7 +206,7 @@ var user_type=<?=$user["tipo"]?>;
                                             </div>
 
                                             <div class="profile-info-row">
-                                                    <div class="profile-info-name"> Soy un: </div>
+                                                    <div class="profile-info-name"> Soy un </div>
 
                                                     <div class="profile-info-value">
                                                         <?php
@@ -219,13 +220,13 @@ var user_type=<?=$user["tipo"]?>;
                                             </div>
 
                                             <div class="profile-info-row">
-                                                    <div class="profile-info-name"> Que enseña: </div>
+                                                    <div class="profile-info-name"> Qué enseña </div>
 
                                                     <div class="profile-info-value">
                                                         <?php
             $t_areas="";
             foreach($u_area as $area){
-                $code= '<span class="themes" onclick="showThemes('.$area["ip_area"]["id"].',\''.$area["ip_area"]["area"].'\')">'.$area["ip_area"]["area"].'</span>';
+                $code= '<span class="themes" id="tema-'.$area["ip_area"]["id"].'" onclick="showThemes('.$area["ip_area"]["id"].',\''.$area["ip_area"]["area"].'\')">'.$area["ip_area"]["area"].'</span>';
               if($t_areas==""){    
                   $t_areas=$code;}
                     else{
@@ -247,8 +248,16 @@ var user_type=<?=$user["tipo"]?>;
                                                         <span id="temas"></span>
                                                     </div>
                                                 </div>
+                                        <div class="profile-info-row">
+                                                <div class="profile-info-name"> Precio/hora </div>
+
+                                                <div class="profile-info-value">
+                                                      
+                                                        <?=$user["precio_hora"]?><?=$user["negociable"]=="1"?" (Negociable)":""?>
+                                                </div>
+                                        </div>
 												<div class="profile-info-row">
-													<div class="profile-info-name"> Sobre Mi </div>
+													<div class="profile-info-name"> Descripción </div>
 
 													<div class="profile-info-value">
 														<span  id="descripcion">
@@ -277,7 +286,7 @@ var user_type=<?=$user["tipo"]?>;
 														
 													</a>
 												</li>
-
+<!--
 												<li class="">
 													<a data-toggle="tab" href="#comentarios">
 														 <i class="purple ace-icon fa fa-comments bigger-120"></i>
@@ -293,7 +302,7 @@ var user_type=<?=$user["tipo"]?>;
 														
 													</a>
 
-												</li>
+												</li>-->
 											</ul>
 
 											<div class="tab-content">
@@ -327,14 +336,14 @@ var user_type=<?=$user["tipo"]?>;
 
                                                                                                     </div><!-- /.col -->
                                                                                             </div>	</div>
-
+<!--
 												<div id="comentarios" class="tab-pane fade">
 													<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade.</p>
 												</div>
 
 												<div id="recomendaciones" class="tab-pane fade">
 													<p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin.</p>
-												</div>
+												</div>-->
 											</div>
 										</div>	
 										</div>

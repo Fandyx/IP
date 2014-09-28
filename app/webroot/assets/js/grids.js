@@ -1,7 +1,7 @@
   jQuery(function($) { 
       var grid_selector = "#grid-edu";
         var pager_selector = "#edu-pager";
-        var colNames=['Tipo','Tipo de Institucion','Nombre','Titulo obtenido','Año'];
+        var colNames=['Tipo','Tipo de Institución','Nombre','Título obtenido','Año'];
         var cModel=[
 
                         {name:'tipo',index:'tipo', width:60},
@@ -13,7 +13,7 @@
         table("../Profesor/getEducacion",grid_selector,pager_selector,colNames,cModel);
          grid_selector = "#grid-exp";
        pager_selector = "#edu-exp";
-       colNames=['Tipo','Nombre de la institucion','Rol','Años'];
+       colNames=['Tipo','Nombre de la institución','Rol','Años'];
         cModel=[
 
                         {name:'tipo',index:'tipo', width:60},

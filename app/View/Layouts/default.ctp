@@ -37,24 +37,78 @@
 		<!--[if lte IE 9]>
 		  <link rel="stylesheet" href="../assets/css/ace-ie.min.css" />
 		<![endif]-->
-		<link rel="stylesheet" href="../assets/css/style.css" />
+		
 		<!-- ace settings handler -->
                 <link rel="stylesheet" href="../assets/css/ace.min.css" id="main-ace-style" />
 		<script src="../assets/js/ace-extra.min.js"></script>
-
+                <link rel="stylesheet" href="../assets/css/style.css" />
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 
 		<!--[if lte IE 8]>
 		<script src="../assets/js/html5shiv.js"></script>
 		<script src="../assets/js/respond.min.js"></script>
 		<![endif]-->
+                		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="../assets/js/bootstrap.min.js"></script>
+
+		<!-- ace scripts -->
+		<script src="../assets/js/ace-elements.min.js"></script>
+		<script src="../assets/js/ace.min.js"></script>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '932909023390821',
+      xfbml      : true,
+      version    : 'v2.1'
+    });
+  };
+
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/es_LA/sdk.js#xfbml=1&appId=932909023390821&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+window.twttr = (function (d, s, id) {
+  var t, js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src= "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+  return window.twttr || (t = { _e: [], ready: function (f) { t._e.push(f) } });
+}(document, "script", "twitter-wjs"));
+
+</script>
+		
+              
 	</head>
 
 	<body class="no-skin">
+            <div id="fb-root"></div>
+
 		<!-- #section:basics/navbar.layout -->
 <!--		
 <?php
 $user=$this->Session->read('User');
+
  if($user["tipo"]==3){$type="Profesor";$user_link="../Profesor/";}
                           if($user["tipo"]==2){$type="Estudiante";$user_link="../Estudiante/";}
                             if($user["tipo"]==1){$type="Padre";$user_link="../Padre/";}
@@ -91,14 +145,22 @@ $user=$this->Session->read('User');
 					<!-- #section:basics/navbar.toggle -->
 
 					<!-- /section:basics/navbar.toggle -->
+                                        
 				</div>
 
 				<!-- #section:basics/navbar.dropdown -->
 				<div class="navbar-buttons navbar-header pull-right" role="navigation">
+                                     
 					<ul class="nav ace-nav">
-				
-
-
+                                            <div id="social" class="inline">
+                                            
+                                            <div class="fb-like" data-width="260" data-href="http://www.instaprofe.com/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+                                            <a class="twitter-follow-button"
+                                                                href="https://twitter.com/instaprofe"
+                                                                  data-lang="es">
+                                                               
+                                                                </a>
+                                            </div>
 						
 						<!-- #section:basics/navbar.user_menu -->
 						<li class="light-blue">
@@ -152,7 +214,7 @@ $user=$this->Session->read('User');
 			</script>
 
 			<!-- #section:basics/sidebar -->
-			<div id="sidebar" class="sidebar                  responsive">
+			<div id="sidebar" class="sidebar responsive">
 				<script type="text/javascript">
 					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
 				</script>
@@ -193,18 +255,18 @@ $user=$this->Session->read('User');
 				<ul class="nav nav-list">
 					<?php if($user["completo"]==1){?>
 					<li class="active" id="leftp_inicio">
-						<a data-url="page/admin" href="<?=$user_link?>">
-							<i class="menu-icon fa fa-home"></i>
-							<span class="menu-text"> Inicio </span>
+						<a class="btn-success" data-url="page/admin" href="../Buscar/">
+							<i class="menu-icon fa fa-search white "></i>
+							<span class="menu-text white"> Búsqueda </span>
 						</a>
 
 						<b class="arrow"></b>
 					</li>
 
 					<li class="" id="leftp_preg">
-						<a href="../Pregunta/">
-							<i class="menu-icon fa fa-question"></i>
-							<span class="menu-text"> Preguntas </span>
+						<a href="../Pregunta/" class="btn-primary">
+							<i class="menu-icon fa fa-question-circle white"></i>
+							<span class="menu-text white"> Preguntas </span>
 
 							<!-- <b class="arrow fa fa-angle-down"></b> -->
 						</a>
@@ -221,10 +283,10 @@ $user=$this->Session->read('User');
 
 					</li>
 
-					<li class="" id="leftp_eval">
-						<a href="#">
-							<i class="menu-icon fa fa-pencil-square-o"></i>
-							<span class="menu-text"> Evaluaciones </span>
+-->					<li class="" id="leftp_contacto">
+						<a href="#" class="dropdown-toggle btn-danger" style="opacity: .92" >
+							<i class="menu-icon fa fa-pencil-square-o white"></i>
+							<span class="menu-text white"> Contactos </span>
 
 							
 						</a>
@@ -232,209 +294,65 @@ $user=$this->Session->read('User');
 						<b class="arrow"></b>
 
 						<ul class="submenu">
-							<li class="">
-								<a data-url="page/form-elements" href="#page/form-elements">
+							<li class="" id="hecontactado">
+								<a href="../Contactos/contactos">
 									<i class="menu-icon fa fa-caret-right"></i>
-									Crear
+									He Contactado
 								</a>
 
 								<b class="arrow"></b>
 							</li>
 
-							<li class="">
-								<a data-url="page/form-wizard" href="#page/form-wizard">
+							<li class="" id="hancontactado">
+								<a href="../Contactos/contactado">
 									<i class="menu-icon fa fa-caret-right"></i>
-									Tomar
+									Me Han Contactado
 								</a>
 
 								<b class="arrow"></b>
 							</li>
 
 						</ul>
-					</li>-->
+					</li>
 
-					<li class="" id="leftp_calendario">
+<!--					<li class="" id="leftp_calendario">
 												<a data-url="page/calendar" href="../Usuarios/calendar">
 							<i class="menu-icon fa fa-calendar"></i>
 
 							<span class="menu-text">
 								Calendario
 
-								<!-- #section:basics/sidebar.layout.badge -->
-<!--								<span class="badge badge-transparent tooltip-error" title="1 Evento Importante">
+								 #section:basics/sidebar.layout.badge 
+								<span class="badge badge-transparent tooltip-error" title="1 Evento Importante">
 									<i class="ace-icon fa fa-exclamation-triangle red bigger-130"></i>
-								</span>-->
+								</span>
 
-								<!-- /section:basics/sidebar.layout.badge -->
+								 /section:basics/sidebar.layout.badge 
 							</span>
 						</a>
 
 						
-					</li>
+					</li>-->
 					<?php }?>
 					<li class="" id="leftp_perfil">
                         <?php
                         $type="";
                        
                         ?>
-						<a data-url="page/widgets" href="<?=$user_link?>Profile">
-							<i class="menu-icon fa fa-user"></i>
-							<span class="menu-text"> Perfil </span>
+						<a data-url="page/widgets" class="btn-purple3" style="background-color:#662D91;opacity:0.65" href="<?=$user_link?>Profile">
+							<i class="menu-icon fa fa-user white"></i>
+							<span class="menu-text white"> Perfil </span>
 						</a>
 
 						<b class="arrow"></b>
 					</li>
-<!-- 
-					<li class="">
-						<a data-url="page/gallery" href="#page/gallery">
-							<i class="menu-icon fa fa-picture-o"></i>
-							<span class="menu-text"> Gallery </span>
-						</a>
+                                        <li class="">
+                                            <a data-url="page/widgets" href="../Usuarios/logout" class="btn-grey ">
+							 <i  class="menu-icon fa fa-user fa-power-off white" ></i>
+                                                        <span class="menu-text white"> Cerrar Sesión </span>
+						</a >
+                                        </li>
 
-						<b class="arrow"></b>
-					</li>
-
-					<li class="">
-						<a href="#" class="dropdown-toggle">
-							<i class="menu-icon fa fa-tag"></i>
-							<span class="menu-text"> More Pages </span>
-
-							<b class="arrow fa fa-angle-down"></b>
-						</a>
-
-						<b class="arrow"></b>
-
-						<ul class="submenu">
-							<li class="">
-								<a data-url="page/profile" href="#page/profile">
-									<i class="menu-icon fa fa-caret-right"></i>
-									User Profile
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a data-url="page/inbox" href="#page/inbox">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Inbox
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a data-url="page/pricing" href="#page/pricing">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Pricing Tables
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a data-url="page/invoice" href="#page/invoice">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Invoice
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a data-url="page/timeline" href="#page/timeline">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Timeline
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a data-url="page/email" href="#page/email">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Email Templates
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a data-url="page/login" href="../login.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Login &amp; Register
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-						</ul>
-					</li>
-
-					<li class="">
-						<a href="#" class="dropdown-toggle">
-							<i class="menu-icon fa fa-file-o"></i>
-
-							<span class="menu-text">
-								Other Pages
-
-								<!-- #section:basics/sidebar.layout.badge 
-								<span class="badge badge-primary">5</span>
-
-								<!-- /section:basics/sidebar.layout.badge 
-							</span>
-
-							<b class="arrow fa fa-angle-down"></b>
-						</a>
-
-						<b class="arrow"></b>
-
-						<ul class="submenu">
-							<li class="">
-								<a data-url="page/faq" href="#page/faq">
-									<i class="menu-icon fa fa-caret-right"></i>
-									FAQ
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a data-url="page/error-404" href="#page/error-404">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Error 404
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a data-url="page/error-500" href="#page/error-500">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Error 500
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a data-url="page/grid" href="#page/grid">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Grid
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a data-url="page/blank" href="#page/blank">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Blank Page
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-						</ul>
-					</li> -->
 				</ul><!-- /.nav-list -->
 
 				<!-- #section:basics/sidebar.layout.minimize -->
@@ -446,7 +364,31 @@ $user=$this->Session->read('User');
 				<script type="text/javascript">
 					try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
 				</script>
-			</div>
+                                <div class="margin-50 center blue">
+                                <p class="center blue">Síguenos en:</p>
+                                <a href="http://www.facebook.com/Instaprofeoficial">
+                                <i  class="menu-icon fa fa-facebook-square blue fa-2x" ></i>
+                                
+                                </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="http://www.twitter.com/instaprofe">
+                                 <i  class="menu-icon fa fa-twitter fa-2x blue" ></i>
+                                </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="http://www.instagram.com/Instaprofeoficial">
+                                 <i  class="menu-icon fa fa-instagram fa-2x blue" ></i>
+                                </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <div class="center margin-top-20">
+                                ¿Dudas, comentarios o sugerencias?<br/>
+                                <a id="contactanos" href="#">Contáctanos</a>
+                                </div>
+                                <div id="dialog-message" class="hide">
+                                <input type="text" class="col-sm-12" id="contactar_asunto" placeholder="Asunto..."/>
+                                
+                                <div class="space-20"></div>
+
+                                <textarea class="col-sm-12 msj_txt" id="contactar_msj" placeholder="Mensaje"></textarea>
+                                </div>
+                                </div>
 
 			<!-- /section:basics/sidebar -->
 			<div class="main-content">
@@ -557,65 +499,12 @@ $user=$this->Session->read('User');
 				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 			</a>
 		</div><!-- /.main-container -->
-
-		<!-- basic scripts -->
-
-		<!--[if !IE]> -->
-		<script type="text/javascript">
-			window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>"+"<"+"/script>");
-		</script>
-
-		<!-- <![endif]-->
-
-		<!--[if IE]>
-<script type="text/javascript">
- window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>"+"<"+"/script>");
-</script>
-<![endif]-->
-		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
-		</script>
-		<script src="../assets/js/bootstrap.min.js"></script>
-
-		<!-- ace scripts -->
-		<script src="../assets/js/ace-elements.min.js"></script>
-		<script src="../assets/js/ace.min.js"></script>
-		<script type="text/javascript">
-			// //Load content via ajax
-					// jQuery(function($) {
-					  // if('enable_ajax_content' in ace) {
-						// var options = {
-						  // content_url: function(url) {
-							// //this is for Ace demo only, you should change it
-							// //please refer to documentation for more info
-// 							
-							// if(!url.match(/^page\//)) return false;
-// 							
-							// var path = document.location.pathname;
-							// path=path;
-							// //for Ace HTML demo version, convert #page/gallery to > gallery.html and load it
-							// console.log(path);
-// 							
-							// if(path.match(/index\.php/)) return path.replace(/index\.php/, url.replace(/^page\//, '')+'.php') ;
-// 					
-							// //for Ace PHP demo version convert "page/dashboard" to "?page=dashboard" and load it
-							// console.log(url);
-							// console.log(path + "?" + url.substr(url.indexOf(/\//)));
-							// return path + url.substr(url.indexOf("/")+1)+".php";
-						  // },
-						  // default_url: 'page/admin'//default url
-						// }
-						// console.log(options);
-						// ace.enable_ajax_content($, options)
-// 						
-					  // }
-// 					    
-					// })
-
-		</script>
-		<script src="../assets/js/jquery.dataTables.min.js"></script>
-<script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
-<script src="../assets/js/jquery-ui.min.js"></script>
+  <script src="../assets/js/ciudades.js"></script>
+		<script src="../assets/js/my.js"></script>
+                <script src="../assets/js/default.js"></script>
+<script src="../assets/js/jquery.dataTables.min.js"></script>
+                <script src="../assets/js/jquery.dataTables.bootstrap.js"></script>
+                <script src="../assets/js/jquery-ui.min.js"></script>
                 
 		<script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
 		<script src="../assets/js/jquery.gritter.min.js"></script>
@@ -645,11 +534,8 @@ $user=$this->Session->read('User');
                 <script src="../assets/js/star-rating.js" type="text/javascript"></script>
                <script src="../assets/js/date-time/bootstrap-datepicker.min.js"></script>
 		<script src="../assets/js/jqGrid/jquery.jqGrid.min.js"></script>
-		<script src="../assets/js/jqGrid/i18n/grid.locale-en.js"></script>
-                <script src="../assets/js/ciudades.js"></script>
-		<script src="../assets/js/my.js"></script>
-                <script src="../assets/js/default.js"></script>
-                <script src="../assets/js/grids.js"></script>
+		<script src="../assets/js/jqGrid/i18n/grid.locale-es.js"></script>
+               
 <!--                <script>
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {

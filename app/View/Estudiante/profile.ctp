@@ -130,38 +130,50 @@
 
                     <div class="col-xs-12 col-sm-9" id="profile-opt">
                          <div class="center">
+					
 
+                                                                                            <a href="../Pregunta/hechas?uid=<?=$user["id"]?>"><span class="btn btn-sm btn-purple no-hover">
+													<span class="line-height-1 bigger-170"> <?=$p_hechas?> </span>
 
-                                    <span class="btn btn-app btn-sm btn-purple no-hover">
-                                            <span class="line-height-1 bigger-170"> <?=$p_hechas?> </span>
+													<br />
+													<span class="line-height-1 smaller-90"> Preguntas Hechas </span>
+                                                                                                    </span></a>
+                                                                                             <a href="../Pregunta/resueltas?uid=<?=$user["id"]?>">        
+												<span class="btn btn-sm btn-primary">
+													<span class="line-height-1 bigger-170"> <?=$p_resueltas?> </span>
 
-                                            <br />
-                                            <span class="line-height-1 smaller-90"> Preguntas Hechas </span>
-                                    </span>
+													<br />
+													<span class="line-height-1 smaller-90">Preguntas Resueltas </span>
+                                                                                                </span></a>
+                                                                                             <a href="../Pregunta/mejores?uid=<?=$user["id"]?>">      
+												<span class="btn btn-sm btn-yellow no-hover">
+                                                                                                    <span class="line-height-1 bigger-170"> <?=$m_respuestas?>  </span>
 
-                                    <span class="btn btn-app btn-sm btn-blue no-hover">
-                                            <span class="line-height-1 bigger-170"><?=$p_resueltas?> </span>
+                                                                                                    <br />
+                                                                                                    <span class="line-height-1 smaller-90"> Mejores Respuestas </span>
+                                                                                            </span></a><?php if($user["tipo"]==3){?>
+                                                                                          <span class="btn btn-sm btn-success no-hover">
+                                                                                                    <span class="line-height-1 bigger-170"> <?=$n_contactos?>  </span>
 
-                                            <br />
-                                            <span class="line-height-1 smaller-90">Preguntas Resueltas </span>
-                                    </span>
+                                                                                                    <br />
+                                                                                                    <span class="line-height-1 smaller-90"> Veces Contactado </span>
+                                                                                              </span>
+                                                                                                <?php }else{  ?>
+                                                                                                     <span class="btn btn-sm btn-success no-hover">
+                                                                                                    <span class="line-height-1 bigger-170"> <?=$n_contactos?>  </span>
 
-                                    <span class="btn btn-app btn-sm btn-success no-hover">
-                                            <span class="line-height-1 bigger-170"> <?=$m_respuestas?>  </span>
-
-                                            <br />
-                                            <span class="line-height-1 smaller-90"> Mejores Respuestas </span>
-                                    </span>
-
-
-                            </div>
+                                                                                                    <br />
+                                                                                                    <span class="line-height-1 smaller-90"> Profesores Contactados </span>
+                                                                                              </span>
+                                                                                                    <?php } ?>
+											</div>
 
                             <div class="space-12"></div>
 
                             <!-- #section:pages/profile.info -->
                             <div class="profile-user-info profile-user-info-striped">
                                     <div class="profile-info-row">
-                                            <div class="profile-info-name"> Nombre </div>
+                                            <div class="profile-info-name"> Mi nombre es </div>
 
                                             <div class="profile-info-value">
                                                     <span id="user_name"><?=$user["nombre"]." ".$user["apellido"]?></span>
@@ -169,7 +181,7 @@
                                     </div>
 
                                     <div class="profile-info-row">
-                                            <div class="profile-info-name"> Ubicación </div>
+                                            <div class="profile-info-name"> Soy de </div>
 
                                             <div class="profile-info-value">
                                                     <i class="fa fa-map-marker light-orange bigger-110"></i>
@@ -178,7 +190,7 @@
                                     </div>
 
                                     <div class="profile-info-row">
-                                            <div class="profile-info-name"> Edad </div>
+                                            <div class="profile-info-name"> Tengo </div>
 
                                             <div class="profile-info-value">
                                                 <?php
@@ -215,7 +227,7 @@ $interval = $today->diff(new DateTime($birthdate));
                                                 <?php
     $t_areas="";
     foreach($u_area as $area){
-        $code= '<span class="themes" onclick="showThemes('.$area["ip_area"]["id"].',\''.$area["ip_area"]["area"].'\')">'.$area["ip_area"]["area"].'</span>';
+        $code= '<span class="themes" id="tema-'.$area["ip_area"]["id"].'" onclick="showThemes('.$area["ip_area"]["id"].',\''.$area["ip_area"]["area"].'\')">'.$area["ip_area"]["area"].'</span>';
       if($t_areas==""){    
           $t_areas=$code;}
             else{

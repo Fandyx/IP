@@ -1,3 +1,5 @@
+<?php
+$user=$this->Session->read('User');?>
 <div id="user-profile-3" class="user-profile row">
                                         <div class="col-sm-offset-1 col-sm-10">
                                             <!-- <div class="well well-sm">
@@ -28,7 +30,7 @@
                                                         <li>
                                                             <a data-toggle="tab" href="#edit-password">
                                                                 <i class="blue ace-icon fa fa-key bigger-125"></i>
-                                                                Contraseña
+                                                                Cambiar Contraseña
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -65,7 +67,7 @@
                                                                     <div class="space-4"></div>
 
                                                                     <div class="form-group">
-                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">¿Como te llamas?*</label>
+                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">¿Cómo te llamas?*</label>
 
                                                                         <div class="col-sm-8">
                                                                             <?php 
@@ -86,15 +88,24 @@
                                                                     </div>
                                                                     <div class="space-4"></div>
                                                                     <div class="form-group">
-                                                                        <label class="col-sm-4 control-label no-padding-right"  for="form-field-ciudad">¿Donde vives?*</label>
+                                                                        <label class="col-sm-4 control-label no-padding-right"  for="form-field-ciudad">¿Dónde vives?*</label>
 
                                                                         <div class="col-sm-8">
                                                                             <input class="col-xs-12 col-sm-10 ciudad" type="text" name="ciudad" id="ciudad" required placeholder="Ciudad" value="<?php echo $user["ciudad"]?>" />
                                                                         </div>
                                                                     </div>
+                                                                     <div class="space-4"></div>
+                                                                    <div class="form-group">
+                                                                        <label class="col-sm-4 control-label no-padding-right">¿Precio de clase por hora?</label>
+                                                                        <div class="col-sm-8"> 
+                                                                        <input type="text" placeholder="Precio/hora" value="<?=$user["precio_hora"]?>" name="precio_hora" id="precio">
+                                                                        <input <?php if($user["negociable"]=="1")echo "checked";?> name="negociable" type="checkbox" id="negociable"  class="ace valid area_chk" aria-required="true" aria-invalid="true"><span class="lbl">Negociable</span>
+                                                                      </div>
+                                                                    
+                                                                    </div>
                                                                     <div class="space-4"></div>
                                                                     <div class="form-group">
-                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-select">¿Cual es tu rol?*</label>
+                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-select">¿Cuál es tu rol?*</label>
 
                                                                         <div class="col-sm-8">
                                                                             <select class="col-xs-12 col-sm-10" id="form-type-select" name="tipo">
@@ -105,44 +116,77 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">¿Donde estudian tus clientes?*</label>
+                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">¿Dónde estudian tus clientes?*</label>
 
                                                                         <div class="col-sm-8">
                                                                             <?php 
                                                                                 $nombre="";$apellido="";
+                                                                                $c_input="";$u_input="";$o_input="";
                                                                                 $c_checked="";$u_checked="";$o_checked="";
-                                                                               $c_input="<input type='text' placeholder='Especifique Colegio...' class='ins_name col-xs-12 col-sm-10 valid colegio' name='nom-cole' id='nom-cole' />";
-                                                                                $u_input="<input type='text' placeholder='Especifique Universidad...' class='ins_name col-xs-12 col-sm-10 valid universidad' name='nom-univ' id='nom-univ'/>";
-                                                                                $o_input="<input type='text' id='nom-otro' placeholder='Especifique Otro...' class='ins_name col-xs-12 col-sm-10 valid' name='nom-otro' />";
-                                                                                $c_name="";$u_name="";$o_name="";
+                                                                                $c_name="";$u_name="";$o_name=""; 
                                                                                 $c_visible="";$u_visible="";$o_visible="";
+                                                                                $first_c=true;$first_u=true;$first_o=true;
                                                                                 foreach($u_instituto as $instituto){
-                                                                                
+                                                                                $button_c="";$button_u="";$button_o="";
                                                                                 
                                                                                 if($instituto["ip_instituto"]["tipo"]==1){
                                                                                     $c_checked=" checked";
                                                                                     $c_name=$instituto["ip_instituto"]["instituto"];
                                                                                     $c_visible="style='display:block;'";
+                                                                                       if($first_c){
+                                                                                    $button_c="<button  ".$c_visible." class='btn btn-info btn-sm ins_name'  type='button' id='add_col'><i class='white ace-icon ace-icon glyphicon glyphicon-plus'></i></button>";
+                                                                                    $first_c=false;
+                                                                                    
+                                                                                }else{
+                                                                                    $button_c="<button onclick='$(this).parent().remove()' class='btn btn-danger btn-sm ins_name' style='display:block' type='button' class='del_col'><i class='white ace-icon ace-icon glyphicon glyphicon-minus'></i></button>";
                                                                                 }
-                                                                                $c_input="<input type='text' placeholder='Especifique Colegio...' class='colegio ins_name col-xs-12 col-sm-10 valid' id='nom-cole' name='nom-cole' value='".$c_name."' ".$c_visible."/>";
+                                                                                  $c_input.="<span><input type='text' placeholder='Especifique Colegio...' class='colegio ins_name col-sm-10 valid' id='nom-col' name='nom-col[]' value='".$c_name."' ".$c_visible."/>".$button_c."<div class='col-xs-12'><select type='multiple' data-placeholder='Nivel(es) de educación' multiple class='col-sm-5 sem chosen-select tag-input-style' ><option>Preescolar</option><option>Primaria (1°-5°)</option><option>Bachillerato (6°-9°)</option><option>Media Vocacional (10°-12°)</option></select><label class='pad-10'>
+                                                                                <input name='instituto' type='checkbox' id='check-otro'  class='ace valid ins_chk' aria-required='true' aria-invalid='true''.$o_checked.'>
+                                                                                <span class='lbl'>¿Es bilingüe?</span>
+                                                                                </label></div></span>";
+                                                                              
+                                                                                }
+                                                                               
+                                                                             
                                                                                 
-                                                                                $name="";
+                                                                           
                                                                                 if($instituto["ip_instituto"]["tipo"]==2){
                                                                                 $u_checked=" checked";
                                                                                 $u_name=$instituto["ip_instituto"]["instituto"];
                                                                                 $u_visible="style='display:block;'";
+                                                                                if($first_u){
+                                                                                    
+                                                                                    $button_u="<button  ".$u_visible." class='btn btn-info btn-sm ins_name'  type='button' id='add_univ'><i class='white ace-icon ace-icon glyphicon glyphicon-plus'></i></button>";
+                                                                                    $first_u=false;
+                                                                                    
+                                                                                }else{
+                                                                                    $button_u="<button onclick='$(this).parent().remove()' class='btn btn-danger btn-sm ins_name' style='display:block' type='button' class='del_col'><i class='white ace-icon ace-icon glyphicon glyphicon-minus'></i></button>";
                                                                                 }
-                                                                                $u_input="<input type='text' placeholder='Especifique Universidad...' class='ins_name col-xs-12 col-sm-10 valid universidad' id='nom-univ' name='nom-univ' value='".$u_name."' ".$u_visible."/>";
+                                                                                $u_input.="<span><input type='text' placeholder='Especifique Universidad...' class='ins_name col-xs-12 col-sm-10 valid universidad' id='nom-univ' name='nom-univ[]' value='".$u_name."' ".$u_visible."/>".$button_u."<div class='col-xs-12'><input type='text' class='col-sm-5 sem' placeholder='Programa' /><input type='text' class='col-sm-5' placeholder='Semestre'/></div></span>";
                                                                                 
-                                                                                $name="";
-                                                                                if($instituto["ip_instituto"]["tipo"]==3){$o_checked=" checked";
+                                                                                }
+                                                                                
+                                                                            
+                                                                                if($instituto["ip_instituto"]["tipo"]==3){
+                                                                                    $o_checked=" checked";
                                                                                 $o_name=$instituto["ip_instituto"]["instituto"];
                                                                                 $o_visible="style='display:block;'";
+                                                                                  if($first_o){
+                                                                                    
+                                                                                    $button_o="<button  ".$o_visible." class='btn btn-info btn-sm ins_name'  type='button' id='add_otro'><i class='white ace-icon ace-icon glyphicon glyphicon-plus'></i></button>";
+                                                                                    $first_o=false;
+                                                                                    
+                                                                                }else{
+                                                                                    $button_o="<button onclick='$(this).parent().remove()' class='btn btn-danger btn-sm ins_name' style='display:block' type='button' class='del_col'><i class='white ace-icon ace-icon glyphicon glyphicon-minus'></i></button>";
                                                                                 }
-                                                                                $o_input="<input type='text' id='nom-otro' placeholder='Especifique Otro...' class='ins_name col-xs-12 col-sm-10 valid' name='nom-otro' value='".$o_name."' ".$o_visible."/>";
-                                                                                    }
+                                                                                  $o_input.="<span><input type='text' id='nom-otro' placeholder='Especifique Otro...' class='ins_name col-xs-12 col-sm-10 valid' name='nom-otro[]' value='".$o_name."' ".$o_visible."/>".$button_o."<div class='col-xs-12' style=''><input type='text' class='col-sm-5 sem' style=''/><input type='text' class='col-sm-5'/></div></span>";
+                                                                               
+                                                                                
+                                                                                }
+                                                                               
+                                                                                }
                                                                                 echo '<label class="pad-10">
-                                                                                <input name="instituto" type="checkbox" id="check-cole"  class="ace valid ins_chk" aria-required="true" aria-invalid="true"'.$c_checked.'>
+                                                                                <input name="instituto" type="checkbox" id="check-col"  class="ace valid ins_chk" aria-required="true" aria-invalid="true"'.$c_checked.'>
                                                                                 <span class="lbl">Colegio</span>
                                                                                 
                                                                                 </label>'; 
@@ -153,9 +197,16 @@
                                                                                 <input name="instituto" type="checkbox" id="check-otro"  class="ace valid ins_chk" aria-required="true" aria-invalid="true"'.$o_checked.'>
                                                                                 <span class="lbl">Otro</span>
                                                                                 </label><div id="ins_names">'; 
+                                                                                if($c_input==""){  $c_input="<span><input type='text' placeholder='Especifique Colegio...' class='colegio ins_name col-sm-10 valid' id='nom-col' name='nom-cole[]' /> <button class='btn btn-info btn-sm ins_name' type='button' id='add_col'><i class='white ace-icon ace-icon glyphicon glyphicon-plus'></i></button></span>";
+                                                                                } if($u_input==""){$u_input="<span><input type='text' placeholder='Especifique Universidad...' class='ins_name col-xs-12 col-sm-10 valid universidad' name='nom-univ[]' id='nom-univ'/><button class='btn btn-info btn-sm ins_name' type='button' id='add_univ'><i class='white ace-icon ace-icon glyphicon glyphicon-plus'></i></button></span>";
+                                                                                } if($o_input==""){$o_input="<span><input type='text' id='nom-otro' placeholder='Especifique Otro...' class='ins_name col-xs-12 col-sm-10 valid' name='nom-otro[]' /><button class='btn btn-info btn-sm ins_name' type='button' id='add_otro'><i class='white ace-icon ace-icon glyphicon glyphicon-plus'></i></button></span>";
+                                                                                }
                                                                                 echo $c_input;
+                                                                                echo "<div id='extra_col'></div>";
                                                                                 echo $u_input;
+                                                                                echo "<div id='extra_univ'></div>";
                                                                                 echo $o_input;
+                                                                                echo "<div id='extra_otro'></div>";
                                                                                 echo "</div>"
                                                                                 ?>
                                                                             
@@ -167,13 +218,24 @@
 
                                                             <hr />
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-date">¿En que fecha naciste?*</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-date">¿En qué fecha naciste?*</label>
 
                                                                 <div class="col-sm-9">
                                                                     <div class="input-medium">
                                                                         <div class="input-group">
-                                                                         
-                                                                            <input class="input-medium date-picker" id="fecha_nacimiento" name="fecha_nacimiento" type="text" data-date-format="dd-mm-yyyy" value="<?php $time=strtotime(substr($user["fecha_nacimiento"],0,-9));echo date('d-m-Y',$time);?>" placeholder="dd-mm-yyyy" />
+                                                                         <?php 
+                                                                        $time=substr($user["fecha_nacimiento"],0,-9);
+                                                                        
+                                                                        $val=$time;
+                                                                      if($time=="0000-00-00"){
+                                                                          $val="";
+                                                                      }else{
+                                                                          $time=strtotime(substr($user["fecha_nacimiento"],0,-9));
+                                                                          $val=$time;
+                                                                          $val=date('d-m-Y',$val);
+                                                                      }
+                                                                         ?>
+                                                                            <input class="input-medium date-picker" id="fecha_nacimiento" name="fecha_nacimiento" type="text" data-date-format="dd-mm-yyyy" value="<?=$val?>" placeholder="dd-mm-yyyy" />
                                                                             
                                                                                
                                                                             <span class="input-group-addon">
@@ -189,7 +251,7 @@
                                                             <div class="space-4"></div>
 
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right">¿Cual es tu genero?*</label>
+                                                                <label class="col-sm-3 control-label no-padding-right">¿Cuál es tu género?*</label>
 
                                                                 <div class="col-sm-9">
                                                                     <label class="inline">
@@ -208,8 +270,8 @@
                                                             <div class="space-4"></div>
 
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-comment">Cuéntanos sobre ti  </label>
-
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-comment">Cuéntanos sobre ti <br/><small>(Descripción general del perfil)</small> </label>
+                                                               
                                                                 <div class="col-sm-6">
                                                                     <textarea id="descripcion" name="descripcion" class="form-control limited" maxlength="150"><?=$user["descripcion"]?></textarea>
                                                                 </div>
@@ -218,7 +280,7 @@
                                                             <div class="space"></div>
                                                             <h4 class="header blue bolder smaller">Información Personal</h4>
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-email">Documento</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-email">Documento*</label>
 
                                                                 <div class="col-sm-9">
                                                                     <span class="input-icon input-icon-right">
@@ -235,7 +297,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-email">Email</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-email">Email*</label>
 
                                                                 <div class="col-sm-9">
                                                                     <span class="input-icon input-icon-right">
@@ -250,7 +312,7 @@
                                                             <div class="space-4"></div>
 
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-phone">Celular</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-phone">Celular*</label>
 
                                                                 <div class="col-sm-9">
                                                                     <span class="input-icon input-icon-right">
@@ -280,37 +342,52 @@
                                                                     </span>
                                                                 </div>
                                                             </div>
-
+                                                            
+                                                            <div class="form-group">
+                                                                                                       <div class="col-sm-9">
+                                                                    <span class="input-icon input-icon-right">
+                                                                    <label>
+                                                                       
+                                                                        <input <?php if($user["contactar"]=="1")echo "checked";?> name="contactar" type="checkbox" id="contactar"  class="ace valid area_chk" aria-required="true" aria-invalid="true">
+                                                                        <span class="lbl"> Deseo que mi información esté disponible al público para que me puedan contactar.</span>
+                                                                    </label>
+                                                                     
+                                                                       </span>
+                                                                </div>
+                                                            </div>
                                                             <div class="space"></div>
                                                                <h4 class="header blue bolder smaller">Educación y Experiencia</h4>
-                                                               <h5>Educación</h5> 
+                                                               <h5>Educación*</h5> 
                                                                  <div class="profile-user-info" id="prof_edu">
                                                                    <?php 
-                                                                   $pe=$profe_edu[0]["ProfesorEducacion"];
-                                                                
-                                                                   ?>
+                                                                     if(sizeof($profe_edu)==0){
+                                                                    ?>
+                                                                   
                                                                     <div class="profile-info-row educacion_prof">
                                                                     
                                                                         <select class="col-sm-2" name="tipo_edu[]" >
-                                                                            <option value="F" <?php if($pe["tipo"]=="F"){echo 'selected';}?>>Formal</option>
-                                                                             <option value="NF"  <?php if($pe["tipo"]=="NF"){echo 'selected';}?>> No Formal</option>
+                                                                            <option value="F" >Formal</option>
+                                                                             <option value="NF"> No Formal</option>
                                                                         </select>
                                                                        
                                                                         <select class="col-sm-2" name="inst_edu[]">
-                                                                            <option value="2" <?php if($pe["instituto_tipo"]=="2"){echo 'selected';}?>>Universidad</option>
-                                                                            <option value="3" <?php if($pe["instituto_tipo"]=="3"){echo 'selected';}?>>Otro</option>
+                                                                            <option value="2" >Universidad</option>
+                                                                            <option value="3">Otro</option>
                                                                         </select>
-                                                                        <input type="text" placeholder="Nombre de la institución" value="<?=$pe["instituto_nombre"]?>" name="nombre_inst[]" class="universidad col-sm-3">
-                                                                        <input type="text" placeholder="Titulo Obtenido" value="<?=$pe["titulo"]?>" name="titulo[]" class=" col-sm-2">
-                                                                         <input type="text" placeholder="Año" value="<?=$pe["ano"]?>" class="input-mini spinner-input form-control instituto col-sm-1" name="year_inst[]" maxlength="4">
+                                                                        <input type="text" placeholder="Nombre de la institución"  name="nombre_inst[]" class="universidad col-sm-3">
+                                                                        <input type="text" placeholder="Título Obtenido" name="titulo[]" class=" col-sm-2">
+                                                                         <input type="text" placeholder="Año" class="input-mini spinner-input form-control instituto col-sm-1" name="year_inst[]" maxlength="4">
                                                                     <button class="btn btn-info btn-sm" type="button" id="add_edu">
                                                                            <i class="white ace-icon ace-icon glyphicon glyphicon-plus"></i>
                                                                         </button>
                                                                     </div>
-                                                                   <?php
+                                                                   <?php }else{
                                                                    $first=true;
+                                                                   
+                                                                 
+                                                               
                                                                    foreach($profe_edu as $pe){
-                                                                       if($first){$first=false;}else{
+                                                                  
                                                                            $pe=$pe["ProfesorEducacion"];
                                                                            echo '<div class="profile-info-row educacion_prof">
                                                                     
@@ -324,14 +401,24 @@
                                                                             <option value="3"';if($pe["instituto_tipo"]=="3"){echo 'selected';}echo'>Otro</option>
                                                                         </select>
                                                                         <input type="text" placeholder="Nombre de la institución" value="'.$pe["instituto_nombre"];echo'" name="nombre_inst[]" class="universidad col-sm-3">
-                                                                        <input type="text" placeholder="Titulo Obtenido" value="'.$pe["titulo"];echo'" name="titulo[]" class=" col-sm-2">
+                                                                        <input type="text" placeholder="Título Obtenido" value="'.$pe["titulo"];echo'" name="titulo[]" class=" col-sm-2">
                                                                          <input type="text" placeholder="Año" value="'.$pe["ano"].'" class="input-mini spinner-input form-control instituto col-sm-1" name="year_inst[]" maxlength="4">
-                                                                     <button class="btn btn-danger btn-sm" onclick="$(this).parent().remove()">
+                                                                            ';if($first){$first=false;
+                                                                           echo ' <button class="btn btn-info btn-sm" id="add_edu">
+                                                                           <i class="white ace-icon ace-icon glyphicon glyphicon-plus"></i>
+                                                                        </button></div>';
+                                                                           }else{
+                                                                    echo '<button class="btn btn-danger btn-sm" onclick="$(this).parent().remove()">
                                                                            <i class="white ace-icon ace-icon glyphicon glyphicon-minus"></i>
                                                                         </button>
                                                                     </div>';
+                                                                       
+                                                                   }
+                                                                    
                                                                        }
                                                                    }
+                                                                   
+                                                                            
                                                                    ?>
                                                                  </div>  
                                                             <h5>Experiencia</h5>
@@ -344,7 +431,7 @@
                                                                              <option value="I">Independiente</option>
                                                                         </select>
                                                                        
-                                                                        <input type="text"  name="inst_exp[]" placeholder="Nombre de la institucion" class="instituto col-sm-4">
+                                                                        <input type="text"  name="inst_exp[]" placeholder="¿Dónde trabajaste?" class="instituto col-sm-4">
                                                                         <input type="text"  name="rol_exp[]" placeholder="Rol" class="instituto col-sm-3">
                                                                         <input type="text"  name="year_exp[]" placeholder="Años" class="input-mini spinner-input form-control instituto col-sm-1" maxlength="2">
                                                                         <button class="btn btn-info btn-sm" id="add_exp">
@@ -363,7 +450,7 @@
                                                                              <option value="I"';if($pe["tipo"]=="I"){echo 'selected';}echo'>Independiente</option>
                                                                         </select>
                                                                        
-                                                                       <input type="text"  name="inst_exp[]" placeholder="Nombre de la institucion" class="instituto col-sm-4" value="'.$pe["nombre"].'">
+                                                                       <input type="text"  name="inst_exp[]" placeholder="¿Dónde trabajaste?" class="instituto col-sm-4" value="'.$pe["nombre"].'">
                                                                          <input type="text"  name="rol_exp[]" placeholder="Rol" class="instituto col-sm-3" value="'.$pe["rol"].'">
                                                                           <input type="text"  name="year_exp[]" placeholder="Años"  maxlength="2" class="input-mini spinner-input form-control instituto col-sm-1" value="'.$pe["anos"].'" >
                                                                      ';
