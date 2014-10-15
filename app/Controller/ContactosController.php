@@ -28,7 +28,7 @@ class ContactosController extends AppController {
         $data = $this->Usuario->find('all', array('joins' => 
             array(
                 array('table' => 'ip_contacto', 'alias' => 'Contacto', 'type' => 'INNER', 'conditions' => array('Contacto.id_contactado=Usuario.id')),
-                 array('table' => 'ip_usuario_calificacion', 'alias' => 'Calificacion', 'type' => 'LEFT OUTER', 'conditions' => array('Contacto.id_contactado=Calificacion.usuario_calificado AND Calificacion.usuario_califica=Contacto.id_contactador')   )), 'conditions' => array('id_contactador' => $user["id"]),'fields'=>array('Usuario.*','Contacto.*','Calificacion.*')));
+                 array('table' => 'ip_usuario_calificacion', 'alias' => 'Calificacion', 'type' => 'LEFT OUTER', 'conditions' => array('Contacto.id_contactado=Calificacion.usuario_calificado AND Calificacion.usuario_califica=Contacto.id_contactador')   )), 'conditions' => array('id_contactador' => $user["id"]),'fields'=>array('Usuario.*','Contacto.*','Calificacion.*'),'order'=>array('Usuario.nombre')));
         $i = 0; 
         foreach ($data as $d) {
            $time=  strtotime($d["Contacto"]["fecha"]);
@@ -43,7 +43,7 @@ class ContactosController extends AppController {
         $data = $this->Usuario->find('all', array('joins' => 
             array(
                 array('table' => 'ip_contacto', 'alias' => 'Contacto', 'type' => 'INNER', 'conditions' => array('Contacto.id_contactador=Usuario.id')),
-                 array('table' => 'ip_usuario_calificacion', 'alias' => 'Calificacion', 'type' => 'LEFT OUTER', 'conditions' => array('Contacto.id_contactador=Calificacion.usuario_califica AND Calificacion.usuario_calificado=Contacto.id_contactado')   )), 'conditions' => array('id_contactado' => $user["id"]),'fields'=>array('Usuario.*','Contacto.*','Calificacion.*')));
+                 array('table' => 'ip_usuario_calificacion', 'alias' => 'Calificacion', 'type' => 'LEFT OUTER', 'conditions' => array('Contacto.id_contactador=Calificacion.usuario_califica AND Calificacion.usuario_calificado=Contacto.id_contactado')   )), 'conditions' => array('id_contactado' => $user["id"]),'fields'=>array('Usuario.*','Contacto.*','Calificacion.*'),'order'=>array('Usuario.nombre')));
         $i = 0; 
         foreach ($data as $d) {
            $time=  strtotime($d["Contacto"]["fecha"]);

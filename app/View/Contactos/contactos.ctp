@@ -13,6 +13,9 @@
     <div class="widget-body">
         <div class="clearfix">
             <?php
+            if(sizeof($contactos)==0){
+                echo '0 Usuarios encontrados';
+            }
             foreach ($contactos as $c) {
                 ?>
                 <div class="itemdiv memberdiv">
@@ -39,10 +42,18 @@
                         <div><?php
                             if($c["Calificacion"]["calificacion"]!=null){?>
                             <div>
-                                <span class="label label-success label-sm">Calificación: <?=$c["Calificacion"]["calificacion"]?> <i class="ace-icon fa fa-star"></i></span>
+                                <small class="center">Calificación dada:</small>
                             </div>
+                            <div>
+                                <span class="white" id="star_container"><input  type="number" class="teach_stars" min=0 max=5 data-size="xs" value="<?=$c["Calificacion"]["calificacion"]?>"></span>
+                                
+                            </div>
+                            
                           <?php  }
                             else{?>
+                            <div>
+                                <small class="center">Calificación dada:</small>
+                            </div>
                              <div>
                                 <span class="label label-danger label-sm">No Calificado</span>
                             </div>

@@ -108,7 +108,7 @@ class EstudianteController extends AppController {
 		$this->Area->recursive = 0;
 		$this->set('areas', $this->Area->find('all',array('limit'=>16,'order'=>array('area'=>'asc'),'conditions'=>array('id<=31'))));
 		
-		if(AppController::checkAuth()){
+		if(AppController::authReturnLogin()){
                     $user=$this->Session->read('User');
 		 $uid=$user["id"];
                  $this->set('seguidores',

@@ -52,7 +52,7 @@ public function checkAuth(){
 
 public function authReturnLogin(){
     if(!$this->checkAuth()){
-        $this->redirect("../Usuarios");
+        $this->redirect("../Home");
     }
     return true;
 }
@@ -60,7 +60,7 @@ public function isRequestOK($request){
     if ($request->is('post')&&$this->checkAuth()) {
               return true; 
     }else{
-        $this->redirect("../Usuarios");
+        $this->redirect("../Home");
         return false;
     }
 }

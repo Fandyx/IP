@@ -67,7 +67,7 @@
                                                                     <div class="space-4"></div>
 
                                                                     <div class="form-group">
-                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">¿Como te llamas?*</label>
+                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">¿Cómo te llamas?*</label>
 
                                                                         <div class="col-sm-8">
                                                                             <?php 
@@ -88,7 +88,7 @@
                                                                     </div>
                                                                     <div class="space-4"></div>
                                                                     <div class="form-group">
-                                                                        <label class="col-sm-4 control-label no-padding-right"  for="form-field-ciudad">¿Donde vives?*</label>
+                                                                        <label class="col-sm-4 control-label no-padding-right"  for="form-field-ciudad">¿Dónde vives?*</label>
 
                                                                         <div class="col-sm-8">
                                                                             <input class="col-xs-12 col-sm-10 ciudad" type="text" name="ciudad" id="ciudad" required placeholder="Ciudad" value="<?php echo $user["ciudad"]?>" />
@@ -96,7 +96,7 @@
                                                                     </div>
                                                                     <div class="space-4"></div>
                                                                     <div class="form-group">
-                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-select">¿Cual es tu rol?*</label>
+                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-select">¿Cuál es tu rol?*</label>
 
                                                                         <div class="col-sm-8">
                                                                             <select class="col-xs-12 col-sm-10" id="form-type-select" name="tipo">
@@ -107,7 +107,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
-                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">¿Donde Estudias?*</label>
+                                                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">¿Dónde Estudias?*</label>
 
                                                                         <div class="col-sm-8">
                                                                             <?php 
@@ -170,7 +170,7 @@
 
                                                             <hr />
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-date">¿En que fecha naciste?*</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-date">¿En qué fecha naciste?*</label>
 
                                                                 <div class="col-sm-9">
                                                                     <div class="input-medium">
@@ -213,7 +213,7 @@
                                                             <div class="space-4"></div>
 
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right">¿Cual es tu genero?*</label>
+                                                                <label class="col-sm-3 control-label no-padding-right">¿Cuál es tu género?*</label>
 
                                                                 <div class="col-sm-9">
                                                                     <label class="inline">
@@ -232,8 +232,8 @@
                                                             <div class="space-4"></div>
 
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-comment">Cuentanos sobre ti  </label>
-
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-comment">Cuéntanos sobre ti <br/> <small>(Descripción general del perfil)</small>     </label>
+                                                               
                                                                 <div class="col-sm-6">
                                                                     <textarea id="descripcion" name="descripcion" class="form-control limited" maxlength="150"><?=$user["descripcion"]?></textarea>
                                                                 </div>
@@ -242,15 +242,15 @@
                                                             <div class="space"></div>
                                                             <h4 class="header blue bolder smaller">Información Personal</h4>
                                                                                                                         <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-email">Documento</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-email">Documento*</label>
 
                                                                 <div class="col-sm-9">
                                                                     <span class="input-icon input-icon-right">
                                                                         <select id="tipo_doc" name="tipo_doc" class="chosen-select">
                                                                             <option value="">--Tipo de Documento--</option>
-                                                                            <option value="CC" <?php if($user["tipo_doc"]=="CC")echo "selected";?>>Cedula de Ciudadania</option>
+                                                                            <option value="CC" <?php if($user["tipo_doc"]=="CC")echo "selected";?>>Cédula de Ciudadanía</option>
                                                                              <option value="TI" <?php if($user["tipo_doc"]=="TI")echo "selected";?>>Tarjeta de Identidad</option>
-                                                                             <option value="CE" <?php if($user["tipo_doc"]=="CE")echo "selected";?>>Cedula de Extranjeria</option>
+                                                                             <option value="CE" <?php if($user["tipo_doc"]=="CE")echo "selected";?>>Cédula de Extranjería</option>
                                                                              <option value="PP" <?php if($user["tipo_doc"]=="PP")echo "selected";?>>Pasaporte</option>
                                                                         </select>
                                                                         <input type="text" id="document" name="documento" value="<?=$user['documento']?>" />
@@ -259,7 +259,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-email">Email</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-email">Email*</label>
 
                                                                 <div class="col-sm-9">
                                                                     <span class="input-icon input-icon-right">
@@ -274,7 +274,7 @@
                                                             <div class="space-4"></div>
 
                                                             <div class="form-group">
-                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-phone">Celular</label>
+                                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-phone">Celular*</label>
 
                                                                 <div class="col-sm-9">
                                                                     <span class="input-icon input-icon-right">
