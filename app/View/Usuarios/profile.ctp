@@ -85,7 +85,7 @@ if ($user["id"] == $this_user["id"]) {
                         <div class="profile-contact-info">
                             <div class="profile-contact-links align-left">
                                 <?php
-                                $img = "'http://www.instaprofe.com/Inicio/cake/assets/images/apple_back2.png'";
+                                $img = "'http://www.instaprofe.com/assets/images/apple_back2.png'";
 
                                 $areas_e = "";
                                 foreach ($u_area as $area) {
@@ -118,12 +118,12 @@ if ($user["id"] == $this_user["id"]) {
                                 }
                                 ?>
                                 <a href="#" id="denun-<?= $user["id"] ?>"  class="btn btn-link denunciar">
-                                        <i class="ace-icon fa fa-times-circle bigger-120 red"></i>
-                                        Denunciar
+                                    <i class="ace-icon fa fa-times-circle bigger-120 red"></i>
+                                    Denunciar
 
-                                    </a>
-                                  <div id="dialog-denuncia" class="hide">
-                              <textarea class="col-sm-12 msj_txt" id="denuncia_msj" placeholder="¿Por que deseas reportar a este usuario?"></textarea>
+                                </a>
+                                <div id="dialog-denuncia" class="hide">
+                                    <textarea class="col-sm-12 msj_txt" id="denuncia_msj" placeholder="¿Por que deseas reportar a este usuario?"></textarea>
                                 </div>
                                 <?php
                                 if ($user["tipo"] == 3) {
@@ -132,7 +132,7 @@ if ($user["id"] == $this_user["id"]) {
 
                                         <a href="#" id="share-<?= $user["id"] ?>" class="btn btn-link share_user" 
                                            onclick="fb_share('<?= strtoupper($user["nombre"] . " " . $user["apellido"]) ?> ESTÁ EN INSTAPROFE.COM',
-                        'http://localhost/Inicio/cake/Usuarios/profile?uid=<?= $user["id"] ?>',<?= $img ?>, '<?= $profe ?> de <?= $areas_e ?>',
+                        'http://www.instaprofe.com/Usuarios/profile?uid=<?= $user["id"] ?>',<?= $img ?>, '<?= $profe ?> de <?= $areas_e ?>',
                                         'Ingresa ya a Instaprofe.com para resolver tus dudas y contactar a este y otros profesores particulares.')">
                                             <i class="ace-icon fa fa-facebook-square bigger-150 blue"></i>
                                             Compartir
@@ -148,7 +148,7 @@ if ($user["id"] == $this_user["id"]) {
 
                                         <a href="#" id="share-<?= $user["id"] ?>" class="btn btn-link share_user" 
                                            onclick="fb_share('<?= strtoupper($user["nombre"] . " " . $user["apellido"]) ?> ESTÁ EN INSTAPROFE.COM',
-                                                           'http://localhost/Inicio/cake/Usuarios/profile?uid=<?= $user["id"] ?>',<?= $img ?>, '<?= $profe ?> de <?= $areas_e ?>',
+                                                           'http://www.instaprofe.com/Usuarios/profile?uid=<?= $user["id"] ?>',<?= $img ?>, '<?= $profe ?> de <?= $areas_e ?>',
                                                                            'Ingresa ya a Instaprofe.com para resolver tus dudas y contactar a este y otros profesores particulares.')">
                                             <i class="ace-icon fa fa-facebook-square bigger-150 blue"></i>
                                             Compartir
@@ -187,10 +187,16 @@ if ($user["id"] == $this_user["id"]) {
                         </div>
 
                         <!-- /section:pages/profile.contact -->
+                        <?php
+                        if ($user["contactar"] != 1 && $user["tipo"] == 3) {
 
+                            echo '<div class="red margin-top-20"><strong>Este usuario tiene su información privada.</strong></div>';
+                        }
+                        ?>
 
-                        <?php if ($contactado > 0 && $user["contactar"] == 1) { ?>
+                        <?php if ($contactado > 0 && $user["contactar"] == 1 && $user["menor"] != 1) { ?>
                             <h4 class="blue smaller">Información de Contacto</h4>
+
                             <div class="hr hr12 dotted"></div>
 
                             <div class="clearfix" id="profile-user-info">
@@ -232,8 +238,10 @@ if ($user["id"] == $this_user["id"]) {
 
                             <!-- #section:custom/extra.grid -->
                             <?php
-                        } else if ($user["contactar"] == 1) {
+                        } else if ($user["contactar"] == 1 && $user["menor"] != 1) {
                             echo '<span id="info_container"></span>';
+                        } else if ($user["menor"] == 1) {
+                            echo '<div class="red margin-top-20"><strong>Se ha enviado un correo a tu acudiente con los datos de este profesor.</strong></div>';
                         }
                         ?>
                         <div class="hr hr16 dotted"></div>
@@ -364,7 +372,7 @@ if ($user["id"] == $this_user["id"]) {
                                     $t_areas = "";
                                     foreach ($u_area as $area) {
 
-                                        $code = '<span class="themes" id="tema-' . $area["ip_area"]["id"] . '" onclick="showThemes(' . $area["ip_area"]["id"] . ',\'' . $area["ip_area"]["area"] . '\')">' . $area["ip_area"]["area"] . '</span>';
+                                        $code = '<span class="themes" id="tema-' . $area["ip_area"]["id"] . '" onclick="showThemesUser(' .$user["id"].','. $area["ip_area"]["id"] . ',\'' . $area["ip_area"]["area"] . '\')">' . $area["ip_area"]["area"] . '</span>';
                                         if ($t_areas == "") {
                                             $t_areas = $code;
                                         } else {

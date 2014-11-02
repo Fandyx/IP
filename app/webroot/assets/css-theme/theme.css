@@ -896,7 +896,7 @@ a.btn-white:focus {
     margin-top: 30px;
     font-size: 28px;
     letter-spacing: normal;
-    font-weight: 700;
+    
 }
 
 .p-services {
@@ -913,7 +913,7 @@ a.btn-white:focus {
     }
 
     .title-services {
-        font-size: 34px
+        font-size: 22px
     }
 
     .p-services {
@@ -1164,6 +1164,8 @@ a.btn-white:focus {
 }
 
 @media (max-width:767px) { 
+    #signup-box {
+        width: 100%;}
     .img-portfolio,
     .img-wrapper {
         margin: 0 auto;

@@ -120,7 +120,7 @@ class PadreController extends AppController {
             $this->set('n_contactos', $this->Contacto->find('count', array('conditions' => array('id_contactador' => $uid))));
             $this->set('u_instituto', $this->Instituto->query("SELECT * FROM Instaprofe.ip_usuario inner join ip_usuario_instituto on ip_usuario_instituto.usuario=ip_usuario.id inner join ip_instituto on ip_instituto.id=ip_usuario_instituto.instituto where ip_usuario.id=" . $user['id']));
             $this->set('u_area', $this->UsuarioArea->query("SELECT * FROM Instaprofe.ip_usuario inner join ip_usuario_area on ip_usuario_area.usuario=ip_usuario.id inner join ip_area on ip_usuario_area.area=ip_area.id where ip_usuario.id=" . $user['id'] . " AND ip_area.id<=31"));
-            $this->set('u_tags', $this->UsuarioTag->query("SELECT * FROM instaprofe.ip_usuario_tags inner join ip_tags on tags_id=ip_tags.id where usuario=" . $user["id"]));
+            $this->set('u_tags', $this->UsuarioTag->query("SELECT * FROM Instaprofe.ip_usuario_tags inner join ip_tags on tags_id=ip_tags.id where usuario=" . $user["id"]));
             $this->render();
         } else {
             $this->layout = "login";

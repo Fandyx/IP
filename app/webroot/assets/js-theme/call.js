@@ -43,6 +43,7 @@ $(document).ready(function() {
             $("#selrol").css({display: "block"});
             $("#reppass").css({display: "block"});
             $("#termsycond").css({display: "block"});
+            $(".forgot-link").css({display: "none"});
         } else {
             var pass = $("#password").val();
             var pass2 = $("#password2").val();

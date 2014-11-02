@@ -14,6 +14,7 @@ jQuery(function($) {
         dialog_follow();
         getFollowers();
     });
+
     $(".siguiendo").click(function(e) {
         e.preventDefault();
         dialog_follow();
@@ -26,9 +27,12 @@ jQuery(function($) {
         var id = $(this).attr("id").split("-")[1];
         getFollowers(id);
     });
-    $(".denunciar").click(function(e){
-               e.preventDefault();
-         var id = $(this).attr("id").split("-")[1];
+    $('#col_search a[data-toggle="tab"]').on('shown.bs.tab', function() {
+        changeType();
+    });
+    $(".denunciar").click(function(e) {
+        e.preventDefault();
+        var id = $(this).attr("id").split("-")[1];
         var dialog = $("#dialog-denuncia").removeClass('hide').dialog({
             modal: true,
             title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-times'></i> Denunciar Usuario</h4></div>",
@@ -48,8 +52,7 @@ jQuery(function($) {
                     "class": "btn btn-primary btn-xs",
                     click: function() {
                         var msj = $("#denuncia_msj").val();
-                        
-                        $.ajax({type: "POST", url: "../Usuarios/denunciar", data: {msj: msj,uid:id}, success: function() {
+                        $.ajax({type: "POST", url: "../Usuarios/denunciar", data: {msj: msj, uid: id}, success: function() {
                                 $("#dialog-denuncia").dialog("close");
                                 $.gritter.add({
                                     title: '¡Usuario denunciado!',
@@ -57,16 +60,13 @@ jQuery(function($) {
                                     class_name: 'gritter-error gritter-center'
                                 });
                             }});
-
                     }
                 }
             ]
         });
-
     });
     $("#contactanos").click(function(e) {
         e.preventDefault();
-      
         var dialog = $("#dialog-message").removeClass('hide').dialog({
             modal: true,
             title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-envelope'></i> Contáctanos</h4></div>",
@@ -95,12 +95,10 @@ jQuery(function($) {
                                     class_name: 'gritter-success gritter-center'
                                 });
                             }});
-
                     }
                 }
             ]
         });
-
         /**
          dialog.data( "uiDialog" )._title = function(title) {
          title.html( this.options.title );
@@ -115,7 +113,6 @@ jQuery(function($) {
     autoCompleteUniversidad();
     autoCompleteColegio();
     autoCompleteInstituto();
-
     $("#add_col").click(function() {
         $("#extra_col").append("<span><input type='text' placeholder='Especifique Colegio...' class='colegio ins_name col-sm-10 valid' id='nom-cole' name='nom-cole[]' style='display:block'/><button onclick='$(this).parent().remove()' class='btn btn-danger btn-sm ins_name' style='display:block' type='button' class='del_col'><i class='white ace-icon ace-icon glyphicon glyphicon-minus'></i></button></span>");
         autoCompleteColegio();
@@ -145,8 +142,6 @@ jQuery(function($) {
                                                                         </button>\
                                                                     </div>');
         autoCompleteUniversidad();
-
-
     });
     $("#add_exp").click(function() {
         $("#prof_exp").append('<div class="profile-info-row educacion_prof">\
@@ -164,18 +159,6 @@ jQuery(function($) {
         autoCompleteInstituto();
     });
 
-    $(".estud_fecha").change(function() {
-        if (getAge($(this).val()) < 18) {
-            $.gritter.add({
-                title: 'Atención!',
-                text: 'Por ser menor de edad, tu perfil deberá ser activado por un Padre de Familia, ingresa su correo y le notificaremos!',
-                class_name: 'gritter-info gritter-center'
-            });
-            $("#email_padre_container").show();
-        } else {
-            $("#email_padre_container").hide();
-        }
-    });
     $('.page-content-area').prevAll('.ajax-loading-overlay').remove();
     $("#edit").click(function() {
         $("#user-profile-1").hide("fadeOut");
@@ -186,7 +169,6 @@ jQuery(function($) {
         $.each(ciudades, function(key, value)
         {
             var sel = "";
-
             if (u_ciudad == value) {
                 sel = "selected";
             }
@@ -211,12 +193,10 @@ jQuery(function($) {
                 });
             }
             else {
-                console.log(id);
+                //console.log(id);
                 $("#contactado-" + id).attr("checked", false);
-
             }
         });
-
     });
     $("#area_search").change(function() {
         var ciudad = $("#filter_ciudad").val();
@@ -234,11 +214,10 @@ jQuery(function($) {
 
                 var t = $.parseJSON(data);
                 var temas = t.temas.split(",");
-                console.log(temas);
+                //console.log(temas);
                 for (var i = 0; i < temas.length; i++) {
                     $("#tema_filter").append("<option>" + temas[i] + "</option>");
                     $("#tema_filter").trigger('chosen:updated');
-
                 }
 
             }
@@ -259,30 +238,27 @@ jQuery(function($) {
     $("#wid-results-close").click(function() {
         $('#wid-results').hide('slow');
     });
-
     $("#cancel-change").click(function() {
         $("#edit-panel").hide();
         $("#user-profile-1").show("fadeIn");
     });
-
     $("#resp_send").click(function() {
         var resp = $("#respuesta").val();
         var pid = getUrlParameter("pid");
-        console.log(pid);
-        $("#comment_box").hide("fadeOut");
-        $("#load_resp").show("fadeIn");
-        $.ajax({
-            url: "saveRespuesta",
-            type: 'post',
-            data: {resp: resp, pid: pid},
-            success: function(data) {
-                $("#comment_box textarea").val("");
-                $("#comment_box").show("fadeIn");
-                $("#load_resp").hide("fadeOut");
-                var block = $.parseJSON(data).block;
-                var id = $.parseJSON(data).id;
-                console.log(block);
-                $("#responses").append('<div class="row">\
+        if (resp !== "" && resp !== undefined) {
+            $("#comment_box").hide("fadeOut");
+            $("#load_resp").show("fadeIn");
+            $.ajax({
+                url: "saveRespuesta",
+                type: 'post',
+                data: {resp: resp, pid: pid},
+                success: function(data) {
+                    $("#comment_box textarea").val("");
+                    $("#comment_box").show("fadeIn");
+                    $("#load_resp").hide("fadeOut");
+                    var block = $.parseJSON(data).block;
+                    var id = $.parseJSON(data).id;
+                    $("#responses").append('<div class="row">\
 					    							<div class="col-xs-1 center">\
                                             <div class="ace-spinner touch-spinner">\
                                         <div class="input-group">\
@@ -295,17 +271,24 @@ jQuery(function($) {
                                              <div>\
                                           <button class="btn-link" id="downvote-' + id + '" onclick="downvote_r(' + id + ')"><i class=" ace-icon ace-icon fa fa-thumbs-o-down red fa-2x">\
                                           </i></button></div></div></div></div><div class="col-xs-11">' + block);
-                var r = parseInt($("#respuestas_n").html());
-                $("#respuestas_n").html(r + 1);
-                $('[data-rel=popover]').popover({html: true});
-                $('[data-rel=popover]').hover(function() {
+                    var r = parseInt($("#respuestas_n").html());
+                    $("#respuestas_n").html(r + 1);
+                    $('[data-rel=popover]').popover({html: true});
+                    $('[data-rel=popover]').hover(function() {
 
-                    $(this).popover("show");
-                }, function() {
-                    $(this).popover("hide");
-                });
+                        $(this).popover("show");
+                    }, function() {
+                        $(this).popover("hide");
+                    });
+                }
+            });
+        } else {
+            bootbox.alert({
+                message: "¡Debes enviar una respuesta!",
+                title: "¡Lo sentimos!"
             }
-        });
+            );
+        }
     });
     $("#search_box .widget-header:not(.widget-toolbar)").click(function(e) {
 
@@ -324,11 +307,10 @@ jQuery(function($) {
             var mats = [];
             $(".area_chk:checked").each(function() {
                 var id = $(this).attr("id").split("-")[1];
-                var tags = $("#tema-" + id).val();
+                var tags = $("#temas-" + id).val();
                 tags = $(this).capitalize(tags, ',');
-
                 var json = {area: id, tags: tags};
-                console.log(tags);
+                //console.log(tags);
                 mats.push(json);
             });
             var sw = true;
@@ -337,11 +319,16 @@ jQuery(function($) {
                     sw = false;
                 }
             }
-            console.log(sw);
+            if ($(".estud_fecha").val() !== undefined) {
+                if (getAge($(".estud_fecha").val()) < 14) {
+                    if ($("#email_padre") == "" || $("#documento_padre") == "" || $("#telefono_padre") == "" || $("#tipo_doc_padre") == "") {
+                        sw = false;
+                    }
+                }
+            }
             if (sw) {
                 var a = $("#profile_form").serialize();
                 $("#profile_form").startLoading();
-
                 $.ajax({
                     url: "../Usuarios/saveProfile",
                     type: 'post',
@@ -354,32 +341,13 @@ jQuery(function($) {
                             data: {areas: mats},
                             success: function(data) {
                                 document.getElementById("profile_form").submit();
-//                                console.log(data);
-//                                var url="";
-//                                if ($(".file img").css("background-image")) {
-//                                    url = $(".file img").css("background-image").split("(")[1].split(",")[1];
-//                                    url = url.substring(0, url.length - 1);}
-//                                     
-//                                    $.ajax({
-//                                        url: "saveProfileImg",
-//                                        type: 'post',
-//                                        data: {url: url},
-//                                        success: function(data) {
-//                                            console.log(mats);
-//                                         //
-//                                        }
-//                                    });
-
-
-
                             }
                         });
-
                     }
                 });
             }
-            else{
-                 bootbox.alert({
+            else {
+                bootbox.alert({
                     message: "¡Hay campos obligatorios sin completar!",
                     title: "¡Error!"
                 }
@@ -391,7 +359,13 @@ jQuery(function($) {
 
 
         }
-
+        else {
+            bootbox.alert({
+                message: "¡Hay campos obligatorios sin completar!",
+                title: "¡Error!"
+            }
+            );
+        }
     }
 
     );
@@ -400,9 +374,7 @@ jQuery(function($) {
     $(".area_chk").change(function() {
         var id = $(this).attr("id").split("-")[1];
         $("#area_cont_" + id).slideToggle();
-
     });
-
     $(".ins_chk").change(function() {
         var id = $(this).attr("id").split("-")[1];
         var checked = $(this).is(":checked");
@@ -416,7 +388,6 @@ jQuery(function($) {
         }
 
     });
-
     $("#send_question").click(function() {
         $("#data-alert").hide();
         var title = $("#ques_title").val();
@@ -425,34 +396,26 @@ jQuery(function($) {
         var area = $("#form-field-select-4").val();
         var msj = '<strong><i class="ace-icon fa fa-times"></i>¡Error!</strong> ';
         var sw = true;
-
-
-
-
         if (title === "") {
             msj += "Coloca un titulo para tu pregunta.	<br>";
             sw = false;
-
         }
         if (sw === true && desc === "") {
             msj += "Describe tu pregunta brevemente.	<br>";
             sw = false;
-
         }
         if (sw === true && tags === "") {
             msj += "Coloca algunas etiquetas.	<br>";
             sw = false;
-
         }
         if (sw === true && area === "") {
             msj += "Escoge el área.	<br>";
             sw = false;
-
         }
 
 
         if (!sw) {
-            console.log(msj);
+            //console.log(msj);
             showMissingAlert(msj);
             return;
         }
@@ -465,8 +428,7 @@ jQuery(function($) {
                 data: {titulo: title, pregunta: desc, tags: $(this).capitalize(tags, ", "), area: area}
                 , method: "POST",
                 success: function(data) {
-                    console.log(data);
-
+                    //console.log(data);
                     $("#load_ques").hide("fadeOut");
                     $("#alert-success").show("fadeIn");
                     resetQuestionForm();
@@ -503,12 +465,10 @@ jQuery(function($) {
 
 
                         preg_html += '<span class="label label-sm label-purple">' + $t[i] + '</span> ';
-
                         i++;
                     }
                     preg_html += '</p>\
                         <p class="area">';
-
                     $autor = $preg['ip_usuario']['nombre'] + " " + $preg['ip_usuario']['apellido'];
                     $fecha = $preg['ip_pregunta']['fecha_pregunta'];
                     preg_html += $preg['ip_area']['area'] + '</p><p class="autor">' + $autor + '</p><p class="fecha">' + $fecha + '</p>\
@@ -520,16 +480,16 @@ jQuery(function($) {
         }
 
     });
-    $('#tree1').ace_tree({
-        dataSource: treeDataSource,
-        loadingHTML: '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
-        'open-icon': 'ace-icon fa fa-minus',
-        'close-icon': 'ace-icon fa fa-plus',
-        'selectable': false,
-        'selected-icon': null,
-        'unselected-icon': null
-
-    });
+//    $('#tree1').ace_tree({
+//        dataSource: treeDataSource,
+//        loadingHTML: '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
+//        'open-icon': 'ace-icon fa fa-minus',
+//        'close-icon': 'ace-icon fa fa-plus',
+//        'selectable': false,
+//        'selected-icon': null,
+//        'unselected-icon': null
+//
+//    });
     setTimeout(function() {
         $(".tree-folder-name").click()
     }, 300);
@@ -550,16 +510,19 @@ jQuery(function($) {
         $("#reg_" + sel).click(function() {
 
             var s = $("#reg_" + sel + " span").html();
-
             s === "+" ? s = "-" : s = "+";
             $("#reg_" + sel + " span").html(s);
             $("#tabla_" + sel + "_wrapper").slideToggle("slow");
         });
     }
-
-    $("#prof_search").click(function() {
+    $("#ipp").change(function() {
         var ipp = parseInt($("#ipp").val());
-        console.log(ipp);
+        //console.log(ipp);
+        buscarProfe(0, ipp);
+    });
+    $(".prof_search").click(function() {
+        var ipp = parseInt($("#ipp").val());
+        //console.log(ipp);
         buscarProfe(0, ipp);
     });
 });
@@ -593,13 +556,29 @@ function showThemes(id, tema) {
             $("#tema-" + id).addClass("themeSelected");
         }
     });
-
 }
+function showThemesUser(uid, id, tema) {
 
+    $.ajax({
+        url: "../Usuarios/getThemesUser",
+        type: 'post',
+        data: {area: id, uid: uid},
+        success: function(data) {
+
+            $("#tema_title").html(tema);
+            var temas = $.parseJSON(data);
+            temas = temas.temas;
+            $("#temas").html($(this).capitalize(temas, ','));
+            $("#row_temas").css("display", "table-row");
+            $(".themeSelected").removeClass("themeSelected");
+            $("#tema-" + id).addClass("themeSelected");
+        }
+    });
+}
 $.fn.capitalize = function(schar, char) {
     if (schar !== null && schar !== undefined && schar !== "") {
         var split = schar.split(char);
-        console.log(split);
+        //console.log(split);
         for (var i = 0, len = split.length; i < len; i++) {
             split[i] = split[i].trim();
             if (split[i].slice(1).indexOf(".") === -1) {
@@ -613,15 +592,13 @@ $.fn.capitalize = function(schar, char) {
     }
     return schar;
 };
-
-
 function getAge(dateString) {
     var dob = dateString;
     var year = dob.substr(6, 4);
     var month = (dob.substr(3, 2));
     var day = (dob.substr(0, 2));
     var today = new Date();
-    console.log(month + "-" + day + "-" + year);
+    //console.log(month + "-" + day + "-" + year);
     var birthDate = new Date(month + "-" + day + "-" + year);
     var age = today.getFullYear() - birthDate.getFullYear();
     var m = today.getMonth() - birthDate.getMonth();
@@ -681,7 +658,6 @@ function ajax_follow(id) {
         success: function(data) {
             data = $.parseJSON(data);
             gritter(data.title, data.text, data.class, data.avatar);
-
             $("#follow-" + id).html('<i class="ace-icon fa fa-minus-circle bigger-120 red"></i>\
                                                    Dejar de Seguir');
             $(".follow_user").unbind("click");
@@ -692,23 +668,24 @@ function ajax_follow(id) {
                 var id = $(this).attr("id").split("-")[1];
                 unfollow(id);
             });
-
         }
     });
 }
 function follow(id, sw) {
     if (!sw) {
-        console.log(confirm("¿Estas seguro?", "¿Deseas seguir a este usuario?", function(result) {
+        //console.log(
+        confirm("¿Estas seguro?", "¿Deseas seguir a este usuario?", function(result) {
             if (result) {
                 ajax_follow(id);
             }
-        }));
+        });
     } else {
         ajax_follow(id);
     }
 }
 function unfollow(id) {
-    console.log(confirm("¿Estas seguro?", "¿Deseas dejar de seguir a este usuario?", function(result) {
+    //console.log(
+    confirm("¿Estas seguro?", "¿Deseas dejar de seguir a este usuario?", function(result) {
         if (result) {
             $.ajax({
                 url: "../Usuarios/dejar",
@@ -725,13 +702,12 @@ function unfollow(id) {
                     $("#seguidores").html(parseInt($("#seguidores").html()) - 1);
                     $(".follow_user").click(function() {
                         var id = $(this).attr("id").split("-")[1];
-
                         follow(id);
                     });
                 }
             });
         }
-    }));
+    });
 }
 function gritter(title, message, class_name, src) {
     if (class_name === undefined) {
@@ -838,7 +814,6 @@ function bestAnswer(id) {
             data = $.parseJSON(data);
             gritter(data.title, data.text);
             var bid = $("#responses .btn-danger").attr("id");
-
             if (bid !== undefined) {
                 var sel = "#" + bid;
                 bid = bid.split("-")[1];
@@ -876,7 +851,6 @@ function unBestAnswer(id) {
             $("#responses .btn-danger").removeClass("btn-danger");
             $(".bestanswer").removeClass("bestanswer");
             $(".bestanswer_chk").remove();
-
         }});
 }
 function downvote_p(id) {
@@ -906,9 +880,8 @@ function downvote_p(id) {
 function getFollows(method, uid) {
     $("#follow-container").startLoading("relative", 50, 0, 0);
     $.ajax({method: "POST", url: "../Usuarios/" + method, data: {uid: uid}, success: function(data) {
-            $("#follow-container").append(data);//            console.log(data);
+            $("#follow-container").append(data); //            //console.log(data);
             data = $.parseJSON(data);
-
             $("#follow-container").empty();
             $.each(data.data, function(i, e) {
 
@@ -924,7 +897,7 @@ function getFollows(method, uid) {
                                                 <a href="../Usuarios/profile?uid=' + user.id + '">' + user.nombre + ' ' + user.apellido + '</a>\
                                             </div>\
 \
-                                            <div>\
+                                            <div class="follow-name">\
                                              ' + user.tipo + '</div>\
                                             \
                                             <div class="follow-name">\
@@ -932,9 +905,7 @@ function getFollows(method, uid) {
                                             </div></div>\
                                         </div>\
                                     </div>';
-
                 $("#follow-container").append(item);
-
                 if (i === data.data.length - 1) {
                     $("#siguiendo-modal").dialog("option", "position", {my: "center", at: "center", of: window});
                     $("#siguiendo-modal").dialog("option", "width", 'auto');
@@ -947,7 +918,7 @@ function getFollows(method, uid) {
         }});
 }
 function getFollowers(user_id) {
-    console.log(user_id);
+    //console.log(user_id);
     if (user_id === undefined) {
         user_id = -1;
     }
@@ -955,7 +926,7 @@ function getFollowers(user_id) {
     $("#siguiendo-modal").dialog("option", "title", "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-users'> Usuarios que me siguen</h4></div>");
 }
 function getFollowing(user_id) {
-    console.log(user_id);
+    //console.log(user_id);
     if (user_id === undefined) {
         user_id = -1;
     }
@@ -1057,12 +1028,9 @@ function question_search() {
             data = $.parseJSON(data);
             if (data.preg.length > 0) {
                 $("#question_search_container").empty();
-
                 $.each(data.preg, function() {
-                    console.log($(this));
+                    //console.log($(this));
                     $preg = $(this)[0];
-
-
                     var cont = '<a href="Post?pid=' + $preg['ip_pregunta']['id'] + '"><li class="question_li">';
                     $cres = $preg['0']['crespuesta'];
                     $votes = $preg['0']['numpreg'];
@@ -1085,32 +1053,25 @@ function question_search() {
                                                                         </div></div><div class="question_rest">';
                     $title = $preg['ip_pregunta']['titulo'];
                     cont += '<h4 class="blue">' + $title + '</h4><p class="hashtags">';
-
                     $.each(data.p_tags, function() {
                         $tag = $(this)[0];
-
                         if ($tag['PreguntaTag']['pregunta'] == $preg['ip_pregunta']['id']) {
                             $t = $tag['Tags']['tag'];
                             cont += '<span class="label label-sm label-purple">' + $t + '</span> ';
                         }
                     });
-
                     cont += '</p><p class="area">';
-
                     $autor = $preg['ip_usuario']['nombre'] + " " + $preg['ip_usuario']['apellido'];
                     $fecha = $preg['ip_pregunta']['fecha_pregunta'];
                     cont += $preg['ip_area']['area'] + '</p><p class="autor">' + $autor + '</p><p class="fecha">' + $fecha + '</p>\
                                         </div></li></a>';
-
                     $("#question_search_container").append(cont);
                 });
                 $("#question_search_container").stopLoading();
                 $("#myTab2 .active").removeClass("active");
                 $(".tab-content.padding-4 .active").removeClass("active");
-
                 $("#search_tab").show();
                 $("#search_tab").addClass("active");
-
                 $("#search_tabpane").addClass("active");
             } else {
                 $("#question_search_container").stopLoading();
@@ -1172,7 +1133,6 @@ function rate_user(id, value, prev) {
                         rate_user(user_id, value, prev);
                     });
                     var stars = ' <input id="input-id" type="number" class="teach_stars" min=0 max=5 data-size="xg" value="' + sum + '">';
-
                     $("#star_container").html(stars);
                     $(".teach_stars").rating({showClear: false, step: 1, disabled: true, showCaption: false});
                     gritter(data.title, data.msg, "gritter-success", data.avatar);
@@ -1180,24 +1140,32 @@ function rate_user(id, value, prev) {
         } else {
 
             $(".teach_rating").rating('update', parseInt(prev));
-
-
         }
     });
 }
 function buscarProfe(ini, fin) {
-    console.log($("#area_search").val());
-    var ar = $("#area_search").val();
-    var ciudad = $("#filter_ciudad").val();
-    var temas = JSON.stringify($("#tema_filter").val());
+    var type = $("#search_type").val();
+    //console.log(type);
+    var ar, ciudad, temas, inst;
+    if (type == 3) {
 
-    var inst = $("#inst_filter").val();
+        ar = $("#area_search_prof").val();
+        ciudad = $("#filter_ciudad_prof").val();
+        temas = JSON.stringify($("#tema_filter_prof").val());
+        inst = $("#inst_filter_prof").val();
+    }
+    else {
+        ar = $("#area_search_est").val();
+        ciudad = $("#filter_ciudad_est").val();
+        temas = JSON.stringify($("#tema_filter_est").val());
+        inst = $("#inst_filter_est").val();
+    }
     $("#search_list").empty();
     $("#load_prof").show();
     $.ajax({
         url: "../Usuarios/buscarProfe",
         method: "POST",
-        data: {area: ar, ciudad: ciudad, ini: ini, fin: fin, temas: temas, inst: inst, tipo: $("#search_type").val()},
+        data: {area: ar, ciudad: ciudad, ini: ini, fin: fin, temas: temas, inst: inst, tipo: type},
         success: function(response) {
 
 
@@ -1205,14 +1173,12 @@ function buscarProfe(ini, fin) {
             var data = $.parseJSON(response).data;
             var count = parseInt($.parseJSON(response).count.c);
             var ipp = parseInt($("#ipp").val());
-
             var pages = Math.ceil(count / ipp);
             var i = 1;
             var p_cont = "";
             var p_cont_prev = "";
             var p_cont_post = "";
             var style = "";
-
             if (fin / ipp == 1) {
                 style = "disabled";
             }
@@ -1222,7 +1188,6 @@ function buscarProfe(ini, fin) {
             var actual = 1;
             while (i <= pages) {
                 style = "";
-
                 if (ini + ipp == i * ipp) {
                     style = "active";
                     actual = i;
@@ -1271,16 +1236,16 @@ function buscarProfe(ini, fin) {
                                      ' + p_cont_prev + p_cont + p_cont_post + '\
                                 </ul>\
                 </span>');
+            $("#bottom-page").html('<ul class="pagination">\
+                                     ' + p_cont_prev + p_cont + p_cont_post + '</ul>');
             $(".pageSearch").click(function() {
                 var a = parseInt($(this).attr("id").split("-")[0]);
-
                 buscarProfe(a, ipp);
             });
             $(data).each(function() {
                 var usr = $(this)[0].Usuario;
                 var inst = $(this)[0].Instituto;
                 var res = $(this)[0][0];
-
                 var mres = 0, sum = 0, votes = 0;
                 res.mres == null ? mres = 0 : mres = res.mres;
                 res.total_sum == null ? sum = 0 : sum = res.total_sum;
@@ -1297,7 +1262,6 @@ function buscarProfe(ini, fin) {
                     }
                 }
                 var src = 'data:image/jpeg;base64,' + usr.p_avatar;
-
                 if (usr.p_avatar == null) {
                     src = "../assets/avatars/profile-pic.jpg";
                 }
@@ -1308,6 +1272,9 @@ function buscarProfe(ini, fin) {
                     tipo = '<i class="ace-icon fa fa-graduation-cap grey"></i> Estudiante<br/>';
                     stars = '<div class="">Preguntas hechas: <span>' + res.pregs + '</span></div>';
                     contacts = '';
+                }
+                if (usr.apellido == null) {
+                    usr.apellido = "";
                 }
                 $("#search_list").append('\
 			<li class="dd-item" data-id="1">\
@@ -1340,7 +1307,6 @@ function buscarProfe(ini, fin) {
 				</div>\
 			</div>\
 		</li>');
-
                 $(".stars").rating({showClear: false, step: 1, disabled: true, showCaption: false});
                 $(".star-rating").addClass("float-left");
                 $("#wid-results").show("slide");
@@ -1348,7 +1314,6 @@ function buscarProfe(ini, fin) {
                 $('#contactar-' + usr.id).on(ace.click_event, function() {
                     contactar(usr);
                 });
-
             });
             $("#load_prof").hide();
         },
@@ -1363,20 +1328,17 @@ function buscarProfe(ini, fin) {
             );
             $("#wid-results .widget-title").html("Resultados de Búsqueda (0 Resultados)");
             $("#search_list").html('No hay resultados para mostrar.');
+            $(".paginate").hide();
             $("#search_list").show("fade");
-
-
         }
     });
-
 }
 ;
-
 function fb_share(name, link, pic, caption, desc, msj) {
 //    var encodedPng = pic.substring(pic.indexOf(',') + 1, pic.length);
     //name=$(this).capitalize(name," ");
 //     pic=Base64Binary.decode(encodedPng);  
-//     console.log(pic);
+//     //console.log(pic);
     FB.ui(
             {
                 method: 'feed',

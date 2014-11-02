@@ -1,4 +1,4 @@
-<?php ?>
+
 
 
 <!-- NAVBAR-->
@@ -41,12 +41,13 @@
                         <h2 class="subtitle-intro animated fadeInRight">¡Resuelve dudas académicas, contacta profesores especializados, y mejora tu desempeño!</h2>
                         <h3 class="subtitle-intro animated fadeInRight shadow1"><strong>¡Regístrate, es gratis!</strong></h3>
                         <div class="btn-delay animated fadeInUp">
-                            <?php echo $this->Session->flash() ?>
+
                             <div id="signup-box" class="signup-box widget-box no-border">
+                                <?php echo $this->Session->flash() ?>
                                 <div class="widget-body">
                                     <div class="widget-main">
 
-                                        <form id="register_form" method="POST" action="../cake/Usuarios/authOrRegister">
+                                        <form id="register_form" method="POST" action="Usuarios/authOrRegister">
                                             <fieldset>
                                                 <label class="block clearfix">
                                                     <span class="block input-icon input-icon-right">
@@ -71,7 +72,7 @@
                                                     <span class="block input-icon input-icon-right">
                                                         <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña*" />
                                                         <i class="ace-icon fa fa-lock"></i>
-                                                        <span><a href="Usuarios" class="forgot-link" target="blank">Olvide mi contraseña</a></span>
+                                                        <span><a href="Usuarios" class="forgot-link" target="blank">Olvidé mi contraseña</a></span>
                                                     </span>
                                                 </label>
 
@@ -86,7 +87,7 @@
                                                     <input id="agree" name="agree" type="checkbox" aria-required="true"  class="ace valid" />
                                                     <span class="lbl">
                                                         Acepto los
-                                                        <a href="#">Términos y Condiciones</a>
+                                                        <a href="Home/terms">Términos y Condiciones</a>
                                                     </span>
                                                 </label>
 

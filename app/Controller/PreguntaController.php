@@ -225,7 +225,7 @@ class PreguntaController extends AppController {
         if (AppController::authReturnLogin()) {
             $user = $this->Session->read('User');
             $preg = $this->request->data("pid");
-            $fecha = date('Y-m-d G:i:s', time() - 3600 * 5);
+            $fecha = date('Y-m-d G:i:s', time() - 18000);
             $res = $this->vote($user, $preg, $fecha, 1);
 
             return new CakeResponse(array('body' => json_encode(array('votes' => $res)), 'status' => 200));
@@ -239,7 +239,7 @@ class PreguntaController extends AppController {
         if (AppController::authReturnLogin()) {
             $user = $this->Session->read('User');
             $preg = $this->request->data("pid");
-            $fecha = date('Y-m-d G:i:s', time() - 3600 * 5);
+            $fecha = date('Y-m-d G:i:s', time() - 18000);
             $res = $this->vote($user, $preg, $fecha, -1);
 
             return new CakeResponse(array('body' => json_encode(array('votes' => $res)), 'status' => 200));
@@ -275,7 +275,7 @@ class PreguntaController extends AppController {
         if (AppController::authReturnLogin()) {
             $user = $this->Session->read('User');
             $res = $this->request->data("rid");
-            $fecha = date('Y-m-d G:i:s', time() - 3600 * 5);
+            $fecha = date('Y-m-d G:i:s', time() - 18000);
             ;
             $res = $this->voteRes($user, $res, $fecha, 1);
 
@@ -290,7 +290,7 @@ class PreguntaController extends AppController {
         if (AppController::authReturnLogin()) {
             $user = $this->Session->read('User');
             $res = $this->request->data("rid");
-            $fecha = date('Y-m-d G:i:s', time() - 3600 * 5);
+            $fecha = date('Y-m-d G:i:s', time() - 18000);
             $res = $this->voteRes($user, $res, $fecha, -1);
 
             return new CakeResponse(array('body' => json_encode(array('votes' => $res)), 'status' => 200));
@@ -333,7 +333,7 @@ class PreguntaController extends AppController {
             if ($user_id == $user["id"]) {
                 $preg_id = $this->Respuesta->field("pregunta");
 
-                $this->Respuesta->updateAll(array('mejor_respuesta' => null), array('respuesta.pregunta' => $preg_id, 'mejor_respuesta' => 1));
+                $this->Respuesta->updateAll(array('mejor_respuesta' => null), array('Respuesta.pregunta' => $preg_id, 'mejor_respuesta' => 1));
                 $this->Respuesta->saveField('mejor_respuesta', true);
                 App::import('Controller', 'Email');
                 $EmailController = new EmailController();
@@ -350,7 +350,7 @@ class PreguntaController extends AppController {
             $res_id = $this->request->data("rid");
             $this->Respuesta->id = $res_id;
             $preg_id = $this->Respuesta->field("pregunta");
-            $this->Respuesta->updateAll(array('mejor_respuesta' => null), array('respuesta.pregunta' => $preg_id, 'mejor_respuesta' => 1));
+            $this->Respuesta->updateAll(array('mejor_respuesta' => null), array('Respuesta.pregunta' => $preg_id, 'mejor_respuesta' => 1));
 
             return new CakeResponse(array('body' => json_encode(array('title' => 'Realizado', 'text' => 'Esta ya no será más la mejor respuesta')), 'status' => 200));
         }
@@ -368,7 +368,7 @@ class PreguntaController extends AppController {
             $this->Respuesta->set("pregunta", $pid);
             $this->Respuesta->set("respuesta", $resp);
             $this->Respuesta->set("id_usuario_res", $user["id"]);
-            $fecha = date('Y-m-d G:i:s', time() - 3600 * 5);
+            $fecha = date('Y-m-d G:i:s', time() - 18000);
             $this->Respuesta->set("fecha_respuesta", $fecha);
             $this->Respuesta->save();
             if ($this->Respuesta->id > 0) {
@@ -430,13 +430,13 @@ class PreguntaController extends AppController {
             $taga = explode(", ", $tags);
             $user = $this->Session->read("User");
             $this->Pregunta->set('id_usuario_preg', $user["id"]);
-            $date = date('Y-m-d G:i:s');
+            $date = date('Y-m-d G:i:s', time() - 18000);
 
             if ($this->Pregunta->save($this->request->data)) {
                 App::import('Controller', 'Email');
                 $EmailController = new EmailController();
-                   $preg_id=$this->Pregunta->id;
-               
+                $preg_id = $this->Pregunta->id;
+
                 $this->Pregunta->saveField('fecha_pregunta', $date);
 
                 foreach ($taga as $tag) {
@@ -451,8 +451,8 @@ class PreguntaController extends AppController {
                     $this->PreguntaTag->save();
                 }
                 $n_preg = $this->Pregunta->query("SELECT titulo,ip_pregunta.id,ip_area.area,ip_pregunta.pregunta,fecha_pregunta,nombre,apellido, (SELECT count(ip_respuesta.id) FROM ip_respuesta where ip_respuesta.pregunta=ip_pregunta.id ) as crespuesta, IFNULL((SELECT SUM(ip_pregunta_votos.voto) FROM ip_pregunta_votos where ip_pregunta_votos.pregunta_id=ip_pregunta.id),0) as numpreg FROM Instaprofe.ip_pregunta left outer join ip_pregunta_votos on pregunta_id=ip_pregunta.id left outer join ip_respuesta on ip_respuesta.pregunta=ip_pregunta.id inner join ip_usuario on ip_pregunta.id_usuario_preg=ip_usuario.id inner join ip_area on ip_pregunta.area=ip_area.id where ip_pregunta.id=" . $this->Pregunta->id);
-                print_r($n_preg);
-                $EmailController->seguidorPregunta($user, $this->request->data("area"), $preg_id,$n_preg[0]["ip_area"]["area"]);
+
+                $EmailController->seguidorPregunta($user, $this->request->data("area"), $preg_id, $n_preg[0]["ip_area"]["area"]);
                 return new CakeResponse(array('body' => json_encode(array('npreg' => $n_preg, 'id' => $this->Pregunta->id)), 'status' => 200));
             } else {
                 

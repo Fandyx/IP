@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application level Controller
  *
@@ -18,7 +19,6 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 App::uses('Controller', 'Controller');
 
 /**
@@ -32,36 +32,59 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 
-public function checkAuth(){
-	$user=$this->Session->read('User');
-    try{
-    if((isset($user["id"]))){
-        if($user["id"]<=0){
-          
-		return false;
-        }else{
-            return true;    
+    public function checkAuth() {
+        $user = $this->Session->read('User');
+        try {
+            if ((isset($user["id"]))) {
+                if ($user["id"] <= 0) {
+
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        } catch (exception $e) {
+            return false;
         }
-	}else{ 
-            return false;}
-
-}catch(exception $e){
-    return false;
-}
-}
-
-public function authReturnLogin(){
-    if(!$this->checkAuth()){
-        $this->redirect("../Home");
     }
-    return true;
-}
-public function isRequestOK($request){
-    if ($request->is('post')&&$this->checkAuth()) {
-              return true; 
-    }else{
-        $this->redirect("../Home");
-        return false;
+
+    public function authAdminReturnLogin() {
+        $user = $this->Session->read('User');
+        try {
+            if ((isset($user["id"]))) {
+                if ($user["id"] == -1) {
+
+                    return true;
+                    
+                } else {
+                    return false;
+                    $this->redirect("../Home");
+                }
+            } else {
+                return false;
+                $this->redirect("../Home");
+            }
+        } catch (exception $e) {
+            return false;
+        }
     }
-}
+
+    public function authReturnLogin() {
+        if (!$this->checkAuth()) {
+            $this->redirect("../Home");
+        }
+        return true;
+    }
+
+    public function isRequestOK($request) {
+        if ($request->is('post') && $this->checkAuth()) {
+            return true;
+        } else {
+            $this->redirect("../Home");
+            return false;
+        }
+    }
+
 }

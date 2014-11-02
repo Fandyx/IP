@@ -73,6 +73,13 @@ $user = $this->Session->read('User');
                             </div>
                             <div class="hr hr12 dotted"></div>
                             <h4 class="blue smaller">Información de Contacto</h4>
+                            <?php
+                            if ($user["contactar"] == 1) {
+                                echo '<div class="green"><strong>Tu información es pública, podrás ser contactado</strong></div>';
+                            } else {
+                                echo '<div class="red"><strong>Tu información es privada, NO podrás ser contactado</strong></div>';
+                            }
+                            ?>
                             <div class="clearfix" id="profile-user-info">
                                 <div class="profile-user-info">
                                     <div class="profile-info-row">

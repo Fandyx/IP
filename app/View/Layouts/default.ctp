@@ -3,10 +3,10 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <meta charset="utf-8" />
-        <title>Bienvenido- InstaProfe</title>
+        <title>Instaprofe - Tu Red de Acompañamiento Educativo</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-
+        <link rel="shortcut icon" type="image/png" href="http://instaprofe.com/assets/images/favicon.png">
         <!-- bootstrap & fontawesome -->
         <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../assets/css/font-awesome.min.css" />
@@ -53,6 +53,7 @@
         <!--[if !IE]> -->
         <script type="text/javascript">
             window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>" + "<" + "/script>");
+
         </script>
 
         <!-- <![endif]-->
@@ -72,7 +73,40 @@ window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>"+"<
         <script src="../assets/js/ace-elements.min.js"></script>
         <script src="../assets/js/ace.min.js"></script>
 
+        <script>
 
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId: '266878143436568',
+                    xfbml: true,
+                    version: 'v2.1'
+                });
+            };
+
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id))
+                    return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "//connect.facebook.net/es_LA/sdk.js#xfbml=1&appId=266878143436568&version=v2.0";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+            window.twttr = (function(d, s, id) {
+                var t, js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id))
+                    return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "https://platform.twitter.com/widgets.js";
+                fjs.parentNode.insertBefore(js, fjs);
+                return window.twttr || (t = {_e: [], ready: function(f) {
+                        t._e.push(f)
+                    }});
+            }(document, "script", "twitter-wjs"));
+
+        </script>
     </head>
 
     <body class="no-skin">
@@ -82,7 +116,8 @@ window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>"+"<
         <!--		
         <?php
         $user = $this->Session->read('User');
-
+        $type = "";
+        $user_link = "";
         if ($user["tipo"] == 3) {
             $type = "Profesor";
             $user_link = "../Profesor/";
@@ -101,10 +136,10 @@ window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>"+"<
 
         <div id="navbar" class="navbar navbar-default navbar-fixed-top">
             <script type="text/javascript">
-            try {
-                ace.settings.check('navbar', 'fixed')
-            } catch (e) {
-            }
+                try {
+                    ace.settings.check('navbar', 'fixed')
+                } catch (e) {
+                }
             </script>
 
             <div class="navbar-container" id="navbar-container"><!--
@@ -122,7 +157,7 @@ window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>"+"<
                 <!-- /section:basics/sidebar.mobile.toggle -->
                 <div class="navbar-header pull-left">
                     <!-- #section:basics/navbar.layout.brand -->
-                    <a href="#" class="navbar-brand" id="logo_container">
+                    <a href="<?= $user_link ?>Profile" class="navbar-brand" id="logo_container">
                         <img src="../assets/images/instaprofe_logo.png" alt="logo" class="logo_img"/>
                     </a>
 
@@ -131,7 +166,17 @@ window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>"+"<
                     <!-- #section:basics/navbar.toggle -->
 
                     <!-- /section:basics/navbar.toggle -->
+                    <?php if ($user["completo"] == 1) { ?>
+                        <span id = "search_box_container">
+                            <input type = "text" placeholder = "Buscar usuarios" class = " float-left user_search">
+                            <a href = "../Buscar/" class = "btn btn-search float-left btn-sm">
+                                <i class = "ace-icon fa fa-search bigger-120"></i>
+                            </a>
 
+                        </span>
+                        <?php
+                    }
+                    ?>
                 </div>
 
                 <!-- #section:basics/navbar.dropdown -->
@@ -272,7 +317,7 @@ window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>"+"<
                             
                                                                     </li>
                             
-                            -->					 <?php if ($user["tipo"] != 3) { ?>
+                            -->					 <?php if ($user["tipo"] == 3) { ?>
                             <li class="" id="leftp_contacto">
                                 <a href="#" class="dropdown-toggle btn-danger" style="opacity: .92" >
                                     <i class="menu-icon fa fa-pencil-square-o white"></i>
@@ -370,20 +415,20 @@ window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>"+"<
                 </script>
                 <div class="margin-50 center blue">
                     <p class="center blue">Síguenos en:</p>
-                    <a href="http://www.facebook.com/Instaprofeoficial" target="blank">
+                    <a href="http://www.facebook.com/Instaprofeoficial" target="_blank">
                         <i  class="menu-icon fa fa-facebook-square blue fa-2x" ></i>
 
                     </a>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="http://www.twitter.com/instaprofe" target="blank">
+                    <a href="http://www.twitter.com/instaprofe" target="_blank">
                         <i  class="menu-icon fa fa-twitter fa-2x blue" ></i>
                     </a>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="http://www.instagram.com/Instaprofeoficial" target="blank">
+                    <a href="http://www.instagram.com/Instaprofeoficial" target="_blank">
                         <i  class="menu-icon fa fa-instagram fa-2x blue" ></i>
                     </a>&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="center margin-top-20">
-                    ¿Dudas, comentarios o sugerencias?<br/>
-                    <a id="contactanos" href="#">Contáctanos</a>
+                    <span id="dudas">¿Dudas, comentarios o sugerencias?<br/>
+                        <a id="contactanos" href="#">Contáctanos</a></span>
                 </div>
                 <div id="dialog-message" class="hide">
                     <input type="text" class="col-sm-12" id="contactar_asunto" placeholder="Asunto..."/>
@@ -502,6 +547,7 @@ window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>"+"<
             <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
                 <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
             </a>
+            <div id="search_auto"></div>
         </div><!-- /.main-container -->
         <script src="../assets/js/ciudades.js"></script>
         <script src="../assets/js/my.js"></script>
@@ -540,86 +586,6 @@ window.jQuery || document.write("<script src='../assets/js/jquery1x.min.js'>"+"<
         <script src="../assets/js/jqGrid/jquery.jqGrid.min.js"></script>
         <script src="../assets/js/jqGrid/i18n/grid.locale-es.js"></script>
 
-<!--                <script>
-// This is called with the results from from FB.getLoginStatus().
-function statusChangeCallback(response) {
-console.log('statusChangeCallback');
-console.log(response);
-// The response object is returned with a status field that lets the
-// app know the current login status of the person.
-// Full docs on the response object can be found in the documentation
-// for FB.getLoginStatus().
-if (response.status === 'connected') {
-// Logged into your app and Facebook.
-testAPI();
-} else if (response.status === 'not_authorized') {
-// The person is logged into Facebook, but not your app.
-document.getElementById('status').innerHTML = 'Please log ' +
-'into this app.';
-} else {
-// The person is not logged into Facebook, so we're not sure if
-// they are logged into this app or not.
-document.getElementById('status').innerHTML = 'Please log ' +
-'into Facebook.';
-}
-}
-
-// This function is called when someone finishes with the Login
-// Button.  See the onlogin handler attached to it in the sample
-// code below.
-function checkLoginState() {
-FB.getLoginStatus(function(response) {
-statusChangeCallback(response);
-});
-}
-
-window.fbAsyncInit = function() {
-FB.init({
-appId      : 925455467469510,
-cookie     : true,  // enable cookies to allow the server to access 
-         // the session
-xfbml      : true,  // parse social plugins on this page
-version    : 'v2.1' // use version 2.1
-});
-
-// Now that we've initialized the JavaScript SDK, we call 
-// FB.getLoginStatus().  This function gets the state of the
-// person visiting this page and can return one of three states to
-// the callback you provide.  They can be:
-//
-// 1. Logged into your app ('connected')
-// 2. Logged into Facebook, but not your app ('not_authorized')
-// 3. Not logged into Facebook and can't tell if they are logged into
-//    your app or not.
-//
-// These three cases are handled in the callback function.
-
-FB.getLoginStatus(function(response) {
-statusChangeCallback(response);
-});
-
-};
-
-// Load the SDK asynchronously
-(function(d, s, id) {
-var js, fjs = d.getElementsByTagName(s)[0];
-if (d.getElementById(id)) return;
-js = d.createElement(s); js.id = id;
-js.src = "//connect.facebook.net/es_LA/sdk.js";
-fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-
-// Here we run a very simple test of the Graph API after login is
-// successful.  See statusChangeCallback() for when this call is made.
-function testAPI() {
-console.log('Welcome!  Fetching your information.... ');
-FB.api('/me', function(response) {
-console.log('Successful login for: ' + response.name);
-document.getElementById('status').innerHTML =
-'Thanks for logging in, ' + response.name + '!';
-});
-}
-</script>-->
     </body>
 </html>
 

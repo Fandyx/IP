@@ -58,7 +58,7 @@ class ProfesorController extends AppController {
             $area = $this->request->data("area");
             $user = $this->Session->read('User');
             $this->UsuarioTag->recursive = 0;
-            $ut = $this->UsuarioTag->query("SELECT * FROM instaprofe.ip_usuario_tags inner join ip_tags on tags_id=ip_tags.id where usuario=" . $user["id"] . " AND area=" . $area);
+            $ut = $this->UsuarioTag->query("SELECT * FROM Instaprofe.ip_usuario_tags inner join ip_tags on tags_id=ip_tags.id where usuario=" . $user["id"] . " AND area=" . $area);
             $tags = "";
             foreach ($ut as $tag) {
 
@@ -239,7 +239,7 @@ class ProfesorController extends AppController {
             App::import('Controller', 'Usuarios');
             $Usuario = new UsuariosController;
             $this->set('stars', $Usuario->getCalificacion($user["id"]));
-            $this->set('u_tags', $this->UsuarioTag->query("SELECT * FROM instaprofe.ip_usuario_tags inner join ip_tags on tags_id=ip_tags.id where usuario=" . $uid));
+            $this->set('u_tags', $this->UsuarioTag->query("SELECT * FROM Instaprofe.ip_usuario_tags inner join ip_tags on tags_id=ip_tags.id where usuario=" . $uid));
             $this->render();
         }
     }

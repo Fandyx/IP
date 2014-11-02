@@ -119,15 +119,21 @@
 
                                     <div class="col-sm-8">
                                         <select class="col-xs-12 col-sm-10" id="form-type-select" name="tipo">
-                                            <option value="3" <?php if ($user["tipo"] == 3) {
-                                            echo "selected";
-                                        } ?>>Profesor</option>
-                                            <option value="2" <?php if ($user["tipo"] == 2) {
-                                            echo "selected";
-                                        } ?>>Estudiante</option>
-                                            <option value="1" <?php if ($user["tipo"] == 1) {
-                                            echo "selected";
-                                        } ?>>Padre de Familia</option>
+                                            <option value="3" <?php
+                                            if ($user["tipo"] == 3) {
+                                                echo "selected";
+                                            }
+                                            ?>>Profesor</option>
+                                            <option value="2" <?php
+                                            if ($user["tipo"] == 2) {
+                                                echo "selected";
+                                            }
+                                            ?>>Estudiante</option>
+                                            <option value="1" <?php
+                                            if ($user["tipo"] == 1) {
+                                                echo "selected";
+                                            }
+                                            ?>>Padre de Familia</option>
                                         </select>
                                     </div>
                                 </div>
@@ -153,6 +159,7 @@
                                         $first_c = true;
                                         $first_u = true;
                                         $first_o = true;
+
                                         foreach ($u_instituto as $instituto) {
                                             $button_c = "";
                                             $button_u = "";
@@ -168,8 +175,8 @@
                                                 } else {
                                                     $button_c = "<button onclick='$(this).parent().remove()' class='btn btn-danger btn-sm ins_name' style='display:block' type='button' class='del_col'><i class='white ace-icon ace-icon glyphicon glyphicon-minus'></i></button>";
                                                 }
-                                                $c_input.="<span><input type='text' placeholder='Especifique Colegio...' class='colegio ins_name col-sm-10 valid' id='nom-col' name='nom-col[]' value='" . $c_name . "' " . $c_visible . "/>" . $button_c;
-                                                                                  }
+                                                $c_input.="<span><input type='text' placeholder='Especifique Colegio...' class='colegio ins_name col-sm-10 valid' id='nom-col' name='nom-cole[]' value='" . $c_name . "' " . $c_visible . "/>" . $button_c;
+                                            }
 
 
 
@@ -185,7 +192,7 @@
                                                 } else {
                                                     $button_u = "<button onclick='$(this).parent().remove()' class='btn btn-danger btn-sm ins_name' style='display:block' type='button' class='del_col'><i class='white ace-icon ace-icon glyphicon glyphicon-minus'></i></button>";
                                                 }
-                                                $u_input.="<span><input type='text' placeholder='Especifique Universidad...' class='ins_name col-xs-12 col-sm-10 valid universidad' id='nom-univ' name='nom-univ[]' value='" . $u_name . "' " . $u_visible . "/>" . $button_u . "<div class='col-xs-12'><input type='text' class='col-sm-5 sem' placeholder='Programa' /><input type='text' class='col-sm-5' placeholder='Semestre'/></div></span>";
+                                                $u_input.="<span><input type='text' placeholder='Especifique Universidad...' class='ins_name col-xs-12 col-sm-10 valid universidad' id='nom-univ' name='nom-univ[]' value='" . $u_name . "' " . $u_visible . "/>" . $button_u;
                                             }
 
 
@@ -200,7 +207,7 @@
                                                 } else {
                                                     $button_o = "<button onclick='$(this).parent().remove()' class='btn btn-danger btn-sm ins_name' style='display:block' type='button' class='del_col'><i class='white ace-icon ace-icon glyphicon glyphicon-minus'></i></button>";
                                                 }
-                                                $o_input.="<span><input type='text' id='nom-otro' placeholder='Especifique Otro...' class='ins_name col-xs-12 col-sm-10 valid' name='nom-otro[]' value='" . $o_name . "' " . $o_visible . "/>" . $button_o . "<div class='col-xs-12' style=''><input type='text' class='col-sm-5 sem' style=''/><input type='text' class='col-sm-5'/></div></span>";
+                                                $o_input.="<span><input type='text' id='nom-otro' placeholder='Especifique Otro...' class='ins_name col-xs-12 col-sm-10 valid' name='nom-otro[]' value='" . $o_name . "' " . $o_visible . "/>" . $button_o;
                                             }
                                         }
                                         echo '<label class="pad-10">
@@ -244,18 +251,18 @@
                             <div class="col-sm-9">
                                 <div class="input-medium">
                                     <div class="input-group">
-<?php
-$time = substr($user["fecha_nacimiento"], 0, -9);
+                                        <?php
+                                        $time = substr($user["fecha_nacimiento"], 0, -9);
 
-$val = $time;
-if ($time == "0000-00-00") {
-    $val = "";
-} else {
-    $time = strtotime(substr($user["fecha_nacimiento"], 0, -9));
-    $val = $time;
-    $val = date('d-m-Y', $val);
-}
-?>
+                                        $val = $time;
+                                        if ($time == "0000-00-00") {
+                                            $val = "";
+                                        } else {
+                                            $time = strtotime(substr($user["fecha_nacimiento"], 0, -9));
+                                            $val = $time;
+                                            $val = date('d-m-Y', $val);
+                                        }
+                                        ?>
                                         <input class="input-medium date-picker" id="fecha_nacimiento" name="fecha_nacimiento" type="text" data-date-format="dd-mm-yyyy" value="<?= $val ?>" placeholder="dd-mm-yyyy" />
 
 
@@ -402,7 +409,7 @@ if ($time == "0000-00-00") {
                                         <i class="white ace-icon ace-icon glyphicon glyphicon-plus"></i>
                                     </button>
                                 </div>
-                            <?php
+                                <?php
                             } else {
                                 $first = true;
 
@@ -466,49 +473,49 @@ if ($time == "0000-00-00") {
                                     </select>
 
                                     <input type="text"  name="inst_exp[]" placeholder="¿Dónde trabajaste?" class="instituto col-sm-4">
-                                    <input type="text"  name="rol_exp[]" placeholder="Rol" class="instituto col-sm-3">
+                                    <input type="text"  name="rol_exp[]" placeholder="Rol" class="col-sm-3">
                                     <input type="text"  name="year_exp[]" placeholder="Años" class="input-mini spinner-input form-control instituto col-sm-1" maxlength="2">
                                     <button class="btn btn-info btn-sm" id="add_exp">
                                         <i class="white ace-icon ace-icon glyphicon glyphicon-plus"></i>
                                     </button>
                                 </div>
                                 <?php
-                                } else {
-                                    $first = true;
-                                    foreach ($profe_exp as $pe) {
+                            } else {
+                                $first = true;
+                                foreach ($profe_exp as $pe) {
 
-                                        $pe = $pe["ProfesorExperiencia"];
-                                        echo '<div class="profile-info-row educacion_prof">
+                                    $pe = $pe["ProfesorExperiencia"];
+                                    echo '<div class="profile-info-row educacion_prof">
                                                                     
                                                                         <select class="col-sm-2" name="tipo_exp[]" >
                                                                             <option value="E"';
-                                        if ($pe["tipo"] == "E") {
-                                            echo 'selected';
-                                        }echo '>Empleado</option>
+                                    if ($pe["tipo"] == "E") {
+                                        echo 'selected';
+                                    }echo '>Empleado</option>
                                                                              <option value="I"';
-                                        if ($pe["tipo"] == "I") {
-                                            echo 'selected';
-                                        }echo'>Independiente</option>
+                                    if ($pe["tipo"] == "I") {
+                                        echo 'selected';
+                                    }echo'>Independiente</option>
                                                                         </select>
                                                                        
                                                                        <input type="text"  name="inst_exp[]" placeholder="¿Dónde trabajaste?" class="instituto col-sm-4" value="' . $pe["nombre"] . '">
                                                                          <input type="text"  name="rol_exp[]" placeholder="Rol" class="instituto col-sm-3" value="' . $pe["rol"] . '">
                                                                           <input type="text"  name="year_exp[]" placeholder="Años"  maxlength="2" class="input-mini spinner-input form-control instituto col-sm-1" value="' . $pe["anos"] . '" >
                                                                      ';
-                                        if ($first) {
-                                            $first = false;
-                                            echo ' <button class="btn btn-info btn-sm" id="add_exp">
+                                    if ($first) {
+                                        $first = false;
+                                        echo ' <button class="btn btn-info btn-sm" id="add_exp">
                                                                            <i class="white ace-icon ace-icon glyphicon glyphicon-plus"></i>
                                                                         </button></div>';
-                                        } else {
-                                            echo '<button class="btn btn-danger btn-sm" onclick="$(this).parent().remove()">
+                                    } else {
+                                        echo '<button class="btn btn-danger btn-sm" onclick="$(this).parent().remove()">
                                                                            <i class="white ace-icon ace-icon glyphicon glyphicon-minus"></i>
                                                                         </button>
                                                                     </div>';
-                                        }
                                     }
                                 }
-                                ?>  
+                            }
+                            ?>  
                         </div>
 
                         <div class="space"></div>
@@ -517,49 +524,49 @@ if ($time == "0000-00-00") {
                         <div class="form-group">
 
                             <div class="col-xs-12 col-lg-12 form-inline">
-<?php
-$cont = 0;
-foreach ($areas as $area) {
-    if ($cont % 2 == 0) {
-        $class = " class='area_left'";
-    } else {
-        $class = " class='area_right'";
-    }
-    $sel = "";
-    $display = "none";
-    $i = 0;
-    while ($i < sizeof($u_area)) {
+                                <?php
+                                $cont = 0;
+                                foreach ($areas as $area) {
+                                    if ($cont % 2 == 0) {
+                                        $class = " class='area_left'";
+                                    } else {
+                                        $class = " class='area_right'";
+                                    }
+                                    $sel = "";
+                                    $display = "none";
+                                    $i = 0;
+                                    while ($i < sizeof($u_area)) {
 
-        if ($area["Area"]["id"] == $u_area[$i]["ip_area"]["id"]) {
-            $sel = "checked";
-            $display = "block";
-        }
-        $i++;
-    }
-    $a_tags = "";
-    foreach ($u_tags as $tag) {
-        if ($tag["ip_tags"]["area"] == $area["Area"]["id"]) {
-            if ($a_tags == "") {
-                $a_tags = $tag["ip_tags"]["tag"];
-            } else {
-                $a_tags = $a_tags . " ," . $tag["ip_tags"]["tag"];
-                ;
-            }
-        }
-    }
-    echo ('<div' . $class . '>
+                                        if ($area["Area"]["id"] == $u_area[$i]["ip_area"]["id"]) {
+                                            $sel = "checked";
+                                            $display = "block";
+                                        }
+                                        $i++;
+                                    }
+                                    $a_tags = "";
+                                    foreach ($u_tags as $tag) {
+                                        if ($tag["ip_tags"]["area"] == $area["Area"]["id"]) {
+                                            if ($a_tags == "") {
+                                                $a_tags = $tag["ip_tags"]["tag"];
+                                            } else {
+                                                $a_tags = $a_tags . " ," . $tag["ip_tags"]["tag"];
+                                                ;
+                                            }
+                                        }
+                                    }
+                                    echo ('<div' . $class . '>
                                                                     <label>
                                                                         <input name="subscription" type="checkbox" id="check-' . $area["Area"]["id"] . '"  class="ace valid area_chk" aria-required="true" aria-invalid="true" ' . $sel . '>
                                                                         <span class="lbl">' . $area["Area"]["area"] . '</span>
                                                                     </label>
                                                                         <div class="area_cont" id="area_cont_' . $area["Area"]["id"] . '" style="display:' . $display . ';">
-                                                                        <input type="text" class="area_temas" name="tema-' . $area["Area"]["id"] . '" id="tema-' . $area["Area"]["id"] . '"  placeholder="Ingresa algunos temas ..." value="' . $a_tags . '" style="display:' . $display . ';">
+                                                                        <input type="text" class="area_temas" name="temas-' . $area["Area"]["id"] . '" id="temas-' . $area["Area"]["id"] . '"  placeholder="Ingresa algunos temas ..." value="' . $a_tags . '" style="display:' . $display . ';">
                                                                             <span class="help-button" data-rel="popover" data-trigger="hover" data-placement="right" data-content="Ingresa temas relativos a esta area enseñes (Ej: ' . $area["Area"]["descripcion"] . ')" title="">?</span>
                                                                         </div>
                                                                 </div>');
-    $cont++;
-}
-?>
+                                    $cont++;
+                                }
+                                ?>
 
 
                             </div>

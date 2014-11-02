@@ -75,7 +75,7 @@ $(document).ready(function () {
 		if(val_txt(txtName)&&val_txt(txtEmail)&&val_txt(type)&&!$(".error").is(":visible")&&$(".chkgroup input").attr("checked")!==undefined&&$("#instCheck input").attr("checked")!==undefined){
 			$("#form_contact_us").hide("slide");
 			$("#load_gif").show("slide");
-			console.log(uni);
+			//console.log(uni);
 			$.ajax({url:"/Services/register.php",data:{
 				name:txtName,
 				email:txtEmail,
