@@ -480,16 +480,16 @@ jQuery(function($) {
         }
 
     });
-//    $('#tree1').ace_tree({
-//        dataSource: treeDataSource,
-//        loadingHTML: '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
-//        'open-icon': 'ace-icon fa fa-minus',
-//        'close-icon': 'ace-icon fa fa-plus',
-//        'selectable': false,
-//        'selected-icon': null,
-//        'unselected-icon': null
-//
-//    });
+    $('#tree1').ace_tree({
+        dataSource: treeDataSource,
+        loadingHTML: '<div class="tree-loading"><a><i class="ace-icon fa fa-refresh fa-spin blue"></i></a></div>',
+        'open-icon': 'ace-icon fa fa-minus',
+        'close-icon': 'ace-icon fa fa-plus',
+        'selectable': false,
+        'selected-icon': null,
+        'unselected-icon': null
+
+    });
     setTimeout(function() {
         $(".tree-folder-name").click()
     }, 300);
@@ -525,6 +525,11 @@ jQuery(function($) {
         //console.log(ipp);
         buscarProfe(0, ipp);
     });
+    
+  if(getUrlParameter("area")!==undefined){
+        id_area=getUrlParameter("area");
+        $("#area_search").val(id_area);
+        question_search();}
 });
 function getUrlParameter(sParam)
 {
@@ -1349,4 +1354,23 @@ function fb_share(name, link, pic, caption, desc, msj) {
                 description: desc,
                 message: msj
             });
+}
+
+
+function busca_tree_estprof(area){
+    if(user_type===3){
+        $("#area_search_est").val(area);
+        $("#search_type").val("2");
+        $("#area_search_est").val(area)
+        $("#area_search_est").trigger("chosen:updated");
+    }else if(user_type===2){
+        $("#area_search_prof").val(area);
+        $("#search_type").val("3");
+        $("#area_search_prof").val(area)
+        $("#area_search_prof").trigger("chosen:updated");
+    }
+   $("#myTab2  li:eq(o) a").tab("show");
+    
+    buscarProfe(0,10);
+    
 }

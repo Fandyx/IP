@@ -106,7 +106,7 @@ the lightweight, feature-rich and easy to use admin template.
                 </div>
 
                 <div class="space-6"></div>
-                <div class="btn_tables" id="reg_users"><span>+</span> Usuarios Registrados</div>
+                <div class="btn_tables" id="reg_users"><span>+</span> Usuarios Antiguos con Perfil Completado</div>
                 <table id="tabla_users" class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>

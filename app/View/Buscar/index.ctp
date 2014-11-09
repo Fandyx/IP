@@ -1,6 +1,10 @@
 <?php
 $user = $this->Session->read('User');
-?>                                          
+
+?>            
+<script>    
+var user_type =<?= $user["tipo"] ?>;
+</script>
 <input type="hidden" value="<?= $user["tipo"] == 3 ? 2 : 3 ?>" id="search_type">
 <div class="row">
     <div id="col_search" class="col-xs-6 col-sm-8">
@@ -205,7 +209,7 @@ $user = $this->Session->read('User');
 
 
     <!-- /section:custom/widget-box.header.options -->
-<!--    <div class="col-xs-4" id="misareas">
+    <div class="col-xs-4" id="misareas">
         <div class="widget-box widget-color-blue2">
             <div class="widget-header">
                 <h4 class="widget-title lighter smaller">Mis Áreas</h4>
@@ -219,7 +223,7 @@ $user = $this->Session->read('User');
                 </div>
             </div>
         </div>
-    </div>-->
+    </div>
 
 </div>
 

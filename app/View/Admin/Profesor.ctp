@@ -106,42 +106,34 @@ the lightweight, feature-rich and easy to use admin template.
                 </div>
 
                 <div class="space-6"></div>
-                <div class="btn_tables" id="reg_users"><span>+</span> Usuarios Registrados</div>
+                <div class="btn_tables" id="reg_users"><span>+</span> Información Adicional Profesores</div>
                 <table id="tabla_users" class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
 
                             <th>Nombre</th>
-                            <th>Email</th>
                             <th>Tipo</th>
-                            <th>
-                                <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
-                                Fecha de Inscripción
-                            </th>
-                            <th class="hidden-480">Ciudad</th>
-
-
+                            <th>Instituto</th>
+                            <th>Area</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <?php
                         foreach ($registrados as $row) {
-                            $nombre = $row["Usuario"]["nombre"];
-                            $fecha = $row["Usuario"]['fecha_inscripcion'];
-                            $email = $row["Usuario"]['email'];
-                            if ($row["Usuario"]['tipo'] == 3) {
+                            $nombre = $row["ip_usuario"]["nombre"];
+                            $fecha = $row["ip_area"]['area'];
+                            $email = $row["ip_instituto"]['instituto'];
+                            if ($row["ip_usuario"]['tipo'] == 3) {
                                 $tipo = "Profesor";
                             }
-                            if ($row["Usuario"]['tipo'] == 2) {
+                            if ($row["ip_usuario"]['tipo'] == 2) {
                                 $tipo = "Estudiante";
                             }
-                            if ($row["Usuario"]['tipo'] == 1) {
+                            if ($row["ip_usuario"]['tipo'] == 1) {
                                 $tipo = "Padre de Familia";
                             }
-
-                            $ciudad = $row["Usuario"]['ciudad'];
-                            echo "<tr><td class='capitalize'>$nombre</td><td>$email</td><td>$tipo</td><td>$fecha</td><td>$ciudad</td></tr>";
+                            echo "<tr><td class='capitalize'>$nombre</td><td>$tipo</td><td>$email</td><td>$fecha</td></tr>";
                         }
                         ?>
 

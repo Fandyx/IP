@@ -106,48 +106,40 @@ the lightweight, feature-rich and easy to use admin template.
                 </div>
 
                 <div class="space-6"></div>
-                <div class="btn_tables" id="reg_users"><span>+</span> Usuarios Registrados</div>
+                <div class="btn_tables" id="reg_users"><span>+</span> Contactados</div>
                 <table id="tabla_users" class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
 
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Tipo</th>
+                            <th>Contactado</th>
+                            <th>Contactador</th>
                             <th>
                                 <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
-                                Fecha de Inscripción
+                                Fecha de contacto
                             </th>
-                            <th class="hidden-480">Ciudad</th>
-
-
+                            <th>Contactado?</th>
+                         
                         </tr>
                     </thead>
 
                     <tbody>
                         <?php
-                        foreach ($registrados as $row) {
-                            $nombre = $row["Usuario"]["nombre"];
-                            $fecha = $row["Usuario"]['fecha_inscripcion'];
-                            $email = $row["Usuario"]['email'];
-                            if ($row["Usuario"]['tipo'] == 3) {
-                                $tipo = "Profesor";
+                        foreach ($contact as $row) {
+                            $contactado = $row["Contacto"]["id_contactado"];
+                            $contactador = $row["Contacto"]["id_contactador"];
+                            $fecha = $row["Contacto"]["fecha"];
+                            $nameUsuario = $this->requestAction('/Admin/nameUser/' . $contactado);
+                            $nameUsuario2 = $this->requestAction('/Admin/nameUser/' . $contactador);
+                            $contactados="No Realizado";
+                            if($row["Contacto"]["contactado"]==1){
+                                $contactados="Exitoso";
                             }
-                            if ($row["Usuario"]['tipo'] == 2) {
-                                $tipo = "Estudiante";
-                            }
-                            if ($row["Usuario"]['tipo'] == 1) {
-                                $tipo = "Padre de Familia";
-                            }
-
-                            $ciudad = $row["Usuario"]['ciudad'];
-                            echo "<tr><td class='capitalize'>$nombre</td><td>$email</td><td>$tipo</td><td>$fecha</td><td>$ciudad</td></tr>";
+                            echo "<tr><td class='capitalize'>$nameUsuario</td><td>$nameUsuario2</td><td>$fecha</td><td>$contactados</td></tr>";
                         }
                         ?>
 
                     </tbody>
                 </table>
-                
 <!--                <div class="btn_tables" id="reg_profe"><span>+</span> Profesores Registrados</div>
                 <table id="tabla_profe" class="table table-striped table-bordered table-hover">
                     <thead>
