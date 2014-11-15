@@ -112,6 +112,7 @@ the lightweight, feature-rich and easy to use admin template.
                         <tr>
 
                             <th>Nombre</th>
+                            <th>Apellido</th>
                             <th>Email</th>
                             <th>Tipo</th>
                             <th>
@@ -128,6 +129,7 @@ the lightweight, feature-rich and easy to use admin template.
                         <?php
                         foreach ($registrados as $row) {
                             $nombre = $row["Usuario"]["nombre"];
+                            $apellido=$row["Usuario"]["apellido"];
                             $fecha = $row["Usuario"]['fecha_inscripcion'];
                             $email = $row["Usuario"]['email'];
                             if ($row["Usuario"]['tipo'] == 3) {
@@ -141,7 +143,7 @@ the lightweight, feature-rich and easy to use admin template.
                             }
 
                             $ciudad = $row["Usuario"]['ciudad'];
-                            echo "<tr><td class='capitalize'>$nombre</td><td>$email</td><td>$tipo</td><td>$fecha</td><td>$ciudad</td></tr>";
+                            echo "<tr><td class='capitalize'>$nombre</td><td>$apellido</td><td>$email</td><td>$tipo</td><td>$fecha</td><td>$ciudad</td></tr>";
                         }
                         ?>
 

@@ -112,7 +112,9 @@ the lightweight, feature-rich and easy to use admin template.
                         <tr>
 
                             <th>Quien sigue</th>
+                            <th>email</th>
                             <th>A quien sigue</th>
+                            <th>email</th>
                             <th>
                                 <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
                                 Fecha de contacto
@@ -128,8 +130,10 @@ the lightweight, feature-rich and easy to use admin template.
                             $seguido = $row["Follow"]["usuario_seguido"];
                             $fecha = $row["Follow"]["fecha"];
                             $nameUsuario = $this->requestAction('/Admin/nameUser/' . $sigue);
+                            $us1=  explode(";", $nameUsuario);
                             $nameUsuario2 = $this->requestAction('/Admin/nameUser/' . $seguido);
-                            echo "<tr><td class='capitalize'>$nameUsuario</td><td>$nameUsuario2</td><td>$fecha</td></tr>";
+                            $us2=  explode(";", $nameUsuario2);
+                            echo "<tr><td class='capitalize'>$us1[0]</td><td>$us1[1]</td><td>$us2[0]</td><td>$us2[1]</td><td>$fecha</td></tr>";
                         }
                         ?>
 

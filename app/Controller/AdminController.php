@@ -276,7 +276,7 @@ class AdminController extends AppController {
                                                 AND ip_profesor_area.area=ip_area.id 
                                                 AND ip_usuario_instituto.instituto=ip_instituto.id
                                                 AND ip_usuario.tipo=3)");*/
-       $registrados = $this->Usuario->query("(SELECT ip_usuario.nombre, ip_usuario.tipo, ip_area.area,ip_instituto.instituto
+       $registrados = $this->Usuario->query("(SELECT ip_usuario.nombre, ip_usuario.apellido, ip_usuario.email, ip_usuario.tipo, ip_area.area,ip_instituto.instituto
                                                 FROM ip_usuario,ip_usuario_area,ip_usuario_instituto,ip_area,ip_instituto
                                                 WHERE ip_usuario_area.usuario=ip_usuario.id 
                                                 AND ip_usuario_instituto.usuario=ip_usuario.id
@@ -307,7 +307,7 @@ class AdminController extends AppController {
     
     public function profesor(){
         
-        $registrados = $this->Usuario->query("(SELECT ip_usuario.nombre, ip_usuario.tipo, ip_area.area,ip_instituto.instituto
+        $registrados = $this->Usuario->query("(SELECT ip_usuario.nombre, ip_usuario.apellido, ip_usuario.email, ip_usuario.tipo, ip_area.area,ip_instituto.instituto
                                                 FROM ip_usuario,ip_usuario_instituto,ip_area,ip_instituto,ip_profesor_area
                                                 WHERE ip_profesor_area.profesor=ip_usuario.id 
                                                 AND ip_usuario_instituto.usuario=ip_usuario.id
@@ -326,7 +326,8 @@ class AdminController extends AppController {
     
     public function nameUser($id){
         $query = $this->Usuario->findById($id);
-	return  $query['Usuario']['nombre'];
+	$dato =  $query['Usuario']['nombre'] . " " . $query['Usuario']['apellido'] . ";" . $query['Usuario']['email'];
+        return $dato;
     }
 
 }

@@ -112,7 +112,9 @@ the lightweight, feature-rich and easy to use admin template.
                         <tr>
 
                             <th>Contactado</th>
+                            <th>email</th>
                             <th>Contactador</th>
+                            <th>email</th>
                             <th>
                                 <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
                                 Fecha de contacto
@@ -129,12 +131,14 @@ the lightweight, feature-rich and easy to use admin template.
                             $contactador = $row["Contacto"]["id_contactador"];
                             $fecha = $row["Contacto"]["fecha"];
                             $nameUsuario = $this->requestAction('/Admin/nameUser/' . $contactado);
+                            $us1=  explode(";", $nameUsuario);
                             $nameUsuario2 = $this->requestAction('/Admin/nameUser/' . $contactador);
+                            $us2=  explode(";", $nameUsuario2);
                             $contactados="No Realizado";
                             if($row["Contacto"]["contactado"]==1){
                                 $contactados="Exitoso";
                             }
-                            echo "<tr><td class='capitalize'>$nameUsuario</td><td>$nameUsuario2</td><td>$fecha</td><td>$contactados</td></tr>";
+                            echo "<tr><td class='capitalize'>$us1[0]</td><td>$us1[1]</td><td>$us2[0]</td><td>$us2[1]</td><td>$fecha</td><td>$contactados</td></tr>";
                         }
                         ?>
 
